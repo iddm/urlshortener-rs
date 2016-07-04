@@ -1,0 +1,7 @@
+[package]
+name = "urlshortener"
+version = "0.1.0"
+authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
+
+[dependencies]
+hyper = "0.9.9"
