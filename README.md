@@ -7,7 +7,7 @@ Currently it uses `is.gd` service.
 It will be developed soon to use more services.
 
 ## Usage
-```
+```rust
 extern crate urlshortener;
 
 use urlshortener::get_short_url;
