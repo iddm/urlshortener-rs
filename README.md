@@ -2,6 +2,7 @@
 
 
 A very-very simple urlshortener for Rust.
+
 Currently it uses `is.gd` service.
 It will be developed soon to use more services.
 
