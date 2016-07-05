@@ -14,9 +14,10 @@ The reason of this as that users of such libraries might need only to get the sh
 ```rust
 extern crate urlshortener;
 
-use urlshortener::get_short_url;
+use urlshortener::UrlShortener;
 
 fn main() {
-    println!("Short url for google: {:?}", get_short_url("http://google.com"));
+    let us = UrlShortener::new();
+    println!("Short url for google: {:?}", us.try_get("http://google.com"));
 }
 ```

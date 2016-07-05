@@ -1,16 +1,18 @@
 [package]
 name = "urlshortener"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
 
 description = "A very-very simple url shortener library"
 readme = "README.md"
 license = "GPL-3.0"
-keywords = ["url", "short", "shortenert"]
+keywords = ["url", "short", "shortener", "link"]
 
 repository = "https://github.com/vityafx/urlshortener-rs"
-documentation = "https://github.com/vityafx/urlshortener-rs"
+documentation = "https://vityafx.github.io/urlshortener-rs/master/urlshortener/"
+
 
 
 [dependencies]
+log = "0.3.6"
 hyper = "0.9.9"
