@@ -1,5 +1,42 @@
-//! A very-very easy library for retrieving short urls.
-#![warn(missing_docs)]
+//! # urlshortener
+//!
+//! An easy library for retrieving short urls.
+//!
+//! ## Installation
+//!
+//! Add the following dependency to your project's `Cargo.toml`:
+//!
+//! ```toml
+//! [dependencies]
+//! urlshortener = "0.2"
+//! ```
+//!
+//! And add this to your root file:
+//!
+//! ```no_run
+//! extern crate urlshortener;
+//! ```
+//!
+//! ## Usage
+//!
+//! Creating a short URL via a specified provider is very simple:
+//!
+//! ```no_run
+//! use urlshortener::{Provider, UrlShortener};
+//!
+//! let us = UrlShortener::new();
+//! let short_url = us.generate_via_provider("https://my-long-url.com",
+//!                                          Provider::IsGd);
+//! ```
+//!
+//! Or attempting all URL shorteners until one is successfully generated:
+//!
+//! ```no_run
+//! use urlshortener::{Provider, UrlShortener};
+//!
+//! let us = UrlShortener::new();
+//! let short_url = us.generate("https://my-long-url.com");
+//! ```
 
 #[macro_use]
 extern crate log;
@@ -7,20 +44,18 @@ extern crate hyper;
 
 pub mod providers;
 
-use std::io::{
-    Read,
-    Error,
-    ErrorKind,
-};
-use std::time::Duration;
 pub use providers::{Provider, providers};
+
 use providers::{parse, prepare};
 use hyper::Client;
+use std::io::{ErrorKind, Error, Read};
+use std::time::Duration;
 
 /// Url shortener - the way to retrieve a short url.
 pub struct UrlShortener {
     client: Client,
 }
+
 impl UrlShortener {
     /// Creates new `UrlShortener`.
     pub fn new() -> UrlShortener {
@@ -35,17 +70,13 @@ impl UrlShortener {
     /// Try to generate a short URL from each provider, iterating over each
     /// provider until a short URL is successfully generated.
     ///
-    /// # Example
+    /// # Examples
     ///
-    /// ```ignore
-    /// extern crate urlshortener;
-    ///
+    /// ```no_run
     /// use urlshortener::UrlShortener;
     ///
-    /// fn main() {
-    ///     let us = UrlShortener::new();
-    ///     println!("Short url for google: {:?}", us.generate("http://google.com"));
-    /// }
+    /// let us = UrlShortener::new();
+    /// println!("Short url for google: {:?}", us.generate("http://google.com"));
     /// ```
     ///
     /// # Errors
@@ -80,8 +111,11 @@ impl UrlShortener {
 
     /// Attempts to get a short URL using the specified provider.
     ///
-    /// ```ignore
-    /// use urlshortener::Provider;
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use urlshortener::{Provider, UrlShortener};
+    ///
     /// let us = UrlShortener::new();
     /// let long_url = "http://google.com";
     /// let short_url = us.generate_via_provider(long_url, Provider::IsGd);

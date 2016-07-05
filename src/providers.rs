@@ -1,4 +1,5 @@
 //! Library service providers implementation.
+
 extern crate hyper;
 
 use hyper::client::{Client, RequestBuilder};
@@ -67,7 +68,6 @@ fn vgd_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
 
 /// Parses the response from a successful request to a provider into the
 /// URL-shortened string.
-#[doc(hidden)]
 pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
         Provider::BnGy => bngy_parse(res),
@@ -78,7 +78,6 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 
 /// Prepares the Hyper client for a connection to a provider, providing the long
 /// URL to be shortened.
-#[doc(hidden)]
 pub fn prepare<'a>(url: &str, client: &'a Client, provider: Provider) -> RequestBuilder<'a> {
     match provider {
         Provider::BnGy => bngy_prepare(url, client),
