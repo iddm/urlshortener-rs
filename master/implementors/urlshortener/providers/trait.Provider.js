@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors['urlshortener'] = [];
+implementors['urlshortener'] = [];implementors['urlshortener'] = [];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);
