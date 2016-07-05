@@ -11,8 +11,6 @@ keywords = ["url", "short", "shortener", "link"]
 repository = "https://github.com/vityafx/urlshortener-rs"
 documentation = "https://vityafx.github.io/urlshortener-rs/master/urlshortener/"
 
-
-
 [dependencies]
 log = "0.3.6"
 hyper = "0.9.9"
