@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["providers","Library service providers implementation."]],"struct":[["UrlShortener","Url shortener - the way to retrieve a short url."]]});
