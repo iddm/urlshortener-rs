@@ -1,75 +1,87 @@
-//! Library service providers implementation. 
+//! Library service providers implementation.
+
 extern crate hyper;
 
-/// Provider abstraction trait
-pub trait Provider {
-    /// Name of the provider
-    fn name(&self) -> &str;
+use hyper::client::{Client, RequestBuilder};
 
-    /// Prepare a request
-    fn prepare_request<'a>(&self, url: &str, client: &'a hyper::Client) -> hyper::client::RequestBuilder<'a>;
-
-    /// Try to parse the response of the request
-    fn parse_response(&self, response: &str) -> Option<String>;
+/// Used to specify which provider to use to generate a short URL.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+pub enum Provider {
+    /// https://bn.gy provider
+    BnGy,
+    /// https://is.gd provider
+    IsGd,
+    /// https://v.gd provider
+    VGd,
 }
 
-/// http://is.gd/ service provider implementation
-pub struct IsGdProvider;
-impl Provider for IsGdProvider {
-    fn name(&self) -> &str {
-        "is.gd"
-    }
-
-    fn prepare_request<'a>(&self, url: &str, client: &'a hyper::Client) -> hyper::client::RequestBuilder<'a> {
-        client.get(&format!("http://is.gd/create.php?format=simple&url={}", url))
-    }
-
-    fn parse_response(&self, response: &str) -> Option<String> {
-        Some(response.to_owned())
-    }
-}
-
-/// http://v.gd/ service provider implementation
-pub struct VGdProvider;
-impl Provider for VGdProvider {
-    fn name(&self) -> &str {
-        "v.gd"
-    }
-
-    fn prepare_request<'a>(&self, url: &str, client: &'a hyper::Client) -> hyper::client::RequestBuilder<'a> {
-        client.get(&format!("http://v.gd/create.php?format=simple&url={}", url))
-    }
-
-    fn parse_response(&self, response: &str) -> Option<String> {
-        Some(response.to_owned())
-    }
-}
-
-/// http://bn.gy/ service provider implementation
-pub struct BnGyProvider;
-impl Provider for BnGyProvider {
-    fn name(&self) -> &str {
-        "bn.gy"
-    }
-
-    fn prepare_request<'a>(&self, url: &str, client: &'a hyper::Client) -> hyper::client::RequestBuilder<'a> {
-        client.get(&format!("http://bn.gy/API.asmx/CreateUrl?real_url={}", url))
-    }
-
-    // I did not want to use any xml-parser here so I decided just to do some hacks
-    fn parse_response(&self, res: &str) -> Option<String> {
-        if res.is_empty() {
-            return None
+impl Provider {
+    /// Converts the Provider variant into its domain name equivilant
+    pub fn to_name(&self) -> &str {
+        match *self {
+            Provider::BnGy => "bn.gy",
+            Provider::IsGd => "is.gd",
+            Provider::VGd => "v.gd",
         }
-        let string = res.to_owned();
-        let iter = string.split("<ShortenedUrl>").skip(1).next();
-        if !iter.is_some() {
-            return None
-        }
-        if let Some(string) = iter.unwrap().split("</ShortenedUrl>").next() {
-            return Some(string.to_owned())
-        }
-        None
     }
 }
 
+/// Returns a vector of all `Provider` variants.
+pub fn providers() -> Vec<Provider> {
+    vec![Provider::BnGy, Provider::IsGd, Provider::VGd]
+}
+
+fn bngy_parse(res: &str) -> Option<String> {
+    if res.is_empty() {
+        return None
+    }
+    let string = res.to_owned();
+    let iter = string.split("<ShortenedUrl>").skip(1).next();
+    if iter.is_none() {
+        return None
+    }
+    if let Some(string) = iter.unwrap().split("</ShortenedUrl>").next() {
+        return Some(string.to_owned())
+    }
+    None
+}
+
+fn bngy_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+    client.get(&format!("https://bn.gy/API.asmx/CreateUrl?real_url={}", url))
+}
+
+fn isgd_parse(res: &str) -> Option<String> {
+    Some(res.to_owned())
+}
+
+fn isgd_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+    client.get(&format!("https://is.gd/create.php?format=simple&url={}", url))
+}
+
+fn vgd_parse(res: &str) -> Option<String> {
+    Some(res.to_owned())
+}
+
+fn vgd_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+    client.get(&format!("http://v.gd/create.php?format=simple&url={}", url))
+}
+
+/// Parses the response from a successful request to a provider into the
+/// URL-shortened string.
+pub fn parse(res: &str, provider: Provider) -> Option<String> {
+    match provider {
+        Provider::BnGy => bngy_parse(res),
+        Provider::IsGd => isgd_parse(res),
+        Provider::VGd => vgd_parse(res),
+    }
+}
+
+/// Prepares the Hyper client for a connection to a provider, providing the long
+/// URL to be shortened.
+pub fn prepare<'a>(url: &str, client: &'a Client, provider: Provider) -> RequestBuilder<'a> {
+    match provider {
+        Provider::BnGy => bngy_prepare(url, client),
+        Provider::IsGd => isgd_prepare(url, client),
+        Provider::VGd => vgd_prepare(url, client),
+    }
+}

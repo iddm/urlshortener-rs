@@ -6,16 +6,16 @@ matrix:
         - rust: beta
         - rust: stable
 
+sudo: false
+
 cache:
     apt: true
     directories:
-        - target/debug/deps
-        - target/debug/build
+        - $TRAVIS_BUILD_DIR/target
+        - $HOME/.cargo
 
 script:
-  - cargo build --verbose $FEATURES
   - cargo test --verbose $FEATURES
-  - 'if [ $TRAVIS_RUST_VERSION = nightly ]; then cargo bench --no-run; fi'
 
 addons:
   apt:
