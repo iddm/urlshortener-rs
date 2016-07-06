@@ -1,15 +1,25 @@
-# urlshortener-rs [![](https://meritbadge.herokuapp.com/urlshortener)](https://crates.io/crates/urlshortener) [![](https://travis-ci.org/vityafx/urlshortener-rs.svg?branch=master)](https://travis-ci.org/vityafx/urlshortener-rs) [![](https://img.shields.io/badge/docs-online-2020ff.svg)](https://vityafx.github.io/urlshortener-rs/master/urlshortener/) 
+# urlshortener-rs [![](https://meritbadge.herokuapp.com/urlshortener)](https://crates.io/crates/urlshortener) [![](https://travis-ci.org/vityafx/urlshortener-rs.svg?branch=master)](https://travis-ci.org/vityafx/urlshortener-rs) [![](https://img.shields.io/badge/docs-online-2020ff.svg)](https://vityafx.github.io/urlshortener-rs/master/urlshortener/)
 
 
-A very-very simple urlshortener for Rust.
+A very simple urlshortener for Rust.
 
-This library aims to implement only url shorten services which does not require any authentication (Google, Bit.ly not in this list) and to provide interface as minimal and simpler as possible.
+This library aims to implement only URL shortener services which do not
+require any authentication (ex: goo.gl, bit.ly) and to provide an interface as
+minimal and simple as possible.
 
-The reason of this as that users of such libraries might need only to get the shorten url instead of using the whole service with authentication. That is also a reason this library aims to have at least dependencies as possible.
+The reason for this is that users of such a library might only need to get the
+shortened URL, rather than a service using authentication. This is also a reason
+that this library aims to use as few dependencies as possible.
 
-At this moment 3 url-shorters are implemented: `is.gd`, `v.gd`, `bn.gy`.
+Currently the following URL shorteners are implemented:
+
+- `bn.gy`
+- `is.gd`
+- `v.gd`
+
 
 ## Usage
+
 ```rust
 extern crate urlshortener;
 
@@ -17,6 +27,7 @@ use urlshortener::UrlShortener;
 
 fn main() {
     let us = UrlShortener::new();
-    println!("Short url for google: {:?}", us.try_get("http://google.com"));
+    let long_url = "https://google.com";
+    println!("Short url for google: {:?}", us.try_generate(long_url));
 }
 ```
