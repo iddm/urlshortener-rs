@@ -1,6 +1,6 @@
 # urlshortener-rs 
 [![](https://meritbadge.herokuapp.com/urlshortener)](https://crates.io/crates/urlshortener) [![](https://travis-ci.org/vityafx/urlshortener-rs.svg?branch=master)](https://travis-ci.org/vityafx/urlshortener-rs) [![](https://img.shields.io/badge/docs-online-2020ff.svg)](https://vityafx.github.io/urlshortener-rs/master/urlshortener/)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE.md)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 
 A very simple urlshortener for Rust.
