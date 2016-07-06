@@ -25,8 +25,7 @@
 //! use urlshortener::{Provider, UrlShortener};
 //!
 //! let us = UrlShortener::new();
-//! let short_url = us.generate_via_provider("https://my-long-url.com",
-//!                                          Provider::IsGd);
+//! let short_url = us.generate("https://my-long-url.com", Provider::IsGd);
 //! ```
 //!
 //! Or attempting all URL shorteners until one is successfully generated:
@@ -35,7 +34,7 @@
 //! use urlshortener::{Provider, UrlShortener};
 //!
 //! let us = UrlShortener::new();
-//! let short_url = us.generate("https://my-long-url.com");
+//! let short_url = us.try_generate("https://my-long-url.com");
 //! ```
 
 #[macro_use]
@@ -76,14 +75,15 @@ impl UrlShortener {
     /// use urlshortener::UrlShortener;
     ///
     /// let us = UrlShortener::new();
-    /// println!("Short url for google: {:?}", us.generate("http://google.com"));
+    /// let long_url = "https://rust-lang.org";
+    /// let short_url = us.try_generate(long_url);
     /// ```
     ///
     /// # Errors
     ///
     /// Returns an `Error<ErrorKind::Other>` if there is an error generating a
     /// short URL from all providers.
-    pub fn generate(&self, url: &str) -> Result<String, Error> {
+    pub fn try_generate(&self, url: &str) -> Result<String, Error> {
         let mut providers = providers();
 
         let x = 0usize;
@@ -96,7 +96,7 @@ impl UrlShortener {
             // This would normally have the potential to panic, except that a
             // check to ensure there is an element at this index is performed.
             let provider = providers.remove(x);
-            let res = self.generate_via_provider(url, provider);
+            let res = self.generate(url, provider);
 
             if let Ok(s) = res {
                 return Ok(s)
@@ -117,8 +117,8 @@ impl UrlShortener {
     /// use urlshortener::{Provider, UrlShortener};
     ///
     /// let us = UrlShortener::new();
-    /// let long_url = "http://google.com";
-    /// let short_url = us.generate_via_provider(long_url, Provider::IsGd);
+    /// let long_url = "http://rust-lang.org";
+    /// let short_url = us.generate(long_url, Provider::IsGd);
     /// ```
     ///
     /// # Errors
@@ -128,7 +128,7 @@ impl UrlShortener {
     ///
     /// a. a decode error;
     /// b. the service being unavailable
-    pub fn generate_via_provider(&self, url: &str, provider: Provider) -> Result<String, Error> {
+    pub fn generate(&self, url: &str, provider: Provider) -> Result<String, Error> {
         let mut response = prepare(url, &self.client, provider)
             .send()
             .unwrap();
