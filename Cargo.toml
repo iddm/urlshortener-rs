@@ -1,11 +1,11 @@
 [package]
 name = "urlshortener"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
 
 description = "A very-very simple url shortener library"
 readme = "README.md"
-license = "GPL-3.0"
+license = "MIT"
 keywords = ["url", "short", "shortener", "link"]
 
 repository = "https://github.com/vityafx/urlshortener-rs"
