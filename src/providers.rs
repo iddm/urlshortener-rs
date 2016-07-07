@@ -2,7 +2,9 @@
 
 extern crate hyper;
 
-use hyper::client::{Client, RequestBuilder};
+use hyper::client::{Client, RequestBuilder, Body};
+
+use std::str;
 
 /// Used to specify which provider to use to generate a short URL.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -13,9 +15,11 @@ pub enum Provider {
     IsGd,
     /// https://v.gd provider
     VGd,
-    /// https://rlu.ru provider
+    /// http://rlu.ru provider
     /// * Attention! If you send a lot of requests from one IP, it can be blocked. If you plan to add more then 100 URLs in one hour, please let the technical support know. Otherwise your IP can be blocked unexpectedly. Prior added URLs can be deleted.
     Rlu,
+    /// http://bit.do provider
+    BitDo,
 }
 
 impl Provider {
@@ -26,6 +30,7 @@ impl Provider {
             Provider::IsGd => "is.gd",
             Provider::VGd => "v.gd",
             Provider::Rlu => "rlu.ru",
+            Provider::BitDo => "bit.do",
         }
     }
 }
@@ -37,6 +42,7 @@ pub fn providers() -> Vec<Provider> {
         Provider::IsGd,
         Provider::VGd,
         Provider::Rlu,
+        Provider::BitDo,
     ]
 }
 
@@ -83,6 +89,24 @@ fn rlu_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
     client.get(&format!("http://rlu.ru/index.sema?a=api&link={}", url))
 }
 
+fn bitdo_parse(res: &str) -> Option<String> {
+    Some(res.to_owned())
+}
+
+fn bitdo_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+    let mut h_url = hyper::Url::parse("http://bit.do/mod_perl/url-shortener.pl").unwrap();
+    h_url.query_pairs_mut()
+        .append_pair("action", "shorten")
+        .append_pair("url", url)
+        .append_pair("url2", "site2")
+        .append_pair("url_hash", "")
+        .append_pair("url_stats_is_private", &0.to_string());
+    let strstr = &format!("action=shorten&url={}&url2=site2&url_hash=&url_stats_is_private=0", url).into_bytes();
+    let string = str::from_utf8(strstr);
+    client.post(h_url.as_str()).body(string.unwrap())
+
+}
+
 /// Parses the response from a successful request to a provider into the
 /// URL-shortened string.
 pub fn parse(res: &str, provider: Provider) -> Option<String> {
@@ -91,6 +115,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
         Provider::IsGd => isgd_parse(res),
         Provider::VGd => vgd_parse(res),
         Provider::Rlu => rlu_parse(res),
+        Provider::BitDo => bitdo_parse(res),
     }
 }
 
@@ -102,5 +127,6 @@ pub fn prepare<'a>(url: &str, client: &'a Client, provider: Provider) -> Request
         Provider::IsGd => isgd_prepare(url, client),
         Provider::VGd => vgd_prepare(url, client),
         Provider::Rlu => rlu_prepare(url, client),
+        Provider::BitDo => bitdo_prepare(url, client),
     }
 }
