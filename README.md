@@ -26,7 +26,6 @@ Currently the following URL shorteners are implemented:
 The following services are supported, but are discouraged from use, due to
 restrictions such as rate limits:
 
-- `bit.do`
 - `psbe.co`
 - `rlu.ru`
 

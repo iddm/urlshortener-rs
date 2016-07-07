@@ -7,8 +7,6 @@ use hyper::client::{Client, Response};
 /// Used to specify which provider to use to generate a short URL.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Provider {
-    /// http://bit.do provider
-    BitDo,
     /// https://bn.gy provider
     BnGy,
     /// https://is.gd provider
@@ -31,7 +29,6 @@ impl Provider {
     /// Converts the Provider variant into its domain name equivilant
     pub fn to_name(&self) -> &str {
         match *self {
-            Provider::BitDo => "bit.do",
             Provider::BnGy => "bn.gy",
             Provider::IsGd => "is.gd",
             Provider::PsbeCo => "psbe.co",
@@ -54,31 +51,9 @@ pub fn providers() -> Vec<Provider> {
         Provider::VGd,
 
         // The following list are items that are discouraged from use.
-        Provider::BitDo,
         Provider::PsbeCo,
         Provider::Rlu,
     ]
-}
-
-fn bitdo_parse(res: &str) -> Option<String> {
-    Some(res.to_owned())
-}
-
-fn bitdo_request(url: &str, client: &Client) -> Option<Response> {
-    let mut h_url = hyper::Url::parse("http://bit.do/mod_perl/url-shortener.pl").unwrap();
-    h_url.query_pairs_mut()
-        .append_pair("action", "shorten")
-        .append_pair("url", url)
-        .append_pair("url2", "site2")
-        .append_pair("url_hash", "")
-        .append_pair("url_stats_is_private", &0.to_string());
-    let body = &*format!("action=shorten&url={}&url2=site2&url_hash=&url_stats_is_private=0", url)
-        .into_bytes();
-
-    client.post(h_url.as_str())
-        .body(body)
-        .send()
-        .ok()
 }
 
 fn bngy_parse(res: &str) -> Option<String> {
@@ -185,7 +160,6 @@ fn vgd_request(url: &str, client: &Client) -> Option<Response> {
 /// URL-shortened string.
 pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
-        Provider::BitDo => bitdo_parse(res),
         Provider::BnGy => bngy_parse(res),
         Provider::IsGd => isgd_parse(res),
         Provider::PsbeCo => psbeco_parse(res),
@@ -199,7 +173,6 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 /// Response to be parsed or `None` on a error.
 pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Response> {
     match provider {
-        Provider::BitDo => bitdo_request(url, client),
         Provider::BnGy => bngy_request(url, client),
         Provider::IsGd => isgd_request(url, client),
         Provider::PsbeCo => psbeco_request(url, client),
