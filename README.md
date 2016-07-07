@@ -47,8 +47,4 @@ fn main() {
 
 ## License
 
-This project is [license](licensed under the MIT license).
-
-
-
-[license]: https://github.com/vityafx/urlshortener-rs/blob/master/LICENSE
+This project is [licensed under the MIT license](https://github.com/vityafx/urlshortener-rs/blob/master/LICENSE).
