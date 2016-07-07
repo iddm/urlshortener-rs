@@ -45,7 +45,7 @@ pub mod providers;
 
 pub use providers::{Provider, providers};
 
-use providers::{parse, prepare};
+use providers::{parse, request};
 use hyper::Client;
 use std::io::{ErrorKind, Error, Read};
 use std::time::Duration;
@@ -129,17 +129,17 @@ impl UrlShortener {
     /// a. a decode error;
     /// b. the service being unavailable
     pub fn generate(&self, url: &str, provider: Provider) -> Result<String, Error> {
-        let mut response = prepare(url, &self.client, provider)
-            .send()
-            .unwrap();
+        let response_opt = request(url, &self.client, provider);
 
-        if response.status.is_success() {
-            let mut short_url = String::new();
-            if try!(response.read_to_string(&mut short_url)) > 0 {
-                if let Some(s) = parse(&short_url, provider) {
-                    return Ok(s)
-                } else {
-                    return Err(Error::new(ErrorKind::Other, "Decode error"))
+        if let Some(mut response) = response_opt {
+            if response.status.is_success() {
+                let mut short_url = String::new();
+                if try!(response.read_to_string(&mut short_url)) > 0 {
+                    if let Some(s) = parse(&short_url, provider) {
+                        return Ok(s)
+                    } else {
+                        return Err(Error::new(ErrorKind::Other, "Decode error"))
+                    }
                 }
             }
         }
