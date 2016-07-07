@@ -146,3 +146,16 @@ impl UrlShortener {
         Err(Error::new(ErrorKind::Other, "Service is unavailable"))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn providers() {
+        let us = ::UrlShortener::new();
+        let url = "https://google.com";
+
+        for provider in ::providers() {
+            assert!(us.generate(url, provider).is_ok());
+        }
+    }
+}
