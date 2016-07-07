@@ -47,7 +47,7 @@ pub fn providers() -> Vec<Provider> {
     vec![
         Provider::IsGd,
         Provider::BnGy,
-        Provider::Vgd,
+        Provider::VGd,
         Provider::Rdd,
 
         // The following list are items that are discouraged from use.
