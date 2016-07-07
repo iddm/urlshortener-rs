@@ -18,9 +18,10 @@ pub enum Provider {
     Rlu,
     /// http://readability.com provider
     Rdd,
-
     /// http://psbe.co provider
-    PsbeCo
+    PsbeCo,
+    /// http://bit.do provider
+    BitDo,
 }
 
 impl Provider {
@@ -33,6 +34,7 @@ impl Provider {
             Provider::Rlu => "rlu.ru",
             Provider::Rdd => "readability.com",
             Provider::PsbeCo => "psbe.co",
+            Provider::BitDo => "bit.do",
         }
     }
 }
@@ -48,6 +50,7 @@ pub fn providers() -> Vec<Provider> {
         // Latest elements should always be the worst services (ex: rate limit exists).
         Provider::Rlu,
         Provider::PsbeCo,
+        Provider::BitDo,
     ]
 }
 
@@ -131,6 +134,30 @@ fn rdd_parse(res: &str) -> Option<String> {
     None
 }
 
+fn bitdo_parse(res: &str) -> Option<String> {
+    Some(res.to_owned())
+}
+
+fn bitdo_request(url: &str, client: &Client) -> Option<Response> {
+    let mut h_url = hyper::Url::parse("http://bit.do/mod_perl/url-shortener.pl").unwrap();
+    h_url.query_pairs_mut()
+        .append_pair("action", "shorten")
+        .append_pair("url", url)
+        .append_pair("url2", "site2")
+        .append_pair("url_hash", "")
+        .append_pair("url_stats_is_private", &0.to_string());
+    let body = &*format!("action=shorten&url={}&url2=site2&url_hash=&url_stats_is_private=0", url)
+        .into_bytes();
+    let resp = client.post(h_url.as_str())
+        .body(body)
+        .send();
+
+    if resp.is_ok() {
+        return Some(resp.unwrap())
+    }
+    None
+}
+
 fn rdd_request(url: &str, client: &Client) -> Option<Response> {
     let body = &format!("url={}", url);
     let resp = client.post("https://readability.com/api/shortener/v1/urls")
@@ -171,6 +198,7 @@ fn psbeco_request(url: &str, client: &Client) -> Option<Response> {
 /// URL-shortened string.
 pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
+        Provider::BitDo => bitdo_parse(res),
         Provider::BnGy => bngy_parse(res),
         Provider::IsGd => isgd_parse(res),
         Provider::VGd => vgd_parse(res),
@@ -184,6 +212,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 /// Response to be parsed or `None` on a error.
 pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Response> {
     match provider {
+        Provider::BitDo => bitdo_request(url, client),
         Provider::BnGy => bngy_request(url, client),
         Provider::IsGd => isgd_request(url, client),
         Provider::VGd => vgd_request(url, client),
