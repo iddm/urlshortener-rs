@@ -45,10 +45,10 @@ impl Provider {
 /// rate limitations are at the end of the resultant vector.
 pub fn providers() -> Vec<Provider> {
     vec![
-        Provider::BnGy,
         Provider::IsGd,
+        Provider::BnGy,
+        Provider::Vgd,
         Provider::Rdd,
-        Provider::VGd,
 
         // The following list are items that are discouraged from use.
         Provider::PsbeCo,
