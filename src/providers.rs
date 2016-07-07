@@ -13,6 +13,9 @@ pub enum Provider {
     IsGd,
     /// https://v.gd provider
     VGd,
+    /// https://rlu.ru provider
+    /// * Attention! If you send a lot of requests from one IP, it can be blocked. If you plan to add more then 100 URLs in one hour, please let the technical support know. Otherwise your IP can be blocked unexpectedly. Prior added URLs can be deleted.
+    Rlu,
 }
 
 impl Provider {
@@ -22,13 +25,19 @@ impl Provider {
             Provider::BnGy => "bn.gy",
             Provider::IsGd => "is.gd",
             Provider::VGd => "v.gd",
+            Provider::Rlu => "rlu.ru",
         }
     }
 }
 
 /// Returns a vector of all `Provider` variants.
 pub fn providers() -> Vec<Provider> {
-    vec![Provider::BnGy, Provider::IsGd, Provider::VGd]
+    vec![
+        Provider::BnGy,
+        Provider::IsGd,
+        Provider::VGd,
+        Provider::Rlu,
+    ]
 }
 
 fn bngy_parse(res: &str) -> Option<String> {
@@ -66,6 +75,14 @@ fn vgd_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
     client.get(&format!("http://v.gd/create.php?format=simple&url={}", url))
 }
 
+fn rlu_parse(res: &str) -> Option<String> {
+    Some(res.to_owned())
+}
+
+fn rlu_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+    client.get(&format!("http://rlu.ru/index.sema?a=api&link={}", url))
+}
+
 /// Parses the response from a successful request to a provider into the
 /// URL-shortened string.
 pub fn parse(res: &str, provider: Provider) -> Option<String> {
@@ -73,6 +90,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
         Provider::BnGy => bngy_parse(res),
         Provider::IsGd => isgd_parse(res),
         Provider::VGd => vgd_parse(res),
+        Provider::Rlu => rlu_parse(res),
     }
 }
 
@@ -83,5 +101,6 @@ pub fn prepare<'a>(url: &str, client: &'a Client, provider: Provider) -> Request
         Provider::BnGy => bngy_prepare(url, client),
         Provider::IsGd => isgd_prepare(url, client),
         Provider::VGd => vgd_prepare(url, client),
+        Provider::Rlu => rlu_prepare(url, client),
     }
 }
