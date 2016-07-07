@@ -18,6 +18,9 @@ Currently the following URL shorteners are implemented:
 - `bn.gy`
 - `is.gd`
 - `v.gd`
+- `rlu.ru`
+- `readability.com`
+- `psbe.co`
 
 
 ## Usage

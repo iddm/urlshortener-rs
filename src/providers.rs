@@ -4,8 +4,6 @@ extern crate hyper;
 
 use hyper::client::{Client, Response};
 
-use std::str;
-
 /// Used to specify which provider to use to generate a short URL.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Provider {
