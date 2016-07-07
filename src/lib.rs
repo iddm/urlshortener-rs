@@ -129,9 +129,7 @@ impl UrlShortener {
     /// a. a decode error;
     /// b. the service being unavailable
     pub fn generate(&self, url: &str, provider: Provider) -> Result<String, Error> {
-        let mut response = prepare(url, &self.client, provider)
-            .send()
-            .unwrap();
+        let mut response = prepare(url, &self.client, provider);
 
         if response.status.is_success() {
             let mut short_url = String::new();

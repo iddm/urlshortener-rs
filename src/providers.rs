@@ -2,7 +2,7 @@
 
 extern crate hyper;
 
-use hyper::client::{Client, RequestBuilder, Body};
+use hyper::client::{Client, Response};
 
 use std::str;
 
@@ -61,39 +61,47 @@ fn bngy_parse(res: &str) -> Option<String> {
     None
 }
 
-fn bngy_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+fn bngy_prepare(url: &str, client: &Client) -> Response {
     client.get(&format!("https://bn.gy/API.asmx/CreateUrl?real_url={}", url))
+        .send()
+        .unwrap()
 }
 
 fn isgd_parse(res: &str) -> Option<String> {
     Some(res.to_owned())
 }
 
-fn isgd_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+fn isgd_prepare(url: &str, client: &Client) -> Response {
     client.get(&format!("https://is.gd/create.php?format=simple&url={}", url))
+        .send()
+        .unwrap()
 }
 
 fn vgd_parse(res: &str) -> Option<String> {
     Some(res.to_owned())
 }
 
-fn vgd_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+fn vgd_prepare(url: &str, client: &Client) -> Response {
     client.get(&format!("http://v.gd/create.php?format=simple&url={}", url))
+        .send()
+        .unwrap()
 }
 
 fn rlu_parse(res: &str) -> Option<String> {
     Some(res.to_owned())
 }
 
-fn rlu_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+fn rlu_prepare(url: &str, client: &Client) -> Response {
     client.get(&format!("http://rlu.ru/index.sema?a=api&link={}", url))
+        .send()
+        .unwrap()
 }
 
 fn bitdo_parse(res: &str) -> Option<String> {
     Some(res.to_owned())
 }
 
-fn bitdo_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
+fn bitdo_prepare(url: &str, client: &Client) -> Response {
     let mut h_url = hyper::Url::parse("http://bit.do/mod_perl/url-shortener.pl").unwrap();
     h_url.query_pairs_mut()
         .append_pair("action", "shorten")
@@ -101,9 +109,12 @@ fn bitdo_prepare<'a>(url: &str, client: &'a Client) -> RequestBuilder<'a> {
         .append_pair("url2", "site2")
         .append_pair("url_hash", "")
         .append_pair("url_stats_is_private", &0.to_string());
-    let strstr = &format!("action=shorten&url={}&url2=site2&url_hash=&url_stats_is_private=0", url).into_bytes();
-    let string = str::from_utf8(strstr);
-    client.post(h_url.as_str()).body(string.unwrap())
+    let body = &*format!("action=shorten&url={}&url2=site2&url_hash=&url_stats_is_private=0", url)
+        .into_bytes();
+    client.post(h_url.as_str())
+        .body(body)
+        .send()
+        .unwrap()
 
 }
 
@@ -121,7 +132,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 
 /// Prepares the Hyper client for a connection to a provider, providing the long
 /// URL to be shortened.
-pub fn prepare<'a>(url: &str, client: &'a Client, provider: Provider) -> RequestBuilder<'a> {
+pub fn prepare(url: &str, client: &Client, provider: Provider) -> Response {
     match provider {
         Provider::BnGy => bngy_prepare(url, client),
         Provider::IsGd => isgd_prepare(url, client),
