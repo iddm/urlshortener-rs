@@ -74,14 +74,11 @@ fn bitdo_request(url: &str, client: &Client) -> Option<Response> {
         .append_pair("url_stats_is_private", &0.to_string());
     let body = &*format!("action=shorten&url={}&url2=site2&url_hash=&url_stats_is_private=0", url)
         .into_bytes();
-    let resp = client.post(h_url.as_str())
-        .body(body)
-        .send();
 
-    if resp.is_ok() {
-        return Some(resp.unwrap())
-    }
-    None
+    client.post(h_url.as_str())
+        .body(body)
+        .send()
+        .ok()
 }
 
 fn bngy_parse(res: &str) -> Option<String> {
@@ -94,18 +91,16 @@ fn bngy_parse(res: &str) -> Option<String> {
         return None
     }
     if let Some(string) = iter.unwrap().split("</ShortenedUrl>").next() {
-        return Some(string.to_owned())
+        Some(string.to_owned())
+    } else {
+        None
     }
-    None
 }
 
 fn bngy_request(url: &str, client: &Client) -> Option<Response> {
-    let resp = client.get(&format!("https://bn.gy/API.asmx/CreateUrl?real_url={}", url))
-                     .send();
-    if resp.is_ok() {
-        return Some(resp.unwrap())
-    }
-    None
+    client.get(&format!("https://bn.gy/API.asmx/CreateUrl?real_url={}", url))
+        .send()
+        .ok()
 }
 
 fn isgd_parse(res: &str) -> Option<String> {
@@ -113,12 +108,9 @@ fn isgd_parse(res: &str) -> Option<String> {
 }
 
 fn isgd_request(url: &str, client: &Client) -> Option<Response> {
-    let resp = client.get(&format!("https://is.gd/create.php?format=simple&url={}", url))
-                     .send();
-    if resp.is_ok() {
-        return Some(resp.unwrap())
-    }
-    None
+    client.get(&format!("https://is.gd/create.php?format=simple&url={}", url))
+        .send()
+        .ok()
 }
 
 fn psbeco_parse(res: &str) -> Option<String> {
@@ -131,18 +123,16 @@ fn psbeco_parse(res: &str) -> Option<String> {
         return None
     }
     if let Some(string) = iter.unwrap().split("</ShortUrl>").next() {
-        return Some(string.to_owned())
+        Some(string.to_owned())
+    } else {
+        None
     }
-    None
 }
 
 fn psbeco_request(url: &str, client: &Client) -> Option<Response> {
-    let resp = client.get(&format!("http://psbe.co/API.asmx/CreateUrl?real_url={}", url))
-                     .send();
-    if resp.is_ok() {
-        return Some(resp.unwrap())
-    }
-    None
+    client.get(&format!("http://psbe.co/API.asmx/CreateUrl?real_url={}", url))
+        .send()
+        .ok()
 }
 
 fn rdd_parse(res: &str) -> Option<String> {
@@ -157,20 +147,17 @@ fn rdd_parse(res: &str) -> Option<String> {
     if let Some(string) = value {
         let mut short_url = string.to_owned();
         let _ = short_url.pop();
-        return Some(short_url)
+        Some(short_url)
+    } else {
+        None
     }
-    None
 }
 
 fn rdd_request(url: &str, client: &Client) -> Option<Response> {
-    let body = &format!("url={}", url);
-    let resp = client.post("https://readability.com/api/shortener/v1/urls")
-                     .body(body)
-                     .send();
-    if resp.is_ok() {
-        return Some(resp.unwrap())
-    }
-    None
+    client.post("https://readability.com/api/shortener/v1/urls")
+        .body(&format!("url={}", url))
+        .send()
+        .ok()
 }
 
 fn rlu_parse(res: &str) -> Option<String> {
@@ -178,12 +165,9 @@ fn rlu_parse(res: &str) -> Option<String> {
 }
 
 fn rlu_request(url: &str, client: &Client) -> Option<Response> {
-    let resp = client.get(&format!("http://rlu.ru/index.sema?a=api&link={}", url))
-                     .send();
-    if resp.is_ok() {
-        return Some(resp.unwrap())
-    }
-    None
+    client.get(&format!("http://rlu.ru/index.sema?a=api&link={}", url))
+        .send()
+        .ok()
 }
 
 fn vgd_parse(res: &str) -> Option<String> {
@@ -191,12 +175,9 @@ fn vgd_parse(res: &str) -> Option<String> {
 }
 
 fn vgd_request(url: &str, client: &Client) -> Option<Response> {
-    let resp = client.get(&format!("http://v.gd/create.php?format=simple&url={}", url))
-                     .send();
-    if resp.is_ok() {
-        return Some(resp.unwrap())
-    }
-    None
+    client.get(&format!("http://v.gd/create.php?format=simple&url={}", url))
+        .send()
+        .ok()
 }
 
 
