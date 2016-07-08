@@ -40,6 +40,8 @@ pub enum Provider {
     /// * Note: this service does not provide any API.
     /// The implementation result depends on the service result web page.
     TinyUrl,
+    /// http://tny.im provider
+    TnyIm,
     /// https://v.gd provider
     VGd,
 }
@@ -59,6 +61,7 @@ impl Provider {
             Provider::Rdd => "readability.com",
             Provider::Rlu => "rlu.ru",
             Provider::TinyUrl => "tinyurl.com",
+            Provider::TnyIm => "tny.im",
             Provider::VGd => "v.gd",
         }
     }
@@ -76,6 +79,7 @@ pub fn providers() -> Vec<Provider> {
         Provider::Rdd,
         Provider::BamBz,
         Provider::FifoCc,
+        Provider::TnyIm,
 
         // The following list are items that are discouraged from use.
         // Reason: rate limit (100 requests per hour)
@@ -298,6 +302,28 @@ fn tinyurl_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
+fn tnyim_parse(res: &str) -> Option<String> {
+    if res.is_empty() {
+        return None
+    }
+    let string = res.to_owned();
+    let iter = string.split("<shorturl>").skip(1).next();
+    if iter.is_none() {
+        return None
+    }
+    if let Some(string) = iter.unwrap().split("</shorturl>").next() {
+        Some(string.to_owned())
+    } else {
+        None
+    }
+}
+
+fn tnyim_request(url: &str, client: &Client) -> Option<Response> {
+    client.get(&format!("http://tny.im/yourls-api.php?action=shorturl&url={}", url))
+        .send()
+        .ok()
+}
+
 fn vgd_parse(res: &str) -> Option<String> {
     Some(res.to_owned())
 }
@@ -324,6 +350,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
         Provider::Rdd => rdd_parse(res),
         Provider::Rlu => rlu_parse(res),
         Provider::TinyUrl => tinyurl_parse(res),
+        Provider::TnyIm => tnyim_parse(res),
         Provider::VGd => vgd_parse(res),
     }
 }
@@ -343,6 +370,7 @@ pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Respons
         Provider::Rdd => rdd_request(url, client),
         Provider::Rlu => rlu_request(url, client),
         Provider::TinyUrl => tinyurl_request(url, client),
+        Provider::TnyIm => tnyim_request(url, client),
         Provider::VGd => vgd_request(url, client),
     }
 }
