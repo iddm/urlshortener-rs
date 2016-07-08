@@ -15,6 +15,8 @@ pub enum Provider {
     Abv8,
     /// https://bam.bz provider
     BamBz,
+    /// http://bmeo.org provider
+    Bmeo,
     /// https://bn.gy provider
     BnGy,
     /// http://fifo.cc provider
@@ -64,6 +66,7 @@ impl Provider {
         match *self {
             Provider::Abv8 => "abv8.me",
             Provider::BamBz => "bam.bz",
+            Provider::Bmeo => "bmeo.org",
             Provider::BnGy => "bn.gy",
             Provider::FifoCc => "fifo.cc",
             Provider::HecSu => "hec.su",
@@ -98,6 +101,7 @@ pub fn providers() -> Vec<Provider> {
         Provider::FifoCc,
         Provider::TnyIm,
         Provider::SCoop,
+        Provider::Bmeo,
 
         // The following list are items that are discouraged from use.
         // Reason: rate limit (250 requests per 15 minutes)
@@ -156,6 +160,26 @@ fn bambz_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
+fn bmeo_parse(res: &str) -> Option<String> {
+    if res.is_empty() {
+        return None
+    }
+    let string = res.to_owned();
+    let value = string.split("\"short\"")
+                      .nth(1).unwrap_or("")
+                      .split("\"").skip(1).next();
+    if let Some(string) = value {
+        Some(string.to_owned().replace("\\", ""))
+    } else {
+        None
+    }
+}
+
+fn bmeo_request(url: &str, client: &Client) -> Option<Response> {
+    client.get(&format!("http://bmeo.org/api.php?url={}", url))
+        .send()
+        .ok()
+}
 
 fn bngy_parse(res: &str) -> Option<String> {
     if res.is_empty() {
@@ -430,6 +454,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
         Provider::Abv8 => abv8_parse(res),
         Provider::BamBz => bambz_parse(res),
+        Provider::Bmeo => bmeo_parse(res),
         Provider::BnGy => bngy_parse(res),
         Provider::FifoCc => fifocc_parse(res),
         Provider::HecSu => hecsu_parse(res),
@@ -454,6 +479,7 @@ pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Respons
     match provider {
         Provider::Abv8 => abv8_request(url, client),
         Provider::BamBz => bambz_request(url, client),
+        Provider::Bmeo => bmeo_request(url, client),
         Provider::BnGy => bngy_request(url, client),
         Provider::FifoCc => fifocc_request(url, client),
         Provider::HecSu => hecsu_request(url, client),
