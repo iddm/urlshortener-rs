@@ -47,37 +47,39 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-8' class='srclink' href='../../src/urlshortener/src/providers.rs.html#1-74' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-6' class='srclink' href='../../src/urlshortener/src/providers.rs.html#1-183' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Library service providers implementation.</p>
-</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+</div><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.BnGyProvider.html'
-                                  title='urlshortener::providers::BnGyProvider'>BnGyProvider</a></td>
-                           <td class='docblock short'>
-                                <p><a href="http://bn.gy/">http://bn.gy/</a> service provider implementation</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='struct' href='struct.IsGdProvider.html'
-                                  title='urlshortener::providers::IsGdProvider'>IsGdProvider</a></td>
-                           <td class='docblock short'>
-                                <p><a href="http://is.gd/">http://is.gd/</a> service provider implementation</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='struct' href='struct.VGdProvider.html'
-                                  title='urlshortener::providers::VGdProvider'>VGdProvider</a></td>
-                           <td class='docblock short'>
-                                <p><a href="http://v.gd/">http://v.gd/</a> service provider implementation</p>
-                           </td>
-                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='trait' href='trait.Provider.html'
+                           <td><a class='enum' href='enum.Provider.html'
                                   title='urlshortener::providers::Provider'>Provider</a></td>
                            <td class='docblock short'>
-                                <p>Provider abstraction trait</p>
+                                <p>Used to specify which provider to use to generate a short URL.</p>
+                           </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.parse.html'
+                                  title='urlshortener::providers::parse'>parse</a></td>
+                           <td class='docblock short'>
+                                <p>Parses the response from a successful request to a provider into the
+URL-shortened string.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.providers.html'
+                                  title='urlshortener::providers::providers'>providers</a></td>
+                           <td class='docblock short'>
+                                <p>Returns a vector of all <code>Provider</code> variants.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.request.html'
+                                  title='urlshortener::providers::request'>request</a></td>
+                           <td class='docblock short'>
+                                <p>Performs a request to the short link provider.
+Response to be parsed or <code>None</code> on a error.</p>
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>

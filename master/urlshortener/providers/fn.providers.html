@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `BnGyProvider` struct in crate `urlshortener`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, BnGyProvider">
+    <meta name="description" content="API documentation for the Rust `providers` fn in crate `urlshortener`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, providers">
 
-    <title>urlshortener::providers::BnGyProvider - Rust</title>
+    <title>urlshortener::providers::providers - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../index.html'>urlshortener</a>::<wbr><a href='index.html'>providers</a></p><script>window.sidebarCurrent = {name: 'BnGyProvider', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='../index.html'>urlshortener</a>::<wbr><a href='index.html'>providers</a></p><script>window.sidebarCurrent = {name: 'providers', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,16 +42,16 @@
         </form>
     </nav>
 
-    <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>urlshortener</a>::<wbr><a href='index.html'>providers</a>::<wbr><a class='struct' href=''>BnGyProvider</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content fn">
+<h1 class='fqn'><span class='in-band'>Function <a href='../index.html'>urlshortener</a>::<wbr><a href='index.html'>providers</a>::<wbr><a class='fn' href=''>providers</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-52' class='srclink' href='../../src/urlshortener/src/providers.rs.html#49' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct BnGyProvider;</pre><div class='docblock'><p><a href="http://bn.gy/">http://bn.gy/</a> service provider implementation</p>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../../urlshortener/providers/trait.Provider.html' title='urlshortener::providers::Provider'>Provider</a> for <a class='struct' href='../../urlshortener/providers/struct.BnGyProvider.html' title='urlshortener::providers::BnGyProvider'>BnGyProvider</a></code></h3><div class='impl-items'><h4 id='method.name' class='method'><code>fn <a href='../../urlshortener/providers/trait.Provider.html#tymethod.name' class='fnname'>name</a>(&amp;self) -&gt; &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
-<h4 id='method.prepare_request' class='method'><code>fn <a href='../../urlshortener/providers/trait.Provider.html#tymethod.prepare_request' class='fnname'>prepare_request</a>&lt;'a&gt;(&amp;self, url: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, client: &amp;'a <a class='struct' href='../../hyper/client/struct.Client.html' title='hyper::client::Client'>Client</a>) -&gt; <a class='struct' href='../../hyper/client/struct.RequestBuilder.html' title='hyper::client::RequestBuilder'>RequestBuilder</a>&lt;'a&gt;</code></h4>
-<h4 id='method.parse_response' class='method'><code>fn <a href='../../urlshortener/providers/trait.Provider.html#tymethod.parse_response' class='fnname'>parse_response</a>(&amp;self, res: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code></h4>
+               </span><a id='src-48' class='srclink' href='../../src/urlshortener/src/providers.rs.html#46-57' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn providers() -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a>&gt;</pre><div class='docblock'><p>Returns a vector of all <code>Provider</code> variants.</p>
+
+<p>The providers which are discouraged from use due to limitations such as
+rate limitations are at the end of the resultant vector.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

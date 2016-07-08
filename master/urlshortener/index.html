@@ -47,9 +47,41 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-0' class='srclink' href='../src/urlshortener/src/lib.rs.html#1-113' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>A very-very easy library for retrieving short urls.</p>
-</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+               </span><a id='src-0' class='srclink' href='../src/urlshortener/src/lib.rs.html#1-161' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'>
+<h1 id='urlshortener' class='section-header'><a href='#urlshortener'>urlshortener</a></h1>
+<p>An easy library for retrieving short urls.</p>
+
+<h2 id='installation' class='section-header'><a href='#installation'>Installation</a></h2>
+<p>Add the following dependency to your project&#39;s <code>Cargo.toml</code>:</p>
+
+<pre><code class="language-toml">[dependencies]
+urlshortener = &quot;0.3&quot;
+</code></pre>
+
+<p>And add this to your root file:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>urlshortener</span>;</pre>
+
+<h2 id='usage' class='section-header'><a href='#usage'>Usage</a></h2>
+<p>Creating a short URL via a specified provider is very simple:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>urlshortener</span>::{<span class='ident'>Provider</span>, <span class='ident'>UrlShortener</span>};
+
+<span class='kw'>let</span> <span class='ident'>us</span> <span class='op'>=</span> <span class='ident'>UrlShortener</span>::<span class='ident'>new</span>();
+<span class='kw'>let</span> <span class='ident'>short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>generate</span>(<span class='string'>&quot;https://my-long-url.com&quot;</span>, <span class='ident'>Provider</span>::<span class='ident'>IsGd</span>);</pre>
+
+<p>Or attempting all URL shorteners until one is successfully generated:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>urlshortener</span>::{<span class='ident'>Provider</span>, <span class='ident'>UrlShortener</span>};
+
+<span class='kw'>let</span> <span class='ident'>us</span> <span class='op'>=</span> <span class='ident'>UrlShortener</span>::<span class='ident'>new</span>();
+<span class='kw'>let</span> <span class='ident'>short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>try_generate</span>(<span class='string'>&quot;https://my-long-url.com&quot;</span>);</pre>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub use providers::{<a class='enum' href='../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a>, <a class='fn' href='../urlshortener/providers/fn.providers.html' title='urlshortener::providers::providers'>providers</a>};</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class='mod' href='providers/index.html'
