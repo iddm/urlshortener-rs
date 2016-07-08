@@ -9,6 +9,8 @@ use hyper::client::{Client, Response};
 pub enum Provider {
     /// https://bn.gy provider
     BnGy,
+    /// http://fifo.cc provider
+    FifoCc,
     /// https://hec.su provider
     ///
     /// * Limited to 3000 API requests per day
@@ -39,6 +41,7 @@ impl Provider {
     pub fn to_name(&self) -> &str {
         match *self {
             Provider::BnGy => "bn.gy",
+            Provider::FifoCc => "fifo.cc",
             Provider::HecSu => "hec.su",
             Provider::IsGd => "is.gd",
             Provider::PsbeCo => "psbe.co",
@@ -60,6 +63,7 @@ pub fn providers() -> Vec<Provider> {
         Provider::BnGy,
         Provider::VGd,
         Provider::Rdd,
+        Provider::FifoCc,
 
         // The following list are items that are discouraged from use.
         // Reason: rate limit (3000 requests per day)
@@ -94,6 +98,31 @@ fn bngy_request(url: &str, client: &Client) -> Option<Response> {
         .send()
         .ok()
 }
+
+fn fifocc_parse(res: &str) -> Option<String> {
+    if res.is_empty() {
+        return None
+    }
+    let string = res.to_owned();
+    let value = string.split("\"shortner\"")
+                      .nth(1).unwrap_or("")
+                      .split(",").next().unwrap_or("")
+                      .split("\"").nth(1);
+    if let Some(string) = value {
+        let mut short_url = string.to_owned();
+        short_url = format!("http://fifo.cc/{}", short_url);
+        Some(short_url)
+    } else {
+        None
+    }
+}
+
+fn fifocc_request(url: &str, client: &Client) -> Option<Response> {
+    client.get(&format!("https://fifo.cc/api/v2?url={}", url))
+        .send()
+        .ok()
+}
+
 
 fn hecsu_parse(res: &str) -> Option<String> {
     if res.is_empty() {
@@ -221,6 +250,7 @@ fn vgd_request(url: &str, client: &Client) -> Option<Response> {
 pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
         Provider::BnGy => bngy_parse(res),
+        Provider::FifoCc => fifocc_parse(res),
         Provider::HecSu => hecsu_parse(res),
         Provider::IsGd => isgd_parse(res),
         Provider::PsbeCo => psbeco_parse(res),
@@ -236,6 +266,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Response> {
     match provider {
         Provider::BnGy => bngy_request(url, client),
+        Provider::FifoCc => fifocc_request(url, client),
         Provider::HecSu => hecsu_request(url, client),
         Provider::IsGd => isgd_request(url, client),
         Provider::PsbeCo => psbeco_request(url, client),
