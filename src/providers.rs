@@ -19,6 +19,9 @@ pub enum Provider {
     IsGd,
     /// http://nowlinks.net provider
     NowLinks,
+    /// http://phx.co.in provider
+    /// After some time shows ads
+    PhxCoIn,
     /// http://psbe.co provider
     PsbeCo,
     /// http://readbility.com provider
@@ -47,6 +50,7 @@ impl Provider {
             Provider::HecSu => "hec.su",
             Provider::IsGd => "is.gd",
             Provider::NowLinks => "nowlinks.net",
+            Provider::PhxCoIn => "phx.co.in",
             Provider::PsbeCo => "psbe.co",
             Provider::Rdd => "readability.com",
             Provider::Rlu => "rlu.ru",
@@ -69,17 +73,21 @@ pub fn providers() -> Vec<Provider> {
         Provider::FifoCc,
 
         // The following list are items that are discouraged from use.
+        // Reason: rate limit (100 requests per hour)
+        Provider::Rlu,
         // Reason: rate limit (3000 requests per day)
         Provider::HecSu, 
         // Reason: does not provide an api
         Provider::TinyUrl,
         // Reason: unstable work
         Provider::PsbeCo,
-        // Reason: rate limit (100 requests per hour)
-        Provider::Rlu,
 
         // The following list are items that show previews instead of direct links.
         Provider::NowLinks,
+
+        // The following list are items that show ads and have a timeout before
+        // you may go on the original link.
+        Provider::PhxCoIn,
     ]
 }
 
@@ -168,6 +176,16 @@ fn nowlinks_parse(res: &str) -> Option<String> {
 
 fn nowlinks_request(url: &str, client: &Client) -> Option<Response> {
     client.get(&format!("http://nowlinks.net/api?url={}", url))
+        .send()
+        .ok()
+}
+
+fn phxcoin_parse(res: &str) -> Option<String> {
+    Some(res.to_owned())
+}
+
+fn phxcoin_request(url: &str, client: &Client) -> Option<Response> {
+    client.get(&format!("http://phx.co.in/shrink.asp?url={}", url))
         .send()
         .ok()
 }
@@ -270,6 +288,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
         Provider::HecSu => hecsu_parse(res),
         Provider::IsGd => isgd_parse(res),
         Provider::NowLinks => nowlinks_parse(res),
+        Provider::PhxCoIn => phxcoin_parse(res),
         Provider::PsbeCo => psbeco_parse(res),
         Provider::Rdd => rdd_parse(res),
         Provider::Rlu => rlu_parse(res),
@@ -287,6 +306,7 @@ pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Respons
         Provider::HecSu => hecsu_request(url, client),
         Provider::IsGd => isgd_request(url, client),
         Provider::NowLinks => nowlinks_request(url, client),
+        Provider::PhxCoIn => phxcoin_request(url, client),
         Provider::PsbeCo => psbeco_request(url, client),
         Provider::Rdd => rdd_request(url, client),
         Provider::Rlu => rlu_request(url, client),
