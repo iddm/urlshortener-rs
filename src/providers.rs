@@ -40,6 +40,8 @@ pub enum Provider {
     /// * Note: this service does not provide any API.
     /// The implementation result depends on the service result web page.
     TinyUrl,
+    /// http://tiny.ph provider
+    TinyPh,
     /// http://tny.im provider
     TnyIm,
     /// https://v.gd provider
@@ -61,6 +63,7 @@ impl Provider {
             Provider::Rdd => "readability.com",
             Provider::Rlu => "rlu.ru",
             Provider::TinyUrl => "tinyurl.com",
+            Provider::TinyPh => "tiny.ph",
             Provider::TnyIm => "tny.im",
             Provider::VGd => "v.gd",
         }
@@ -79,6 +82,7 @@ pub fn providers() -> Vec<Provider> {
         Provider::Rdd,
         Provider::BamBz,
         Provider::FifoCc,
+        Provider::TinyPh,
         Provider::TnyIm,
 
         // The following list are items that are discouraged from use.
@@ -302,6 +306,30 @@ fn tinyurl_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
+fn tinyph_parse(res: &str) -> Option<String> {
+    if res.is_empty() {
+        return None
+    }
+    let string = res.to_owned();
+    let value = string.split("\"hash\"")
+                      .nth(1).unwrap_or("")
+                      .split("\"").skip(1).next();
+    if let Some(string) = value {
+        Some(format!("http://tiny.ph/{}", string))
+    } else {
+        None
+    }
+}
+
+fn tinyph_request(url: &str, client: &Client) -> Option<Response> {
+    client.post("http://tiny.ph/api/url/create")
+        .body(&format!("url={}", url))
+        .header(ContentType::form_url_encoded())
+        .send()
+        .ok()
+}
+
+
 fn tnyim_parse(res: &str) -> Option<String> {
     if res.is_empty() {
         return None
@@ -350,6 +378,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
         Provider::Rdd => rdd_parse(res),
         Provider::Rlu => rlu_parse(res),
         Provider::TinyUrl => tinyurl_parse(res),
+        Provider::TinyPh => tinyph_parse(res),
         Provider::TnyIm => tnyim_parse(res),
         Provider::VGd => vgd_parse(res),
     }
@@ -370,6 +399,7 @@ pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Respons
         Provider::Rdd => rdd_request(url, client),
         Provider::Rlu => rlu_request(url, client),
         Provider::TinyUrl => tinyurl_request(url, client),
+        Provider::TinyPh => tinyph_request(url, client),
         Provider::TnyIm => tnyim_request(url, client),
         Provider::VGd => vgd_request(url, client),
     }
