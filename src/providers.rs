@@ -9,6 +9,10 @@ use hyper::client::{Client, Response};
 pub enum Provider {
     /// https://bn.gy provider
     BnGy,
+    /// https://hec.su provider
+    ///
+    /// * Limited to 3000 API requests per day
+    HecSu,
     /// https://is.gd provider
     IsGd,
     /// http://psbe.co provider
@@ -16,6 +20,7 @@ pub enum Provider {
     /// http://readbility.com provider
     Rdd,
     /// http://rlu.ru provider
+    ///
     /// * Attention! If you send a lot of requests from one IP, it can be
     /// blocked. If you plan to add more then 100 URLs in one hour, please let
     /// the technical support know. Otherwise your IP can be blocked
@@ -34,6 +39,7 @@ impl Provider {
     pub fn to_name(&self) -> &str {
         match *self {
             Provider::BnGy => "bn.gy",
+            Provider::HecSu => "hec.su",
             Provider::IsGd => "is.gd",
             Provider::PsbeCo => "psbe.co",
             Provider::Rdd => "readability.com",
@@ -56,11 +62,13 @@ pub fn providers() -> Vec<Provider> {
         Provider::Rdd,
 
         // The following list are items that are discouraged from use.
+        // Reason: rate limit (3000 requests per day)
+        Provider::HecSu, 
         // Reason: does not provide an api
         Provider::TinyUrl,
         // Reason: unstable work
         Provider::PsbeCo,
-        // Reason: rate limit
+        // Reason: rate limit (100 requests per hour)
         Provider::Rlu,
     ]
 }
@@ -83,6 +91,28 @@ fn bngy_parse(res: &str) -> Option<String> {
 
 fn bngy_request(url: &str, client: &Client) -> Option<Response> {
     client.get(&format!("https://bn.gy/API.asmx/CreateUrl?real_url={}", url))
+        .send()
+        .ok()
+}
+
+fn hecsu_parse(res: &str) -> Option<String> {
+    if res.is_empty() {
+        return None
+    }
+    let string = res.to_owned();
+    let iter = string.split("<short>").skip(1).next();
+    if iter.is_none() {
+        return None
+    }
+    if let Some(string) = iter.unwrap().split("</short>").next() {
+        Some(string.to_owned())
+    } else {
+        None
+    }
+}
+
+fn hecsu_request(url: &str, client: &Client) -> Option<Response> {
+    client.get(&format!("https://hec.su/api?url={}&method=xml", url))
         .send()
         .ok()
 }
@@ -191,6 +221,7 @@ fn vgd_request(url: &str, client: &Client) -> Option<Response> {
 pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
         Provider::BnGy => bngy_parse(res),
+        Provider::HecSu => hecsu_parse(res),
         Provider::IsGd => isgd_parse(res),
         Provider::PsbeCo => psbeco_parse(res),
         Provider::Rdd => rdd_parse(res),
@@ -205,6 +236,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Response> {
     match provider {
         Provider::BnGy => bngy_request(url, client),
+        Provider::HecSu => hecsu_request(url, client),
         Provider::IsGd => isgd_request(url, client),
         Provider::PsbeCo => psbeco_request(url, client),
         Provider::Rdd => rdd_request(url, client),
