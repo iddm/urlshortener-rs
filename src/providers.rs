@@ -8,6 +8,11 @@ use hyper::header::ContentType;
 /// Used to specify which provider to use to generate a short URL.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Provider {
+    /// http://abv8.me provider
+    /// Limits:
+    /// * You may not shorten more than 20 unique URLs in a 3-minute span.
+    /// * You may not shorten more than 60 unique URLs in a 15-minute span.
+    Abv8,
     /// https://bam.bz provider
     BamBz,
     /// https://bn.gy provider
@@ -57,6 +62,7 @@ impl Provider {
     /// Converts the Provider variant into its domain name equivilant
     pub fn to_name(&self) -> &str {
         match *self {
+            Provider::Abv8 => "abv8.me",
             Provider::BamBz => "bam.bz",
             Provider::BnGy => "bn.gy",
             Provider::FifoCc => "fifo.cc",
@@ -99,7 +105,9 @@ pub fn providers() -> Vec<Provider> {
         // Reason: rate limit (100 requests per hour)
         Provider::Rlu,
         // Reason: rate limit (3000 requests per day)
-        Provider::HecSu, 
+        Provider::HecSu,
+        // Reason: rate limit (20r/3min; 60r/15min for a UNIQUE urls only)
+        Provider::Abv8,
         // Reason: does not provide an api
         Provider::TinyUrl,
         // Reason: unstable work
@@ -112,6 +120,16 @@ pub fn providers() -> Vec<Provider> {
         // you may go on the original link.
         Provider::PhxCoIn,
     ]
+}
+
+fn abv8_parse(res: &str) -> Option<String> {
+    Some(res.to_owned())
+}
+
+fn abv8_request(url: &str, client: &Client) -> Option<Response> {
+    client.get(&format!("http://abv8.me/?url={}", url))
+        .send()
+        .ok()
 }
 
 fn bambz_parse(res: &str) -> Option<String> {
@@ -410,6 +428,7 @@ fn vgd_request(url: &str, client: &Client) -> Option<Response> {
 /// URL-shortened string.
 pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
+        Provider::Abv8 => abv8_parse(res),
         Provider::BamBz => bambz_parse(res),
         Provider::BnGy => bngy_parse(res),
         Provider::FifoCc => fifocc_parse(res),
@@ -433,6 +452,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 /// Response to be parsed or `None` on a error.
 pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Response> {
     match provider {
+        Provider::Abv8 => abv8_request(url, client),
         Provider::BamBz => bambz_request(url, client),
         Provider::BnGy => bngy_request(url, client),
         Provider::FifoCc => fifocc_request(url, client),
