@@ -3,7 +3,7 @@ name = "urlshortener"
 version = "0.4.0"
 authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
 
-description = "A very-very simple url shortener library"
+description = "A very simple url shortener library"
 readme = "README.md"
 license = "MIT"
 keywords = ["url", "short", "shortener", "link"]
