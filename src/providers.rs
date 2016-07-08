@@ -3,10 +3,13 @@
 extern crate hyper;
 
 use hyper::client::{Client, Response};
+use hyper::header::ContentType;
 
 /// Used to specify which provider to use to generate a short URL.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Provider {
+    /// https://bam.bz provider
+    BamBz,
     /// https://bn.gy provider
     BnGy,
     /// http://fifo.cc provider
@@ -45,6 +48,7 @@ impl Provider {
     /// Converts the Provider variant into its domain name equivilant
     pub fn to_name(&self) -> &str {
         match *self {
+            Provider::BamBz => "bam.bz",
             Provider::BnGy => "bn.gy",
             Provider::FifoCc => "fifo.cc",
             Provider::HecSu => "hec.su",
@@ -70,6 +74,7 @@ pub fn providers() -> Vec<Provider> {
         Provider::BnGy,
         Provider::VGd,
         Provider::Rdd,
+        Provider::BamBz,
         Provider::FifoCc,
 
         // The following list are items that are discouraged from use.
@@ -90,6 +95,31 @@ pub fn providers() -> Vec<Provider> {
         Provider::PhxCoIn,
     ]
 }
+
+fn bambz_parse(res: &str) -> Option<String> {
+    if res.is_empty() {
+        return None
+    }
+    let string = res.to_owned();
+    let value = string.split("\"url\"")
+                      .nth(1).unwrap_or("")
+                      .split(",").next().unwrap_or("")
+                      .split("\"").nth(1);
+    if let Some(string) = value {
+        Some(string.to_owned().replace("\\", ""))
+    } else {
+        None
+    }
+}
+
+fn bambz_request(url: &str, client: &Client) -> Option<Response> {
+    client.post("https://bam.bz/api/short")
+        .body(&format!("target={}", url))
+        .header(ContentType::form_url_encoded())
+        .send()
+        .ok()
+}
+
 
 fn bngy_parse(res: &str) -> Option<String> {
     if res.is_empty() {
@@ -283,6 +313,7 @@ fn vgd_request(url: &str, client: &Client) -> Option<Response> {
 /// URL-shortened string.
 pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
+        Provider::BamBz => bambz_parse(res),
         Provider::BnGy => bngy_parse(res),
         Provider::FifoCc => fifocc_parse(res),
         Provider::HecSu => hecsu_parse(res),
@@ -301,6 +332,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 /// Response to be parsed or `None` on a error.
 pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Response> {
     match provider {
+        Provider::BamBz => bambz_request(url, client),
         Provider::BnGy => bngy_request(url, client),
         Provider::FifoCc => fifocc_request(url, client),
         Provider::HecSu => hecsu_request(url, client),
