@@ -22,6 +22,12 @@ Currently the following URL shorteners are implemented:
 - `is.gd`
 - `readability.com`
 - `v.gd`
+- `bam.bz`
+- `fifo.cc`
+- `tiny.ph`
+- `tny.im`
+- `s.coop`
+- `bmeo.org`
 
 The following services are supported, but are discouraged from use, due to
 restrictions such as rate limits:
@@ -29,6 +35,10 @@ restrictions such as rate limits:
 - `tinyurl.com`
 - `psbe.co`
 - `rlu.ru`
+- `sirbz.com`
+- `hec.su`
+- `abv8.me`
+- `nowlinks.net`
 
 
 ## Usage
