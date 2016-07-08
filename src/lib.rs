@@ -152,7 +152,7 @@ mod tests {
     #[test]
     fn providers() {
         let us = ::UrlShortener::new();
-        let url = "https://google.com";
+        let url = "http://stackoverflow.com";
 
         for provider in ::providers() {
             assert!(us.generate(url, provider).is_ok());

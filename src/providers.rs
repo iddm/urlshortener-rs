@@ -30,7 +30,9 @@ pub enum Provider {
     /// http://nowlinks.net provider
     NowLinks,
     /// http://phx.co.in provider
-    /// After some time shows ads
+    /// * After some time shows ads
+    /// * Instead of redirecting shows preview page
+    /// * Unstable working
     PhxCoIn,
     /// http://psbe.co provider
     PsbeCo,
@@ -90,6 +92,8 @@ impl Provider {
 ///
 /// The providers which are discouraged from use due to limitations such as
 /// rate limitations are at the end of the resultant vector.
+///
+/// Note that some providers may not short url because because the submitted URL may already be short enough and would not benefit from shortening.
 pub fn providers() -> Vec<Provider> {
     vec![
         Provider::IsGd,
@@ -105,6 +109,7 @@ pub fn providers() -> Vec<Provider> {
 
         // The following list are items that are discouraged from use.
         // Reason: rate limit (250 requests per 15 minutes)
+        // Reason: does not accept short urls (ex: http://google.com)
         Provider::SirBz,
         // Reason: rate limit (100 requests per hour)
         Provider::Rlu,
@@ -116,13 +121,9 @@ pub fn providers() -> Vec<Provider> {
         Provider::TinyUrl,
         // Reason: unstable work
         Provider::PsbeCo,
-
-        // The following list are items that show previews instead of direct links.
+        
+        // // The following list are items that show previews instead of direct links.
         Provider::NowLinks,
-
-        // The following list are items that show ads and have a timeout before
-        // you may go on the original link.
-        Provider::PhxCoIn,
     ]
 }
 
