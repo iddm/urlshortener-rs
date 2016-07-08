@@ -8,7 +8,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! urlshortener = "0.3"
+//! urlshortener = "0.4"
 //! ```
 //!
 //! And add this to your root file:
