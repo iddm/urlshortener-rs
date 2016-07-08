@@ -1,6 +1,6 @@
 [package]
 name = "urlshortener"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
 
 description = "A very-very simple url shortener library"

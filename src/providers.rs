@@ -21,6 +21,10 @@ pub enum Provider {
     /// the technical support know. Otherwise your IP can be blocked
     /// unexpectedly. Prior added URLs can be deleted.
     Rlu,
+    /// http://tinyurl.com provider
+    /// * Note: this service does not provide any API.
+    /// The implementation result depends on the service result web page.
+    TinyUrl,
     /// https://v.gd provider
     VGd,
 }
@@ -34,6 +38,7 @@ impl Provider {
             Provider::PsbeCo => "psbe.co",
             Provider::Rdd => "readability.com",
             Provider::Rlu => "rlu.ru",
+            Provider::TinyUrl => "tinyurl.com",
             Provider::VGd => "v.gd",
         }
     }
@@ -51,7 +56,11 @@ pub fn providers() -> Vec<Provider> {
         Provider::Rdd,
 
         // The following list are items that are discouraged from use.
+        // Reason: does not provide an api
+        Provider::TinyUrl,
+        // Reason: unstable work
         Provider::PsbeCo,
+        // Reason: rate limit
         Provider::Rlu,
     ]
 }
@@ -145,6 +154,27 @@ fn rlu_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
+fn tinyurl_parse(res: &str) -> Option<String> {
+    if res.is_empty() {
+        return None
+    }
+    let string = res.to_owned();
+    let value = string.split("data-clipboard-text=\"")
+                      .nth(1).unwrap_or("")
+                      .split("\">").next();
+    if let Some(string) = value {
+        Some(string.to_owned())
+    } else {
+        None
+    }
+}
+
+fn tinyurl_request(url: &str, client: &Client) -> Option<Response> {
+    client.get(&format!("http://tinyurl.com/create.php?url={}", url))
+        .send()
+        .ok()
+}
+
 fn vgd_parse(res: &str) -> Option<String> {
     Some(res.to_owned())
 }
@@ -165,6 +195,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
         Provider::PsbeCo => psbeco_parse(res),
         Provider::Rdd => rdd_parse(res),
         Provider::Rlu => rlu_parse(res),
+        Provider::TinyUrl => tinyurl_parse(res),
         Provider::VGd => vgd_parse(res),
     }
 }
@@ -178,6 +209,7 @@ pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Respons
         Provider::PsbeCo => psbeco_request(url, client),
         Provider::Rdd => rdd_request(url, client),
         Provider::Rlu => rlu_request(url, client),
+        Provider::TinyUrl => tinyurl_request(url, client),
         Provider::VGd => vgd_request(url, client),
     }
 }
