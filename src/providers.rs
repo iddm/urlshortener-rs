@@ -9,9 +9,12 @@ use hyper::header::ContentType;
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Provider {
     /// http://abv8.me provider
-    /// Limits:
-    /// * You may not shorten more than 20 unique URLs in a 3-minute span.
-    /// * You may not shorten more than 60 unique URLs in a 15-minute span.
+    ///
+    /// Notes:
+    ///
+    /// * You may not shorten more than 20 unique URLs within a 3-minute period.
+    /// * You may not shorten more than 60 unique URLs within a 15-minute
+    ///   period.
     Abv8,
     /// https://bam.bz provider
     BamBz,
@@ -23,6 +26,8 @@ pub enum Provider {
     FifoCc,
     /// https://hec.su provider
     ///
+    /// Notes:
+    ///
     /// * Limited to 3000 API requests per day
     HecSu,
     /// https://is.gd provider
@@ -30,9 +35,12 @@ pub enum Provider {
     /// http://nowlinks.net provider
     NowLinks,
     /// http://phx.co.in provider
-    /// * After some time shows ads
-    /// * Instead of redirecting shows preview page
-    /// * Unstable working
+    ///
+    /// Notes:
+    ///
+    /// * After some time the service will display ads
+    /// * Instead of redirecting, a preview page will be displayed
+    /// * Currently unstable
     PhxCoIn,
     /// http://psbe.co provider
     PsbeCo,
@@ -42,17 +50,25 @@ pub enum Provider {
     Rdd,
     /// http://rlu.ru provider
     ///
-    /// * Attention! If you send a lot of requests from one IP, it can be
+    /// Notes:
+    ///
+    /// If you send a lot of requests from one IP, it can be
     /// blocked. If you plan to add more then 100 URLs in one hour, please let
     /// the technical support know. Otherwise your IP can be blocked
     /// unexpectedly. Prior added URLs can be deleted.
     Rlu,
     /// http://sirbz.com provider
-    /// * Note: By default, you get 250 requests per 15 min for the SirBz URL Shortener API.
+    ///
+    /// Notes:
+    ///
+    /// * By default, you are limited to 250 requests per 15 minutes.
     SirBz,
     /// http://tinyurl.com provider
-    /// * Note: this service does not provide any API.
-    /// The implementation result depends on the service result web page.
+    ///
+    /// Notes:
+    ///
+    /// * This service does not provide any API.
+    /// * The implementation result depends on the service result web page.
     TinyUrl,
     /// http://tiny.ph provider
     TinyPh,
@@ -88,12 +104,15 @@ impl Provider {
     }
 }
 
-/// Returns a vector of all `Provider` variants.
+/// Returns a vector of all `Provider` variants. This list is in order of
+/// provider quality.
 ///
-/// The providers which are discouraged from use due to limitations such as
-/// rate limitations are at the end of the resultant vector.
+/// The providers which are discouraged from use - due to problems such as rate
+/// limitations - are at the end of the resultant vector.
 ///
-/// Note that some providers may not short url because because the submitted URL may already be short enough and would not benefit from shortening.
+/// Note that some providers may not provide a generated short URL because the
+/// submitted URL may already be short enough and would not benefit from
+/// shortening via their service.
 pub fn providers() -> Vec<Provider> {
     vec![
         Provider::IsGd,
@@ -107,9 +126,12 @@ pub fn providers() -> Vec<Provider> {
         Provider::SCoop,
         Provider::Bmeo,
 
-        // The following list are items that are discouraged from use.
-        // Reason: rate limit (250 requests per 15 minutes)
-        // Reason: does not accept short urls (ex: http://google.com)
+        // The following list are items that are discouraged from use:
+
+        // Reasons:
+        //
+        // * rate limit (250 requests per 15 minutes)
+        // * does not accept short urls (ex: http://google.com)
         Provider::SirBz,
         // Reason: rate limit (100 requests per hour)
         Provider::Rlu,
@@ -121,8 +143,8 @@ pub fn providers() -> Vec<Provider> {
         Provider::TinyUrl,
         // Reason: unstable work
         Provider::PsbeCo,
-        
-        // // The following list are items that show previews instead of direct links.
+
+        // The following list are items that show previews instead of direct links.
         Provider::NowLinks,
     ]
 }
