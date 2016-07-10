@@ -26,15 +26,17 @@
 //!
 //! let us = UrlShortener::new();
 //! let short_url = us.generate("https://my-long-url.com", Provider::IsGd);
+//! assert!(short_url.is_ok());
 //! ```
 //!
 //! Or attempting all URL shorteners until one is successfully generated:
 //!
 //! ```no_run
-//! use urlshortener::{Provider, UrlShortener};
+//! use urlshortener::UrlShortener;
 //!
 //! let us = UrlShortener::new();
 //! let short_url = us.try_generate("https://my-long-url.com");
+//! assert!(short_url.is_ok());
 //! ```
 
 #[macro_use]
@@ -148,19 +150,23 @@ impl UrlShortener {
                 }
             }
         }
-        Err(Error::new(ErrorKind::Other, "Service is unavailable"))
+        Err(Error::new(ErrorKind::ConnectionAborted, "Service is unavailable"))
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use std::io::ErrorKind;
+
     #[test]
     fn providers() {
         let us = ::UrlShortener::with_timeout(5);
         let url = "http://stackoverflow.com";
 
         for provider in ::providers() {
-            assert!(us.generate(url, provider).is_ok());
+            if let Some(err) = us.generate(url, provider).err() {
+                assert!(err.kind() == ErrorKind::ConnectionAborted);
+            }
         }
     }
 }
