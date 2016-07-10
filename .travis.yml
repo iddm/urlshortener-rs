@@ -15,7 +15,7 @@ cache:
         - $HOME/.cargo
 
 script:
-  - cargo test --verbose $FEATURES
+  - cargo test --verbose $FEATURES -- --nocapture
 
 addons:
   apt:
