@@ -5,6 +5,42 @@ extern crate hyper;
 use hyper::client::{Client, Response};
 use hyper::header::ContentType;
 
+macro_rules! parse_xml_tag {
+    ($fname: ident, $tag: expr) => {
+        fn $fname(res: &str) -> Option<String> {
+            if res.is_empty() {
+                return None
+            }
+            let string = res.to_owned();
+            if let Some(value) = string.split(concat!("<", $tag, ">")).nth(1).unwrap_or("")
+                                       .split(concat!("</", $tag, ">")).next() {
+                Some(value.to_owned())
+            } else {
+                None
+            }
+        }
+    }
+}
+
+macro_rules! parse_json_tag {
+    ($fname: ident, $tag: expr, $prefix: expr) => {
+        fn $fname(res: &str) -> Option<String> {
+            if res.is_empty() {
+                return None
+            }
+            let string = res.to_owned();
+            if let Some(value) = string.split(concat!("\"", $tag, "\""))
+                                       .nth(1).unwrap_or("")
+                                       .split(",").next().unwrap_or("")
+                                       .split("\"").nth(1) {
+                Some(format!(concat!($prefix, "{}"), value.to_owned().replace("\\", "")))
+            } else {
+                None
+            }
+        }
+    }
+}
+
 /// Used to specify which provider to use to generate a short URL.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Provider {
@@ -161,21 +197,7 @@ fn abv8_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-fn bambz_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let value = string.split("\"url\"")
-                      .nth(1).unwrap_or("")
-                      .split(",").next().unwrap_or("")
-                      .split("\"").nth(1);
-    if let Some(string) = value {
-        Some(string.to_owned().replace("\\", ""))
-    } else {
-        None
-    }
-}
+parse_json_tag!(bambz_parse, "url", "");
 
 fn bambz_request(url: &str, client: &Client) -> Option<Response> {
     client.post("https://bam.bz/api/short")
@@ -185,20 +207,7 @@ fn bambz_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-fn bmeo_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let value = string.split("\"short\"")
-                      .nth(1).unwrap_or("")
-                      .split("\"").skip(1).next();
-    if let Some(string) = value {
-        Some(string.to_owned().replace("\\", ""))
-    } else {
-        None
-    }
-}
+parse_json_tag!(bmeo_parse, "short", "");
 
 fn bmeo_request(url: &str, client: &Client) -> Option<Response> {
     client.get(&format!("http://bmeo.org/api.php?url={}", url))
@@ -206,21 +215,7 @@ fn bmeo_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-fn bngy_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let iter = string.split("<ShortenedUrl>").skip(1).next();
-    if iter.is_none() {
-        return None
-    }
-    if let Some(string) = iter.unwrap().split("</ShortenedUrl>").next() {
-        Some(string.to_owned())
-    } else {
-        None
-    }
-}
+parse_xml_tag!(bngy_parse, "ShortenedUrl");
 
 fn bngy_request(url: &str, client: &Client) -> Option<Response> {
     client.get(&format!("https://bn.gy/API.asmx/CreateUrl?real_url={}", url))
@@ -228,23 +223,7 @@ fn bngy_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-fn fifocc_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let value = string.split("\"shortner\"")
-                      .nth(1).unwrap_or("")
-                      .split(",").next().unwrap_or("")
-                      .split("\"").nth(1);
-    if let Some(string) = value {
-        let mut short_url = string.to_owned();
-        short_url = format!("http://fifo.cc/{}", short_url);
-        Some(short_url)
-    } else {
-        None
-    }
-}
+parse_json_tag!(fifocc_parse, "shortner", "http://fifo.cc/");
 
 fn fifocc_request(url: &str, client: &Client) -> Option<Response> {
     client.get(&format!("https://fifo.cc/api/v2?url={}", url))
@@ -252,22 +231,7 @@ fn fifocc_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-
-fn hecsu_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let iter = string.split("<short>").skip(1).next();
-    if iter.is_none() {
-        return None
-    }
-    if let Some(string) = iter.unwrap().split("</short>").next() {
-        Some(string.to_owned())
-    } else {
-        None
-    }
-}
+parse_xml_tag!(hecsu_parse, "short");
 
 fn hecsu_request(url: &str, client: &Client) -> Option<Response> {
     client.get(&format!("https://hec.su/api?url={}&method=xml", url))
@@ -305,21 +269,7 @@ fn phxcoin_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-fn psbeco_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let iter = string.split("<ShortUrl>").skip(1).next();
-    if iter.is_none() {
-        return None
-    }
-    if let Some(string) = iter.unwrap().split("</ShortUrl>").next() {
-        Some(string.to_owned())
-    } else {
-        None
-    }
-}
+parse_xml_tag!(psbeco_parse, "ShortUrl");
 
 fn psbeco_request(url: &str, client: &Client) -> Option<Response> {
     client.get(&format!("http://psbe.co/API.asmx/CreateUrl?real_url={}", url))
@@ -337,23 +287,7 @@ fn scoop_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-fn rdd_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let value = string.split("\"rdd_url\"")
-                      .nth(1).unwrap_or("")
-                      .split(",").next().unwrap_or("")
-                      .split("\"").nth(1);
-    if let Some(string) = value {
-        let mut short_url = string.to_owned();
-        let _ = short_url.pop();
-        Some(short_url)
-    } else {
-        None
-    }
-}
+parse_json_tag!(rdd_parse, "rdd_url", "");
 
 fn rdd_request(url: &str, client: &Client) -> Option<Response> {
     client.post("https://readability.com/api/shortener/v1/urls")
@@ -372,20 +306,7 @@ fn rlu_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-fn sirbz_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let value = string.split("\"short_link\"")
-                      .nth(1).unwrap_or("")
-                      .split("\"").skip(1).next();
-    if let Some(string) = value {
-        Some(string.to_owned())
-    } else {
-        None
-    }
-}
+parse_json_tag!(sirbz_parse, "short_link", "");
 
 fn sirbz_request(url: &str, client: &Client) -> Option<Response> {
     client.post("http://sirbz.com/api/shorten_url")
@@ -416,20 +337,7 @@ fn tinyurl_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-fn tinyph_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let value = string.split("\"hash\"")
-                      .nth(1).unwrap_or("")
-                      .split("\"").skip(1).next();
-    if let Some(string) = value {
-        Some(format!("http://tiny.ph/{}", string))
-    } else {
-        None
-    }
-}
+parse_json_tag!(tinyph_parse, "hash", "http://tiny.ph/");
 
 fn tinyph_request(url: &str, client: &Client) -> Option<Response> {
     client.post("http://tiny.ph/api/url/create")
@@ -439,22 +347,7 @@ fn tinyph_request(url: &str, client: &Client) -> Option<Response> {
         .ok()
 }
 
-
-fn tnyim_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None
-    }
-    let string = res.to_owned();
-    let iter = string.split("<shorturl>").skip(1).next();
-    if iter.is_none() {
-        return None
-    }
-    if let Some(string) = iter.unwrap().split("</shorturl>").next() {
-        Some(string.to_owned())
-    } else {
-        None
-    }
-}
+parse_xml_tag!(tnyim_parse, "shorturl");
 
 fn tnyim_request(url: &str, client: &Client) -> Option<Response> {
     client.get(&format!("http://tny.im/yourls-api.php?action=shorturl&url={}", url))
