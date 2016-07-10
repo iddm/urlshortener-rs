@@ -55,7 +55,7 @@
 <div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></h4>
 <div class='docblock'><p>Creates new <code>UrlShortener</code> with default (3 seconds) timeout.</p>
 </div><h4 id='method.with_timeout' class='method'><code>fn <a href='#method.with_timeout' class='fnname'>with_timeout</a>(seconds: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>) -&gt; <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></h4>
-<div class='docblock'><p>Creates new <code>UrlShortener</code> and with read timeout.</p>
+<div class='docblock'><p>Creates new <code>UrlShortener</code> with custom read timeout.</p>
 </div><h4 id='method.try_generate' class='method'><code>fn <a href='#method.try_generate' class='fnname'>try_generate</a>(&amp;self, url: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a>&gt;</code></h4>
 <div class='docblock'><p>Try to generate a short URL from each provider, iterating over each
 provider until a short URL is successfully generated.</p>
@@ -83,11 +83,11 @@ short URL from all providers.</p>
 <span class='kw'>let</span> <span class='ident'>short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>generate</span>(<span class='ident'>long_url</span>, <span class='ident'>Provider</span>::<span class='ident'>IsGd</span>);</pre>
 
 <h1 id='errors-1' class='section-header'><a href='#errors-1'>Errors</a></h1>
-<p>Returns an <code>Error&lt;&lt;ErrorKind::Other&gt;</code> if there is an error generating a
+<p>Returns an <code>std::io::Error</code> if there is an error generating a
 short URL from the given provider due to either:</p>
 
-<p>a. a decode error;
-b. the service being unavailable</p>
+<p>a. a decode error (ErrorKind::Other);
+b. the service being unavailable (ErrorKind::ConnectionAborted)</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
 
