@@ -63,7 +63,7 @@ impl UrlShortener {
         UrlShortener::with_timeout(3)
     }
 
-    /// Creates new `UrlShortener` and with read timeout.
+    /// Creates new `UrlShortener` with custom read timeout.
     pub fn with_timeout(seconds: u64) -> UrlShortener {
         let mut client = hyper::Client::new();
         client.set_read_timeout(Some(Duration::from_secs(seconds)));
@@ -130,11 +130,11 @@ impl UrlShortener {
     ///
     /// # Errors
     ///
-    /// Returns an `Error<<ErrorKind::Other>` if there is an error generating a
+    /// Returns an `std::io::Error` if there is an error generating a
     /// short URL from the given provider due to either:
     ///
-    /// a. a decode error;
-    /// b. the service being unavailable
+    /// a. a decode error (ErrorKind::Other);
+    /// b. the service being unavailable (ErrorKind::ConnectionAborted)
     pub fn generate(&self, url: &str, provider: Provider) -> Result<String, Error> {
         let response_opt = request(url, &self.client, provider);
 

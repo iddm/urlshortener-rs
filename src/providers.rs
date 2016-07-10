@@ -88,7 +88,7 @@ pub enum Provider {
     ///
     /// Notes:
     ///
-    /// If you send a lot of requests from one IP, it can be
+    /// - If you send a lot of requests from one IP, it can be
     /// blocked. If you plan to add more then 100 URLs in one hour, please let
     /// the technical support know. Otherwise your IP can be blocked
     /// unexpectedly. Prior added URLs can be deleted.
