@@ -47,36 +47,112 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-10' class='srclink' href='../../src/urlshortener/src/providers.rs.html#9-26' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-11' class='srclink' href='../../src/urlshortener/src/providers.rs.html#46-115' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum Provider {
+    Abv8,
+    BamBz,
+    Bmeo,
     BnGy,
+    FifoCc,
+    HecSu,
     IsGd,
+    NowLinks,
+    PhxCoIn,
     PsbeCo,
+    SCoop,
     Rdd,
     Rlu,
+    SirBz,
+    TinyUrl,
+    TinyPh,
+    TnyIm,
     VGd,
 }</pre><div class='docblock'><p>Used to specify which provider to use to generate a short URL.</p>
 </div><h2 class='variants'>Variants</h2>
-<table class='variants_table'><tr><td id='variant.BnGy'><code>BnGy</code></td><td><div class='docblock'><p><a href="https://bn.gy">https://bn.gy</a> provider</p>
+<table class='variants_table'><tr><td id='variant.Abv8'><code>Abv8</code></td><td><div class='docblock'><p><a href="http://abv8.me">http://abv8.me</a> provider</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>You may not shorten more than 20 unique URLs within a 3-minute period.</li>
+<li>You may not shorten more than 60 unique URLs within a 15-minute
+period.</li>
+</ul>
+</div></td><td></td></tr><tr><td id='variant.BamBz'><code>BamBz</code></td><td><div class='docblock'><p><a href="https://bam.bz">https://bam.bz</a> provider</p>
+</div></td><td></td></tr><tr><td id='variant.Bmeo'><code>Bmeo</code></td><td><div class='docblock'><p><a href="http://bmeo.org">http://bmeo.org</a> provider</p>
+</div></td><td></td></tr><tr><td id='variant.BnGy'><code>BnGy</code></td><td><div class='docblock'><p><a href="https://bn.gy">https://bn.gy</a> provider</p>
+</div></td><td></td></tr><tr><td id='variant.FifoCc'><code>FifoCc</code></td><td><div class='docblock'><p><a href="http://fifo.cc">http://fifo.cc</a> provider</p>
+</div></td><td></td></tr><tr><td id='variant.HecSu'><code>HecSu</code></td><td><div class='docblock'><p><a href="https://hec.su">https://hec.su</a> provider</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>Limited to 3000 API requests per day</li>
+</ul>
 </div></td><td></td></tr><tr><td id='variant.IsGd'><code>IsGd</code></td><td><div class='docblock'><p><a href="https://is.gd">https://is.gd</a> provider</p>
+</div></td><td></td></tr><tr><td id='variant.NowLinks'><code>NowLinks</code></td><td><div class='docblock'><p><a href="http://nowlinks.net">http://nowlinks.net</a> provider</p>
+</div></td><td></td></tr><tr><td id='variant.PhxCoIn'><code>PhxCoIn</code></td><td><div class='docblock'><p><a href="http://phx.co.in">http://phx.co.in</a> provider</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>After some time the service will display ads</li>
+<li>Instead of redirecting, a preview page will be displayed</li>
+<li>Currently unstable</li>
+</ul>
 </div></td><td></td></tr><tr><td id='variant.PsbeCo'><code>PsbeCo</code></td><td><div class='docblock'><p><a href="http://psbe.co">http://psbe.co</a> provider</p>
+</div></td><td></td></tr><tr><td id='variant.SCoop'><code>SCoop</code></td><td><div class='docblock'><p><a href="http://s.coop">http://s.coop</a> provider</p>
 </div></td><td></td></tr><tr><td id='variant.Rdd'><code>Rdd</code></td><td><div class='docblock'><p><a href="http://readbility.com">http://readbility.com</a> provider</p>
-</div></td><td></td></tr><tr><td id='variant.Rlu'><code>Rlu</code></td><td><div class='docblock'><p><a href="http://rlu.ru">http://rlu.ru</a> provider
-* Attention! If you send a lot of requests from one IP, it can be
+</div></td><td></td></tr><tr><td id='variant.Rlu'><code>Rlu</code></td><td><div class='docblock'><p><a href="http://rlu.ru">http://rlu.ru</a> provider</p>
+
+<p>Notes:</p>
+
+<p>If you send a lot of requests from one IP, it can be
 blocked. If you plan to add more then 100 URLs in one hour, please let
 the technical support know. Otherwise your IP can be blocked
 unexpectedly. Prior added URLs can be deleted.</p>
+</div></td><td></td></tr><tr><td id='variant.SirBz'><code>SirBz</code></td><td><div class='docblock'><p><a href="http://sirbz.com">http://sirbz.com</a> provider</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>By default, you are limited to 250 requests per 15 minutes.</li>
+</ul>
+</div></td><td></td></tr><tr><td id='variant.TinyUrl'><code>TinyUrl</code></td><td><div class='docblock'><p><a href="http://tinyurl.com">http://tinyurl.com</a> provider</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>This service does not provide any API.</li>
+<li>The implementation result depends on the service result web page.</li>
+</ul>
+</div></td><td></td></tr><tr><td id='variant.TinyPh'><code>TinyPh</code></td><td><div class='docblock'><p><a href="http://tiny.ph">http://tiny.ph</a> provider</p>
+</div></td><td></td></tr><tr><td id='variant.TnyIm'><code>TnyIm</code></td><td><div class='docblock'><p><a href="http://tny.im">http://tny.im</a> provider</p>
 </div></td><td></td></tr><tr><td id='variant.VGd'><code>VGd</code></td><td><div class='docblock'><p><a href="https://v.gd">https://v.gd</a> provider</p>
-</div></td><td></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></h3><div class='impl-items'><h4 id='method.to_name' class='method'><code>fn <a href='#method.to_name' class='fnname'>to_name</a>(&amp;self) -&gt; &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
+</div></td><td></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-70' class='srclink' href='../../src/urlshortener/src/providers.rs.html#117-141' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.to_name' class='method'><code>fn <a href='#method.to_name' class='fnname'>to_name</a>(&amp;self) -&gt; &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
 <div class='docblock'><p>Converts the Provider variant into its domain name equivilant</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<h4 id='method.ne' class='method'><span class="since">1.0.0</span><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html' title='core::hash::Hash'>Hash</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></h3><div class='impl-items'><h4 id='method.hash' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#tymethod.hash' class='fnname'>hash</a>&lt;__H: <a class='trait' href='https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html' title='core::hash::Hasher'>Hasher</a>&gt;(&amp;self, __arg_0: &amp;mut __H)</code></h4>
-<h4 id='method.hash_slice' class='method'><span class="since">1.3.0</span><code>fn <a href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice' class='fnname'>hash_slice</a>&lt;H&gt;(data: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[Self]</a>, state: &amp;mut H) <span class='where'>where H: <a class='trait' href='https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html' title='core::hash::Hasher'>Hasher</a></span></code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></h4>
-<h4 id='method.clone_from' class='method'><span class="since">1.0.0</span><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
-</div></section>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-30' class='srclink' href='../../src/urlshortener/src/providers.rs.html#45' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html' title='core::hash::Hash'>Hash</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-36' class='srclink' href='../../src/urlshortener/src/providers.rs.html#45' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.hash' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#tymethod.hash' class='fnname'>hash</a>&lt;__H: <a class='trait' href='https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html' title='core::hash::Hasher'>Hasher</a>&gt;(&amp;self, __arg_0: &amp;mut __H)</code></h4>
+<div class='docblock'><p>Feeds this value into the state given, updating the hasher as necessary.</p>
+</div><h4 id='method.hash_slice' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice' class='fnname'>hash_slice</a>&lt;H&gt;(data: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[Self]</a>, state: &amp;mut H) <span class='where'>where H: <a class='trait' href='https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html' title='core::hash::Hasher'>Hasher</a></span></code><div class='since' title='Stable since Rust version 1.3.0'>1.3.0</div></h4>
+<div class='docblock'><p>Feeds a slice of this type into the state provided.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-41' class='srclink' href='../../src/urlshortener/src/providers.rs.html#45' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-44' class='srclink' href='../../src/urlshortener/src/providers.rs.html#45' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-66' class='srclink' href='../../src/urlshortener/src/providers.rs.html#45' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-67' class='srclink' href='../../src/urlshortener/src/providers.rs.html#45' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a></code></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -99,6 +175,8 @@ unexpectedly. Prior added URLs can be deleted.</p>
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 

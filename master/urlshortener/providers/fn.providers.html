@@ -47,11 +47,16 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-48' class='srclink' href='../../src/urlshortener/src/providers.rs.html#46-57' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn providers() -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a>&gt;</pre><div class='docblock'><p>Returns a vector of all <code>Provider</code> variants.</p>
+               </span><a id='src-73' class='srclink' href='../../src/urlshortener/src/providers.rs.html#152-188' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn providers() -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a>&gt;</pre><div class='docblock'><p>Returns a vector of all <code>Provider</code> variants. This list is in order of
+provider quality.</p>
 
-<p>The providers which are discouraged from use due to limitations such as
-rate limitations are at the end of the resultant vector.</p>
+<p>The providers which are discouraged from use - due to problems such as rate
+limitations - are at the end of the resultant vector.</p>
+
+<p>Note that some providers may not provide a generated short URL because the
+submitted URL may already be short enough and would not benefit from
+shortening via their service.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 
@@ -75,6 +80,8 @@ rate limitations are at the end of the resultant vector.</p>
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 

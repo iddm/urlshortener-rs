@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/user/.cargo/registry/src/github.com-88ac128001ac3a9a/openssl-0.7.14/src/x509/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/fx/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.7.14/src/x509/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -1059,7 +1059,7 @@
             <span class='prelude-val'>Some</span>(<span class='ident'>X509</span> {
                 <span class='ident'>ctx</span>: <span class='prelude-val'>Some</span>(<span class='self'>self</span>),
                 <span class='ident'>handle</span>: <span class='ident'>ptr</span>,
-                <span class='ident'>owned</span>: <span class='boolval'>false</span>,
+                <span class='ident'>owned</span>: <span class='boolvalue'>false</span>,
             })
         }
     }
@@ -1235,7 +1235,7 @@
                                          <span class='ident'>value</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>)
                 }
             };
-            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>success</span> <span class='op'>=</span> <span class='boolval'>false</span>;
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>success</span> <span class='op'>=</span> <span class='boolvalue'>false</span>;
             <span class='kw'>if</span> <span class='ident'>ext</span> <span class='op'>!=</span> <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>() {
                 <span class='ident'>success</span> <span class='op'>=</span> <span class='ident'>ffi</span>::<span class='ident'>X509_add_ext</span>(<span class='ident'>x509</span>, <span class='ident'>ext</span>, <span class='op'>-</span><span class='number'>1</span>) <span class='op'>!=</span> <span class='number'>0</span>;
                 <span class='ident'>ffi</span>::<span class='ident'>X509_EXTENSION_free</span>(<span class='ident'>ext</span>);
@@ -1300,7 +1300,7 @@
             <span class='kw'>let</span> <span class='ident'>x509</span> <span class='op'>=</span> <span class='ident'>X509</span> {
                 <span class='ident'>handle</span>: <span class='ident'>x509</span>,
                 <span class='ident'>ctx</span>: <span class='prelude-val'>None</span>,
-                <span class='ident'>owned</span>: <span class='boolval'>true</span>,
+                <span class='ident'>owned</span>: <span class='boolvalue'>true</span>,
             };
 
             <span class='macro'>try_ssl</span><span class='macro'>!</span>(<span class='ident'>ffi</span>::<span class='ident'>X509_set_version</span>(<span class='ident'>x509</span>.<span class='ident'>handle</span>, <span class='number'>2</span>));
@@ -1398,7 +1398,7 @@
         <span class='ident'>X509</span> {
             <span class='ident'>ctx</span>: <span class='prelude-val'>Some</span>(<span class='ident'>ctx</span>),
             <span class='ident'>handle</span>: <span class='ident'>handle</span>,
-            <span class='ident'>owned</span>: <span class='boolval'>false</span>,
+            <span class='ident'>owned</span>: <span class='boolvalue'>false</span>,
         }
     }
 
@@ -1414,7 +1414,7 @@
                                                               <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>(),
                                                               <span class='prelude-val'>None</span>,
                                                               <span class='ident'>ptr</span>::<span class='ident'>null_mut</span>()));
-            <span class='prelude-val'>Ok</span>(<span class='ident'>X509</span>::<span class='ident'>new</span>(<span class='ident'>handle</span>, <span class='boolval'>true</span>))
+            <span class='prelude-val'>Ok</span>(<span class='ident'>X509</span>::<span class='ident'>new</span>(<span class='ident'>handle</span>, <span class='boolvalue'>true</span>))
         }
     }
 
@@ -1503,7 +1503,7 @@
         <span class='comment'>// FIXME: given that we now have refcounting control, &#39;owned&#39; should be uneeded, the &#39;ctx</span>
         <span class='comment'>// is probably also uneeded. We can remove both to condense the x509 api quite a bit</span>
         <span class='comment'>//</span>
-        <span class='ident'>X509</span>::<span class='ident'>new</span>(<span class='self'>self</span>.<span class='ident'>handle</span>, <span class='boolval'>true</span>)
+        <span class='ident'>X509</span>::<span class='ident'>new</span>(<span class='self'>self</span>.<span class='ident'>handle</span>, <span class='boolvalue'>true</span>)
     }
 }
 
@@ -1660,7 +1660,7 @@
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>Iterator</span> <span class='kw'>for</span> <span class='ident'>ExtensionsIter</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
     <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> (<span class='ident'>ExtensionType</span>, <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>Extension</span>);
 
-    <span class='kw'>fn</span> <span class='ident'>next</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Self</span>::<span class='ident'>Item</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>next</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='self'>Self</span>::<span class='ident'>Item</span><span class='op'>&gt;</span> {
         <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>current</span> <span class='op'>&lt;</span> <span class='self'>self</span>.<span class='ident'>extensions</span>.<span class='ident'>len</span>() {
             <span class='kw'>let</span> <span class='ident'>ext</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>extensions</span>[<span class='self'>self</span>.<span class='ident'>current</span>];
 
@@ -1805,7 +1805,7 @@
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>Iterator</span> <span class='kw'>for</span> <span class='ident'>GeneralNamesIter</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
     <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>GeneralName</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>;
 
-    <span class='kw'>fn</span> <span class='ident'>next</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Self</span>::<span class='ident'>Item</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>next</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='self'>Self</span>::<span class='ident'>Item</span><span class='op'>&gt;</span> {
         <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>idx</span> <span class='op'>&lt;</span> <span class='self'>self</span>.<span class='ident'>names</span>.<span class='ident'>len</span>() {
             <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>names</span>.<span class='ident'>get</span>(<span class='self'>self</span>.<span class='ident'>idx</span>);
             <span class='self'>self</span>.<span class='ident'>idx</span> <span class='op'>+=</span> <span class='number'>1</span>;
@@ -1895,6 +1895,8 @@
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 

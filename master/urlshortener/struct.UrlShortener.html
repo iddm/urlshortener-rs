@@ -47,12 +47,15 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-113' class='srclink' href='../src/urlshortener/src/lib.rs.html#54-56' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-247' class='srclink' href='../src/urlshortener/src/lib.rs.html#56-58' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct UrlShortener {
     // some fields omitted
 }</pre><div class='docblock'><p>Url shortener - the way to retrieve a short url.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></h4>
-<div class='docblock'><p>Creates new <code>UrlShortener</code>.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-249' class='srclink' href='../src/urlshortener/src/lib.rs.html#60-155' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></h4>
+<div class='docblock'><p>Creates new <code>UrlShortener</code> with default (3 seconds) timeout.</p>
+</div><h4 id='method.with_timeout' class='method'><code>fn <a href='#method.with_timeout' class='fnname'>with_timeout</a>(seconds: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>) -&gt; <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></h4>
+<div class='docblock'><p>Creates new <code>UrlShortener</code> and with read timeout.</p>
 </div><h4 id='method.try_generate' class='method'><code>fn <a href='#method.try_generate' class='fnname'>try_generate</a>(&amp;self, url: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a>&gt;</code></h4>
 <div class='docblock'><p>Try to generate a short URL from each provider, iterating over each
 provider until a short URL is successfully generated.</p>
@@ -108,6 +111,8 @@ b. the service being unavailable</p>
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 

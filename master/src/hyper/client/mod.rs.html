@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/user/.cargo/registry/src/github.com-88ac128001ac3a9a/hyper-0.9.9/src/client/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/fx/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.9.9/src/client/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -973,8 +973,8 @@
         <span class='macro'>trace</span><span class='macro'>!</span>(<span class='string'>&quot;send method={:?}, url={:?}, client={:?}&quot;</span>, <span class='ident'>method</span>, <span class='ident'>url</span>, <span class='ident'>client</span>);
 
         <span class='kw'>let</span> <span class='ident'>can_have_body</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>method</span> {
-            <span class='ident'>Method</span>::<span class='ident'>Get</span> <span class='op'>|</span> <span class='ident'>Method</span>::<span class='ident'>Head</span> <span class='op'>=&gt;</span> <span class='boolval'>false</span>,
-            _ <span class='op'>=&gt;</span> <span class='boolval'>true</span>
+            <span class='ident'>Method</span>::<span class='ident'>Get</span> <span class='op'>|</span> <span class='ident'>Method</span>::<span class='ident'>Head</span> <span class='op'>=&gt;</span> <span class='boolvalue'>false</span>,
+            _ <span class='op'>=&gt;</span> <span class='boolvalue'>true</span>
         };
 
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>body</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='ident'>can_have_body</span> {
@@ -988,7 +988,7 @@
                 <span class='kw'>let</span> (<span class='ident'>host</span>, <span class='ident'>port</span>) <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>get_host_and_port</span>(<span class='kw-2'>&amp;</span><span class='ident'>url</span>));
                 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>message</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>client</span>.<span class='ident'>protocol</span>.<span class='ident'>new_message</span>(<span class='kw-2'>&amp;</span><span class='ident'>host</span>, <span class='ident'>port</span>, <span class='ident'>url</span>.<span class='ident'>scheme</span>()));
                 <span class='kw'>if</span> <span class='ident'>url</span>.<span class='ident'>scheme</span>() <span class='op'>==</span> <span class='string'>&quot;http&quot;</span> <span class='op'>&amp;&amp;</span> <span class='ident'>client</span>.<span class='ident'>proxy</span>.<span class='ident'>is_some</span>() {
-                    <span class='ident'>message</span>.<span class='ident'>set_proxied</span>(<span class='boolval'>true</span>);
+                    <span class='ident'>message</span>.<span class='ident'>set_proxied</span>(<span class='boolvalue'>true</span>);
                 }
 
                 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>headers</span> {
@@ -1006,11 +1006,11 @@
             <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>req</span>.<span class='ident'>set_read_timeout</span>(<span class='ident'>client</span>.<span class='ident'>read_timeout</span>));
 
             <span class='kw'>match</span> (<span class='ident'>can_have_body</span>, <span class='ident'>body</span>.<span class='ident'>as_ref</span>()) {
-                (<span class='boolval'>true</span>, <span class='prelude-val'>Some</span>(<span class='ident'>body</span>)) <span class='op'>=&gt;</span> <span class='kw'>match</span> <span class='ident'>body</span>.<span class='ident'>size</span>() {
+                (<span class='boolvalue'>true</span>, <span class='prelude-val'>Some</span>(<span class='ident'>body</span>)) <span class='op'>=&gt;</span> <span class='kw'>match</span> <span class='ident'>body</span>.<span class='ident'>size</span>() {
                     <span class='prelude-val'>Some</span>(<span class='ident'>size</span>) <span class='op'>=&gt;</span> <span class='ident'>req</span>.<span class='ident'>headers_mut</span>().<span class='ident'>set</span>(<span class='ident'>ContentLength</span>(<span class='ident'>size</span>)),
                     <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> (), <span class='comment'>// chunked, Request will add it automatically</span>
                 },
-                (<span class='boolval'>true</span>, <span class='prelude-val'>None</span>) <span class='op'>=&gt;</span> <span class='ident'>req</span>.<span class='ident'>headers_mut</span>().<span class='ident'>set</span>(<span class='ident'>ContentLength</span>(<span class='number'>0</span>)),
+                (<span class='boolvalue'>true</span>, <span class='prelude-val'>None</span>) <span class='op'>=&gt;</span> <span class='ident'>req</span>.<span class='ident'>headers_mut</span>().<span class='ident'>set</span>(<span class='ident'>ContentLength</span>(<span class='number'>0</span>)),
                 _ <span class='op'>=&gt;</span> () <span class='comment'>// neither</span>
             }
             <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>streaming</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>req</span>.<span class='ident'>start</span>());
@@ -1193,9 +1193,9 @@
     <span class='kw'>use</span> <span class='ident'>header</span>::<span class='ident'>Server</span>;
     <span class='kw'>use</span> <span class='ident'>http</span>::<span class='ident'>h1</span>::<span class='ident'>Http11Message</span>;
     <span class='kw'>use</span> <span class='ident'>mock</span>::{<span class='ident'>MockStream</span>, <span class='ident'>MockSsl</span>};
-    <span class='kw'>use</span> <span class='ident'>super</span>::{<span class='ident'>Client</span>, <span class='ident'>RedirectPolicy</span>};
-    <span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>proxy</span>::<span class='ident'>Proxy</span>;
-    <span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>pool</span>::<span class='ident'>Pool</span>;
+    <span class='kw'>use</span> <span class='kw'>super</span>::{<span class='ident'>Client</span>, <span class='ident'>RedirectPolicy</span>};
+    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>proxy</span>::<span class='ident'>Proxy</span>;
+    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>pool</span>::<span class='ident'>Pool</span>;
     <span class='kw'>use</span> <span class='ident'>url</span>::<span class='ident'>Url</span>;
 
     <span class='macro'>mock_connector</span><span class='macro'>!</span>(<span class='ident'>MockRedirectPolicy</span> {
@@ -1218,8 +1218,8 @@
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_proxy</span>() {
-        <span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>pool</span>::<span class='ident'>PooledStream</span>;
-        <span class='kw'>type</span> <span class='ident'>MessageStream</span> <span class='op'>=</span> <span class='ident'>PooledStream</span><span class='op'>&lt;</span><span class='ident'>super</span>::<span class='ident'>proxy</span>::<span class='ident'>Proxied</span><span class='op'>&lt;</span><span class='ident'>MockStream</span>, <span class='ident'>MockStream</span><span class='op'>&gt;&gt;</span>;
+        <span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>pool</span>::<span class='ident'>PooledStream</span>;
+        <span class='kw'>type</span> <span class='ident'>MessageStream</span> <span class='op'>=</span> <span class='ident'>PooledStream</span><span class='op'>&lt;</span><span class='kw'>super</span>::<span class='ident'>proxy</span>::<span class='ident'>Proxied</span><span class='op'>&lt;</span><span class='ident'>MockStream</span>, <span class='ident'>MockStream</span><span class='op'>&gt;&gt;</span>;
         <span class='macro'>mock_connector</span><span class='macro'>!</span>(<span class='ident'>ProxyConnector</span> {
             <span class='string'>b&quot;HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n&quot;</span>
         });
@@ -1245,8 +1245,8 @@
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_proxy_tunnel</span>() {
-        <span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>pool</span>::<span class='ident'>PooledStream</span>;
-        <span class='kw'>type</span> <span class='ident'>MessageStream</span> <span class='op'>=</span> <span class='ident'>PooledStream</span><span class='op'>&lt;</span><span class='ident'>super</span>::<span class='ident'>proxy</span>::<span class='ident'>Proxied</span><span class='op'>&lt;</span><span class='ident'>MockStream</span>, <span class='ident'>MockStream</span><span class='op'>&gt;&gt;</span>;
+        <span class='kw'>use</span> <span class='kw'>super</span>::<span class='ident'>pool</span>::<span class='ident'>PooledStream</span>;
+        <span class='kw'>type</span> <span class='ident'>MessageStream</span> <span class='op'>=</span> <span class='ident'>PooledStream</span><span class='op'>&lt;</span><span class='kw'>super</span>::<span class='ident'>proxy</span>::<span class='ident'>Proxied</span><span class='op'>&lt;</span><span class='ident'>MockStream</span>, <span class='ident'>MockStream</span><span class='op'>&gt;&gt;</span>;
 
         <span class='macro'>mock_connector</span><span class='macro'>!</span>(<span class='ident'>ProxyConnector</span> {
             <span class='string'>b&quot;HTTP/1.1 200 OK\r\n\r\n&quot;</span>,
@@ -1355,6 +1355,8 @@
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 

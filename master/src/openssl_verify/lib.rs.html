@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/user/.cargo/registry/src/github.com-88ac128001ac3a9a/openssl-verify-0.1.0/src/lib.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/fx/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-verify-0.1.0/src/lib.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>lib.rs.html -- source</title>
@@ -582,7 +582,7 @@
 
     <span class='kw'>match</span> <span class='ident'>x509_ctx</span>.<span class='ident'>get_current_cert</span>() {
         <span class='prelude-val'>Some</span>(<span class='ident'>x509</span>) <span class='op'>=&gt;</span> <span class='ident'>verify_hostname</span>(<span class='ident'>domain</span>, <span class='kw-2'>&amp;</span><span class='ident'>x509</span>),
-        <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='boolval'>true</span>,
+        <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='boolvalue'>true</span>,
     }
 }
 
@@ -603,21 +603,21 @@
             <span class='prelude-val'>Ok</span>(<span class='ident'>ip</span>) <span class='op'>=&gt;</span> {
                 <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>actual</span>) <span class='op'>=</span> <span class='ident'>name</span>.<span class='ident'>ipaddress</span>() {
                     <span class='kw'>if</span> <span class='ident'>matches_ip</span>(<span class='kw-2'>&amp;</span><span class='ident'>ip</span>, <span class='ident'>actual</span>) {
-                        <span class='kw'>return</span> <span class='boolval'>true</span>;
+                        <span class='kw'>return</span> <span class='boolvalue'>true</span>;
                     }
                 }
             }
             <span class='prelude-val'>Err</span>(_) <span class='op'>=&gt;</span> {
                 <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>pattern</span>) <span class='op'>=</span> <span class='ident'>name</span>.<span class='ident'>dnsname</span>() {
-                    <span class='kw'>if</span> <span class='ident'>matches_dns</span>(<span class='ident'>pattern</span>, <span class='ident'>domain</span>, <span class='boolval'>false</span>) {
-                        <span class='kw'>return</span> <span class='boolval'>true</span>;
+                    <span class='kw'>if</span> <span class='ident'>matches_dns</span>(<span class='ident'>pattern</span>, <span class='ident'>domain</span>, <span class='boolvalue'>false</span>) {
+                        <span class='kw'>return</span> <span class='boolvalue'>true</span>;
                     }
                 }
             }
         }
     }
 
-    <span class='boolval'>false</span>
+    <span class='boolvalue'>false</span>
 }
 
 <span class='kw'>fn</span> <span class='ident'>verify_subject_name</span>(<span class='ident'>domain</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>subject_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>X509Name</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
@@ -628,11 +628,11 @@
         <span class='kw'>let</span> <span class='ident'>is_ip</span> <span class='op'>=</span> <span class='ident'>domain</span>.<span class='ident'>parse</span>::<span class='op'>&lt;</span><span class='ident'>IpAddr</span><span class='op'>&gt;</span>().<span class='ident'>is_ok</span>();
 
         <span class='kw'>if</span> <span class='ident'>matches_dns</span>(<span class='kw-2'>&amp;</span><span class='ident'>pattern</span>, <span class='ident'>domain</span>, <span class='ident'>is_ip</span>) {
-            <span class='kw'>return</span> <span class='boolval'>true</span>;
+            <span class='kw'>return</span> <span class='boolvalue'>true</span>;
         }
     }
 
-    <span class='boolval'>false</span>
+    <span class='boolvalue'>false</span>
 }
 
 <span class='kw'>fn</span> <span class='ident'>matches_dns</span>(<span class='kw-2'>mut</span> <span class='ident'>pattern</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='kw-2'>mut</span> <span class='ident'>hostname</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>is_ip</span>: <span class='ident'>bool</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
@@ -689,7 +689,7 @@
 
     <span class='comment'>// check that the non-wildcard parts are identical</span>
     <span class='kw'>if</span> <span class='ident'>pattern</span>[<span class='ident'>wildcard_end</span>..] <span class='op'>!=</span> <span class='ident'>hostname</span>[<span class='ident'>hostname_label_end</span>..] {
-        <span class='kw'>return</span> <span class='prelude-val'>Some</span>(<span class='boolval'>false</span>);
+        <span class='kw'>return</span> <span class='prelude-val'>Some</span>(<span class='boolvalue'>false</span>);
     }
 
     <span class='kw'>let</span> <span class='ident'>wildcard_prefix</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>pattern</span>[..<span class='ident'>wildcard_location</span>];
@@ -699,15 +699,15 @@
 
     <span class='comment'>// check the prefix of the first label</span>
     <span class='kw'>if</span> <span class='op'>!</span><span class='ident'>hostname_label</span>.<span class='ident'>starts_with</span>(<span class='ident'>wildcard_prefix</span>) {
-        <span class='kw'>return</span> <span class='prelude-val'>Some</span>(<span class='boolval'>false</span>);
+        <span class='kw'>return</span> <span class='prelude-val'>Some</span>(<span class='boolvalue'>false</span>);
     }
 
     <span class='comment'>// and the suffix</span>
     <span class='kw'>if</span> <span class='op'>!</span><span class='ident'>hostname_label</span>[<span class='ident'>wildcard_prefix</span>.<span class='ident'>len</span>()..].<span class='ident'>ends_with</span>(<span class='ident'>wildcard_suffix</span>) {
-        <span class='kw'>return</span> <span class='prelude-val'>Some</span>(<span class='boolval'>false</span>);
+        <span class='kw'>return</span> <span class='prelude-val'>Some</span>(<span class='boolvalue'>false</span>);
     }
 
-    <span class='prelude-val'>Some</span>(<span class='boolval'>true</span>)
+    <span class='prelude-val'>Some</span>(<span class='boolvalue'>true</span>)
 }
 
 <span class='kw'>fn</span> <span class='ident'>matches_ip</span>(<span class='ident'>expected</span>: <span class='kw-2'>&amp;</span><span class='ident'>IpAddr</span>, <span class='ident'>actual</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
@@ -724,7 +724,7 @@
                             ((<span class='ident'>actual</span>[<span class='number'>14</span>] <span class='kw'>as</span> <span class='ident'>u16</span>) <span class='op'>&lt;&lt;</span> <span class='number'>8</span>) <span class='op'>|</span> <span class='ident'>actual</span>[<span class='number'>15</span>] <span class='kw'>as</span> <span class='ident'>u16</span>];
             <span class='ident'>segments</span> <span class='op'>==</span> <span class='ident'>addr</span>.<span class='ident'>segments</span>()
         }
-        _ <span class='op'>=&gt;</span> <span class='boolval'>false</span>,
+        _ <span class='op'>=&gt;</span> <span class='boolvalue'>false</span>,
     }
 }
 
@@ -739,7 +739,7 @@
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>thread</span>;
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>time</span>::<span class='ident'>Duration</span>;
 
-    <span class='kw'>use</span> <span class='ident'>super</span>::<span class='op'>*</span>;
+    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='op'>*</span>;
 
     <span class='kw'>static</span> <span class='ident'>NEXT_PORT</span>: <span class='ident'>AtomicUsize</span> <span class='op'>=</span> <span class='ident'>ATOMIC_USIZE_INIT</span>;
 
@@ -1031,6 +1031,8 @@
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
