@@ -56,10 +56,15 @@ pub struct UrlShortener {
 }
 
 impl UrlShortener {
-    /// Creates new `UrlShortener`.
+    /// Creates new `UrlShortener` with default (3 seconds) timeout.
     pub fn new() -> UrlShortener {
+        UrlShortener::with_timeout(3)
+    }
+
+    /// Creates new `UrlShortener` and with read timeout.
+    pub fn with_timeout(seconds: u64) -> UrlShortener {
         let mut client = hyper::Client::new();
-        client.set_read_timeout(Some(Duration::from_secs(3)));
+        client.set_read_timeout(Some(Duration::from_secs(seconds)));
 
         UrlShortener {
             client: client,
@@ -151,7 +156,7 @@ impl UrlShortener {
 mod tests {
     #[test]
     fn providers() {
-        let us = ::UrlShortener::new();
+        let us = ::UrlShortener::with_timeout(5);
         let url = "http://stackoverflow.com";
 
         for provider in ::providers() {

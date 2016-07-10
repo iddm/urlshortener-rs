@@ -122,9 +122,11 @@ pub fn providers() -> Vec<Provider> {
         Provider::BamBz,
         Provider::TinyPh,
         Provider::FifoCc,
-        Provider::TnyIm,
         Provider::SCoop,
         Provider::Bmeo,
+
+        // The following list are items that have long response sometimes:
+        Provider::TnyIm,
 
         // The following list are items that are discouraged from use:
 
