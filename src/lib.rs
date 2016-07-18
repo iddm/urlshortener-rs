@@ -83,7 +83,7 @@ impl UrlShortener {
     ///
     /// let us = UrlShortener::new();
     /// let long_url = "https://rust-lang.org";
-    /// let short_url = us.try_generate(long_url);
+    /// let _short_url = us.try_generate(long_url);
     /// ```
     ///
     /// # Errors
