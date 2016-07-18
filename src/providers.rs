@@ -42,7 +42,7 @@ macro_rules! parse_json_tag {
 }
 
 /// Used to specify which provider to use to generate a short URL.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug)]
 pub enum Provider {
     /// http://abv8.me provider
     ///
@@ -88,10 +88,10 @@ pub enum Provider {
     ///
     /// Notes:
     ///
-    /// - If you send a lot of requests from one IP, it can be
-    /// blocked. If you plan to add more then 100 URLs in one hour, please let
-    /// the technical support know. Otherwise your IP can be blocked
-    /// unexpectedly. Prior added URLs can be deleted.
+    /// * If you send a lot of requests from one IP, it can be
+    ///   blocked. If you plan to add more then 100 URLs in one hour, please let
+    ///   the technical support know. Otherwise your IP can be blocked
+    ///   unexpectedly. Prior added URLs can be deleted.
     Rlu,
     /// http://sirbz.com provider
     ///
@@ -392,7 +392,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 }
 
 /// Performs a request to the short link provider.
-/// Response to be parsed or `None` on a error.
+/// Returns the parsed response on success or a `None` on error.
 pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Response> {
     match provider {
         Provider::Abv8 => abv8_request(url, client),
