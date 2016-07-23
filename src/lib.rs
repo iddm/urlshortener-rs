@@ -90,7 +90,9 @@ impl UrlShortener {
     ///
     /// Returns an `Error<ErrorKind::Other>` if there is an error generating a
     /// short URL from all providers.
-    pub fn try_generate(&self, url: &str) -> Result<String, Error> {
+    pub fn try_generate<S: Into<String>>(&self,
+                                         url: S) -> Result<String, Error> {
+        let url = &url.into()[..];
         let mut providers = providers();
 
         let x = 0usize;
@@ -135,8 +137,10 @@ impl UrlShortener {
     ///
     /// a. a decode error (ErrorKind::Other);
     /// b. the service being unavailable (ErrorKind::ConnectionAborted)
-    pub fn generate(&self, url: &str, provider: Provider) -> Result<String, Error> {
-        let response_opt = request(url, &self.client, provider);
+    pub fn generate<S: Into<String>>(&self,
+                                     url: S,
+                                     provider: Provider) -> Result<String, Error> {
+        let response_opt = request(&url.into(), &self.client, provider);
 
         if let Some(mut response) = response_opt {
             if response.status.is_success() {
