@@ -43,7 +43,7 @@
 extern crate log;
 extern crate hyper;
 
-pub mod providers;
+mod providers;
 
 pub use providers::{Provider, providers};
 
