@@ -28,6 +28,7 @@ Currently the following URL shorteners are implemented:
 - `tny.im`
 - `s.coop`
 - `bmeo.org`
+- `url-shortener.io`
 
 The following services are supported, but are discouraged from use, due to
 restrictions such as rate limits:
