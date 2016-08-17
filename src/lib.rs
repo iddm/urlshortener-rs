@@ -49,7 +49,7 @@ pub use providers::{Provider, providers};
 
 use providers::{parse, request};
 use hyper::Client;
-use std::io::{ErrorKind, Error, Read};
+use std::io::{Error, ErrorKind, Read};
 use std::time::Duration;
 
 /// Url shortener - the way to retrieve a short url.
@@ -68,9 +68,7 @@ impl UrlShortener {
         let mut client = hyper::Client::new();
         client.set_read_timeout(Some(Duration::from_secs(seconds)));
 
-        UrlShortener {
-            client: client,
-        }
+        UrlShortener { client: client }
     }
 
     /// Try to generate a short URL from each provider, iterating over each
@@ -99,7 +97,7 @@ impl UrlShortener {
 
         loop {
             if providers.len() == 0 {
-                break
+                break;
             }
 
             // This would normally have the potential to panic, except that a
@@ -108,14 +106,15 @@ impl UrlShortener {
             let res = self.generate(url, provider);
 
             if let Ok(s) = res {
-                return Ok(s)
+                return Ok(s);
             } else {
                 warn!("Failed to get short link from service: {}",
                       res.unwrap_err());
             }
         }
         error!("Failed to get short link from any service");
-        Err(Error::new(ErrorKind::Other, "Failed to get short link from any service"))
+        Err(Error::new(ErrorKind::Other,
+                       "Failed to get short link from any service"))
     }
 
     /// Attempts to get a short URL using the specified provider.
@@ -147,9 +146,9 @@ impl UrlShortener {
                 let mut short_url = String::new();
                 if try!(response.read_to_string(&mut short_url)) > 0 {
                     if let Some(s) = parse(&short_url, provider) {
-                        return Ok(s)
+                        return Ok(s);
                     } else {
-                        return Err(Error::new(ErrorKind::Other, "Decode error"))
+                        return Err(Error::new(ErrorKind::Other, "Decode error"));
                     }
                 }
             }

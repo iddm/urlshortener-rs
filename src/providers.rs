@@ -110,6 +110,8 @@ pub enum Provider {
     TinyPh,
     /// http://tny.im provider
     TnyIm,
+    /// http://url-shortener.io provider
+    UrlShortenerIo,
     /// https://v.gd provider
     VGd,
 }
@@ -135,6 +137,7 @@ impl Provider {
             Provider::TinyUrl => "tinyurl.com",
             Provider::TinyPh => "tiny.ph",
             Provider::TnyIm => "tny.im",
+            Provider::UrlShortenerIo => "url-shortener.io",
             Provider::VGd => "v.gd",
         }
     }
@@ -160,6 +163,7 @@ pub fn providers() -> Vec<Provider> {
         Provider::FifoCc,
         Provider::SCoop,
         Provider::Bmeo,
+        Provider::UrlShortenerIo,
 
         // The following list are items that have long response sometimes:
         Provider::TnyIm,
@@ -318,12 +322,14 @@ fn sirbz_request(url: &str, client: &Client) -> Option<Response> {
 
 fn tinyurl_parse(res: &str) -> Option<String> {
     if res.is_empty() {
-        return None
+        return None;
     }
     let string = res.to_owned();
     let value = string.split("data-clipboard-text=\"")
-                      .nth(1).unwrap_or("")
-                      .split("\">").next();
+        .nth(1)
+        .unwrap_or("")
+        .split("\">")
+        .next();
     if let Some(string) = value {
         Some(string.to_owned())
     } else {
@@ -351,6 +357,18 @@ parse_xml_tag!(tnyim_parse, "shorturl");
 
 fn tnyim_request(url: &str, client: &Client) -> Option<Response> {
     client.get(&format!("http://tny.im/yourls-api.php?action=shorturl&url={}", url))
+        .send()
+        .ok()
+}
+
+fn urlshortenerio_parse(res: &str) -> Option<String> {
+    Some(res.to_owned())
+}
+
+fn urlshortenerio_request(url: &str, client: &Client) -> Option<Response> {
+    client.post("http://url-shortener.io/shorten")
+        .body(&format!("url_param={}", url))
+        .header(ContentType::form_url_encoded())
         .send()
         .ok()
 }
@@ -387,6 +405,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
         Provider::TinyUrl => tinyurl_parse(res),
         Provider::TinyPh => tinyph_parse(res),
         Provider::TnyIm => tnyim_parse(res),
+        Provider::UrlShortenerIo => urlshortenerio_parse(res),
         Provider::VGd => vgd_parse(res),
     }
 }
@@ -412,6 +431,7 @@ pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Respons
         Provider::TinyUrl => tinyurl_request(url, client),
         Provider::TinyPh => tinyph_request(url, client),
         Provider::TnyIm => tnyim_request(url, client),
+        Provider::UrlShortenerIo => urlshortenerio_request(url, client),
         Provider::VGd => vgd_request(url, client),
     }
 }
