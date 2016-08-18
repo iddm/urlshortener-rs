@@ -8,16 +8,12 @@ use hyper::header::ContentType;
 macro_rules! parse_xml_tag {
     ($fname: ident, $tag: expr) => {
         fn $fname(res: &str) -> Option<String> {
-            if res.is_empty() {
-                return None
-            }
-            let string = res.to_owned();
-            if let Some(value) = string.split(concat!("<", $tag, ">")).nth(1).unwrap_or("")
-                                       .split(concat!("</", $tag, ">")).next() {
-                Some(value.to_owned())
-            } else {
-                None
-            }
+            res.split(&format!("<{}>", $tag))
+                .nth(1)
+                .unwrap_or("")
+                .split(&format!("</{}>", $tag))
+                .next()
+                .map(|v| v.to_owned())
         }
     }
 }
@@ -25,18 +21,16 @@ macro_rules! parse_xml_tag {
 macro_rules! parse_json_tag {
     ($fname: ident, $tag: expr, $prefix: expr) => {
         fn $fname(res: &str) -> Option<String> {
-            if res.is_empty() {
-                return None
-            }
-            let string = res.to_owned();
-            if let Some(value) = string.split(concat!("\"", $tag, "\""))
-                                       .nth(1).unwrap_or("")
-                                       .split(",").next().unwrap_or("")
-                                       .split("\"").nth(1) {
-                Some(format!("{}{}", $prefix, value.to_owned().replace("\\", "")))
-            } else {
-                None
-            }
+            res.to_owned()
+                .split(&format!("\"{}\"", $tag))
+                .nth(1)
+                .unwrap_or("")
+                .split(",")
+                .next()
+                .unwrap_or("")
+                .split("\"")
+                .nth(1)
+                .map(|v| format!("{}{}", $prefix, v.replace("\\", "")))
         }
     }
 }
@@ -321,20 +315,12 @@ fn sirbz_request(url: &str, client: &Client) -> Option<Response> {
 }
 
 fn tinyurl_parse(res: &str) -> Option<String> {
-    if res.is_empty() {
-        return None;
-    }
-    let string = res.to_owned();
-    let value = string.split("data-clipboard-text=\"")
+    res.split("data-clipboard-text=\"")
         .nth(1)
         .unwrap_or("")
         .split("\">")
-        .next();
-    if let Some(string) = value {
-        Some(string.to_owned())
-    } else {
-        None
-    }
+        .next()
+        .map(|v| v.to_owned())
 }
 
 fn tinyurl_request(url: &str, client: &Client) -> Option<Response> {

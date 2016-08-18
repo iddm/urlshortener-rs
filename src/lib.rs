@@ -52,8 +52,8 @@ use hyper::Client;
 use std::io::{Error, ErrorKind, Read};
 use std::time::Duration;
 
-/// Url shortener - the way to retrieve a short url.
-#[derive(Default)]
+/// Url shortener: the way to retrieve a short url.
+#[derive(Debug, Default)]
 pub struct UrlShortener {
     client: Client,
 }
@@ -94,8 +94,6 @@ impl UrlShortener {
         let url = &url.into()[..];
         let mut providers = providers();
 
-        let x = 0usize;
-
         loop {
             if providers.is_empty() {
                 break;
@@ -103,8 +101,7 @@ impl UrlShortener {
 
             // This would normally have the potential to panic, except that a
             // check to ensure there is an element at this index is performed.
-            let provider = providers.remove(x);
-            let res = self.generate(url, provider);
+            let res = self.generate(url, providers.remove(0));
 
             if let Ok(s) = res {
                 return Ok(s);
@@ -145,15 +142,14 @@ impl UrlShortener {
         if let Some(mut response) = response_opt {
             if response.status.is_success() {
                 let mut short_url = String::new();
+
                 if try!(response.read_to_string(&mut short_url)) > 0 {
-                    if let Some(s) = parse(&short_url, provider) {
-                        return Ok(s);
-                    } else {
-                        return Err(Error::new(ErrorKind::Other, "Decode error"));
-                    }
+                    return parse(&short_url, provider)
+                        .ok_or(Error::new(ErrorKind::Other, "Decode error"));
                 }
             }
         }
+
         Err(Error::new(ErrorKind::ConnectionAborted, "Service is unavailable"))
     }
 }
