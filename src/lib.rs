@@ -124,7 +124,7 @@ impl UrlShortener {
     ///
     /// let us = UrlShortener::new();
     /// let long_url = "http://rust-lang.org";
-    /// let short_url = us.generate(long_url, Provider::IsGd);
+    /// let _short_url = us.generate(long_url, Provider::IsGd);
     /// ```
     ///
     /// # Errors
