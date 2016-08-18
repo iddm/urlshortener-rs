@@ -33,7 +33,7 @@ macro_rules! parse_json_tag {
                                        .nth(1).unwrap_or("")
                                        .split(",").next().unwrap_or("")
                                        .split("\"").nth(1) {
-                Some(format!(concat!($prefix, "{}"), value.to_owned().replace("\\", "")))
+                Some(format!("{}{}", $prefix, value.to_owned().replace("\\", "")))
             } else {
                 None
             }

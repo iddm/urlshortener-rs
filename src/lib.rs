@@ -53,6 +53,7 @@ use std::io::{Error, ErrorKind, Read};
 use std::time::Duration;
 
 /// Url shortener - the way to retrieve a short url.
+#[derive(Default)]
 pub struct UrlShortener {
     client: Client,
 }
@@ -96,7 +97,7 @@ impl UrlShortener {
         let x = 0usize;
 
         loop {
-            if providers.len() == 0 {
+            if providers.is_empty() {
                 break;
             }
 
