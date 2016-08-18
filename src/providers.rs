@@ -35,6 +35,43 @@ macro_rules! parse_json_tag {
     }
 }
 
+macro_rules! parse {
+    ($name:ident) => {
+        fn $name(res: &str) -> Option<String> {
+            Some(res.to_owned())
+        }
+    };
+}
+
+macro_rules! request {
+    ($name:ident, $method:ident, $req_url:expr) => {
+        fn $name(url: &str, client: &Client) -> Option<Response> {
+            client.$method(&format!($req_url, url))
+                .send()
+                .ok()
+        }
+    };
+
+    (B, $name:ident, $method: ident, $req_url:expr, $body:expr) => {
+        fn $name(url: &str, client: &Client) -> Option<Response> {
+            client.$method($req_url)
+                .body(&format!($body, url))
+                .send()
+                .ok()
+        }
+    };
+
+    ($name:ident, $method:ident, $req_url:expr, $body:expr, $header:expr) => {
+        fn $name(url: &str, client: &Client) -> Option<Response> {
+            client.$method($req_url)
+                .body(&format!($body, url))
+                .header($header)
+                .send()
+                .ok()
+        }
+    };
+}
+
 /// Used to specify which provider to use to generate a short URL.
 #[derive(Clone, Copy, Debug)]
 pub enum Provider {
@@ -180,139 +217,67 @@ pub fn providers() -> Vec<Provider> {
         // Reason: unstable work
         Provider::PsbeCo,
 
-        // The following list are items that show previews instead of direct links.
+        // The following list are items that show previews instead of direct
+        // links.
         Provider::NowLinks,
     ]
 }
 
-fn abv8_parse(res: &str) -> Option<String> {
-    Some(res.to_owned())
-}
-
-fn abv8_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://abv8.me/?url={}", url))
-        .send()
-        .ok()
-}
+parse!(abv8_parse);
+request!(abv8_req, get, "http://abv8.me/?url={}");
 
 parse_json_tag!(bambz_parse, "url", "");
-
-fn bambz_request(url: &str, client: &Client) -> Option<Response> {
-    client.post("https://bam.bz/api/short")
-        .body(&format!("target={}", url))
-        .header(ContentType::form_url_encoded())
-        .send()
-        .ok()
-}
+request!(bambz_req,
+         post,
+         "https://bam.bz/api/short",
+         "target={}",
+         ContentType::form_url_encoded());
 
 parse_json_tag!(bmeo_parse, "short", "");
-
-fn bmeo_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://bmeo.org/api.php?url={}", url))
-        .send()
-        .ok()
-}
+request!(bmeo_req, get, "http://bmeo.org/api.php?url={}");
 
 parse_xml_tag!(bngy_parse, "ShortenedUrl");
-
-fn bngy_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("https://bn.gy/API.asmx/CreateUrl?real_url={}", url))
-        .send()
-        .ok()
-}
+request!(bngy_req, get, "https://bn.gy/API.asmx/CreateUrl?real_url={}");
 
 parse_json_tag!(fifocc_parse, "shortner", "http://fifo.cc/");
-
-fn fifocc_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("https://fifo.cc/api/v2?url={}", url))
-        .send()
-        .ok()
-}
+request!(fifocc_req, get, "https://fifo.cc/api/v2?url={}");
 
 parse_xml_tag!(hecsu_parse, "short");
+request!(hecsu_req, get, "https://hec.su/api?url={}&method=xml");
 
-fn hecsu_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("https://hec.su/api?url={}&method=xml", url))
-        .send()
-        .ok()
-}
+parse!(isgd_parse);
+request!(isgd_req, get, "https://is.gd/create.php?format=simple&url={}");
 
-fn isgd_parse(res: &str) -> Option<String> {
-    Some(res.to_owned())
-}
+parse!(nowlinks_parse);
+request!(nowlinks_req, get, "http://nowlinks.net/api?url={}");
 
-fn isgd_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("https://is.gd/create.php?format=simple&url={}", url))
-        .send()
-        .ok()
-}
-
-fn nowlinks_parse(res: &str) -> Option<String> {
-    Some(res.to_owned())
-}
-
-fn nowlinks_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://nowlinks.net/api?url={}", url))
-        .send()
-        .ok()
-}
-
-fn phxcoin_parse(res: &str) -> Option<String> {
-    Some(res.to_owned())
-}
-
-fn phxcoin_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://phx.co.in/shrink.asp?url={}", url))
-        .send()
-        .ok()
-}
+parse!(phxcoin_parse);
+request!(phxcoin_req, get, "http://phx.co.in/shrink.asp?url={}");
 
 parse_xml_tag!(psbeco_parse, "ShortUrl");
+request!(psbeco_req, get, "http://psbe.co/API.asmx/CreateUrl?real_url={}");
 
-fn psbeco_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://psbe.co/API.asmx/CreateUrl?real_url={}", url))
-        .send()
-        .ok()
-}
-
-fn scoop_parse(res: &str) -> Option<String> {
-    Some(res.to_owned())
-}
-
-fn scoop_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://s.coop/devapi.php?action=shorturl&url={}&format=RETURN", url))
-        .send()
-        .ok()
-}
+parse!(scoop_parse);
+request!(scoop_req,
+         get,
+         "http://s.coop/devapi.php?action=shorturl&url={}&format=RETURN");
 
 parse_json_tag!(rdd_parse, "rdd_url", "");
+request!(B,
+         rdd_req,
+         post,
+         "https://readability.com/api/shortener/v1/urls",
+         "url={}");
 
-fn rdd_request(url: &str, client: &Client) -> Option<Response> {
-    client.post("https://readability.com/api/shortener/v1/urls")
-        .body(&format!("url={}", url))
-        .send()
-        .ok()
-}
-
-fn rlu_parse(res: &str) -> Option<String> {
-    Some(res.to_owned())
-}
-
-fn rlu_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://rlu.ru/index.sema?a=api&link={}", url))
-        .send()
-        .ok()
-}
+parse!(rlu_parse);
+request!(rlu_req, get, "http://rlu.ru/index.sema?a=api&link={}");
 
 parse_json_tag!(sirbz_parse, "short_link", "");
-
-fn sirbz_request(url: &str, client: &Client) -> Option<Response> {
-    client.post("http://sirbz.com/api/shorten_url")
-        .body(&format!("url={}", url))
-        .header(ContentType::form_url_encoded())
-        .send()
-        .ok()
-}
+request!(sirbz_req,
+         post,
+         "http://sirbz.com/api/shorten_url",
+         "url={}",
+         ContentType::form_url_encoded());
 
 fn tinyurl_parse(res: &str) -> Option<String> {
     res.split("data-clipboard-text=\"")
@@ -322,53 +287,27 @@ fn tinyurl_parse(res: &str) -> Option<String> {
         .next()
         .map(|v| v.to_owned())
 }
-
-fn tinyurl_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://tinyurl.com/create.php?url={}", url))
-        .send()
-        .ok()
-}
+request!(tinyurl_req, get, "http://tinyurl.com/create.php?url={}");
 
 parse_json_tag!(tinyph_parse, "hash", "http://tiny.ph/");
-
-fn tinyph_request(url: &str, client: &Client) -> Option<Response> {
-    client.post("http://tiny.ph/api/url/create")
-        .body(&format!("url={}", url))
-        .header(ContentType::form_url_encoded())
-        .send()
-        .ok()
-}
+request!(tinyph_req,
+         post,
+         "http://tiny.ph/api/url/create",
+         "url={}",
+         ContentType::form_url_encoded());
 
 parse_xml_tag!(tnyim_parse, "shorturl");
+request!(tnyim_req, get, "http://tny.im/yourls-api.php?action=shorturl&url={}");
 
-fn tnyim_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://tny.im/yourls-api.php?action=shorturl&url={}", url))
-        .send()
-        .ok()
-}
+parse!(urlshortenerio_parse);
+request!(urlshortenerio_req,
+         post,
+         "http://url-shortener.io/shorten",
+         "url_param={}",
+         ContentType::form_url_encoded());
 
-fn urlshortenerio_parse(res: &str) -> Option<String> {
-    Some(res.to_owned())
-}
-
-fn urlshortenerio_request(url: &str, client: &Client) -> Option<Response> {
-    client.post("http://url-shortener.io/shorten")
-        .body(&format!("url_param={}", url))
-        .header(ContentType::form_url_encoded())
-        .send()
-        .ok()
-}
-
-fn vgd_parse(res: &str) -> Option<String> {
-    Some(res.to_owned())
-}
-
-fn vgd_request(url: &str, client: &Client) -> Option<Response> {
-    client.get(&format!("http://v.gd/create.php?format=simple&url={}", url))
-        .send()
-        .ok()
-}
-
+parse!(vgd_parse);
+request!(vgd_req, get, "http://is.gd/create.php?format=simple&url={}");
 
 /// Parses the response from a successful request to a provider into the
 /// URL-shortened string.
@@ -398,26 +337,29 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 
 /// Performs a request to the short link provider.
 /// Returns the parsed response on success or a `None` on error.
-pub fn request(url: &str, client: &Client, provider: Provider) -> Option<Response> {
+pub fn request(url: &str,
+               client: &Client,
+               provider: Provider)
+               -> Option<Response> {
     match provider {
-        Provider::Abv8 => abv8_request(url, client),
-        Provider::BamBz => bambz_request(url, client),
-        Provider::Bmeo => bmeo_request(url, client),
-        Provider::BnGy => bngy_request(url, client),
-        Provider::FifoCc => fifocc_request(url, client),
-        Provider::HecSu => hecsu_request(url, client),
-        Provider::IsGd => isgd_request(url, client),
-        Provider::NowLinks => nowlinks_request(url, client),
-        Provider::PhxCoIn => phxcoin_request(url, client),
-        Provider::PsbeCo => psbeco_request(url, client),
-        Provider::SCoop => scoop_request(url, client),
-        Provider::SirBz => sirbz_request(url, client),
-        Provider::Rdd => rdd_request(url, client),
-        Provider::Rlu => rlu_request(url, client),
-        Provider::TinyUrl => tinyurl_request(url, client),
-        Provider::TinyPh => tinyph_request(url, client),
-        Provider::TnyIm => tnyim_request(url, client),
-        Provider::UrlShortenerIo => urlshortenerio_request(url, client),
-        Provider::VGd => vgd_request(url, client),
+        Provider::Abv8 => abv8_req(url, client),
+        Provider::BamBz => bambz_req(url, client),
+        Provider::Bmeo => bmeo_req(url, client),
+        Provider::BnGy => bngy_req(url, client),
+        Provider::FifoCc => fifocc_req(url, client),
+        Provider::HecSu => hecsu_req(url, client),
+        Provider::IsGd => isgd_req(url, client),
+        Provider::NowLinks => nowlinks_req(url, client),
+        Provider::PhxCoIn => phxcoin_req(url, client),
+        Provider::PsbeCo => psbeco_req(url, client),
+        Provider::SCoop => scoop_req(url, client),
+        Provider::SirBz => sirbz_req(url, client),
+        Provider::Rdd => rdd_req(url, client),
+        Provider::Rlu => rlu_req(url, client),
+        Provider::TinyUrl => tinyurl_req(url, client),
+        Provider::TinyPh => tinyph_req(url, client),
+        Provider::TnyIm => tnyim_req(url, client),
+        Provider::UrlShortenerIo => urlshortenerio_req(url, client),
+        Provider::VGd => vgd_req(url, client),
     }
 }
