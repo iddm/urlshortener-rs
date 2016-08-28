@@ -13,7 +13,7 @@ macro_rules! parse_xml_tag {
                 .unwrap_or("")
                 .split(&format!("</{}>", $tag))
                 .next()
-                .map(|v| v.to_owned())
+                .map(String::from)
         }
     }
 }
@@ -285,7 +285,7 @@ fn tinyurl_parse(res: &str) -> Option<String> {
         .unwrap_or("")
         .split("\">")
         .next()
-        .map(|v| v.to_owned())
+        .map(String::from)
 }
 request!(tinyurl_req, get, "http://tinyurl.com/create.php?url={}");
 

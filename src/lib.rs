@@ -136,7 +136,8 @@ impl UrlShortener {
     /// b. the service being unavailable (ErrorKind::ConnectionAborted)
     pub fn generate<S: Into<String>>(&self,
                                      url: S,
-                                     provider: Provider) -> Result<String, Error> {
+                                     provider: Provider)
+                                     -> Result<String, Error> {
         let response_opt = request(&url.into(), &self.client, provider);
 
         if let Some(mut response) = response_opt {
