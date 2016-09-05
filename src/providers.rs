@@ -4,7 +4,7 @@ extern crate hyper;
 
 use hyper::client::{Client, Response};
 use hyper::header::ContentType;
-use url::form_urlencoded::byte_serialize;
+use url::form_urlencoded;
 
 macro_rules! parse_xml_tag {
     ($fname: ident, $tag: expr) => {
@@ -47,7 +47,8 @@ macro_rules! parse {
 macro_rules! request {
     ($name:ident, $method:ident, $req_url:expr) => {
         fn $name(url: &str, client: &Client) -> Option<Response> {
-            let url = byte_serialize(url.as_bytes()).collect::<String>();
+            let url = form_urlencoded::byte_serialize(url.as_bytes())
+                .collect::<String>();
             client.$method(&format!($req_url, url))
                 .send()
                 .ok()
