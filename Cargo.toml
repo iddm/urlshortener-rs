@@ -14,3 +14,4 @@ documentation = "https://vityafx.github.io/urlshortener-rs/master/urlshortener/"
 [dependencies]
 log = "0.3.6"
 hyper = "0.9.9"
+url = "1.2.0"
