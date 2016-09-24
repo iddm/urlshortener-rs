@@ -100,6 +100,8 @@ pub enum Provider {
     ///
     /// * Limited to 3000 API requests per day
     HecSu,
+    /// http://hmm.rs provider
+    HmmRs,
     /// https://is.gd provider
     IsGd,
     /// http://nowlinks.net provider
@@ -159,6 +161,7 @@ impl Provider {
             Provider::Bmeo => "bmeo.org",
             Provider::BnGy => "bn.gy",
             Provider::FifoCc => "fifo.cc",
+            Provider::HmmRs => "hmm.rs",
             Provider::HecSu => "hec.su",
             Provider::IsGd => "is.gd",
             Provider::NowLinks => "nowlinks.net",
@@ -198,6 +201,7 @@ pub fn providers() -> Vec<Provider> {
         Provider::SCoop,
         Provider::Bmeo,
         Provider::UrlShortenerIo,
+        Provider::HmmRs,
 
         // The following list are items that have long response sometimes:
         Provider::TnyIm,
@@ -244,6 +248,13 @@ request!(bngy_req, get, "https://bn.gy/API.asmx/CreateUrl?real_url={}");
 
 parse_json_tag!(fifocc_parse, "shortner", "http://fifo.cc/");
 request!(fifocc_req, get, "https://fifo.cc/api/v2?url={}");
+
+parse_json_tag!(hmmrs_parse, "shortUrl", "");
+request!(hmmrs_req,
+         post,
+         "http://hmm.rs/x/shorten",
+         "url={}",
+         ContentType::form_url_encoded());
 
 parse_xml_tag!(hecsu_parse, "short");
 request!(hecsu_req, get, "https://hec.su/api?url={}&method=xml");
@@ -321,6 +332,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
         Provider::Bmeo => bmeo_parse(res),
         Provider::BnGy => bngy_parse(res),
         Provider::FifoCc => fifocc_parse(res),
+        Provider::HmmRs => hmmrs_parse(res),
         Provider::HecSu => hecsu_parse(res),
         Provider::IsGd => isgd_parse(res),
         Provider::NowLinks => nowlinks_parse(res),
@@ -350,6 +362,7 @@ pub fn request(url: &str,
         Provider::Bmeo => bmeo_req(url, client),
         Provider::BnGy => bngy_req(url, client),
         Provider::FifoCc => fifocc_req(url, client),
+        Provider::HmmRs => hmmrs_req(url, client),
         Provider::HecSu => hecsu_req(url, client),
         Provider::IsGd => isgd_req(url, client),
         Provider::NowLinks => nowlinks_req(url, client),
