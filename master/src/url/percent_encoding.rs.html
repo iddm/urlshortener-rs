@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/fx/.cargo/registry/src/github.com-1ecc6299db9ec823/url-1.1.1/src/percent_encoding.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/fx/.cargo/registry/src/github.com-1ecc6299db9ec823/url-1.2.0/src/percent_encoding.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>percent_encoding.rs.html -- source</title>
@@ -398,7 +398,7 @@
 <span class='kw'>use</span> <span class='ident'>encoding</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ascii</span>::<span class='ident'>AsciiExt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Cow</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>::{<span class='self'>self</span>, <span class='ident'>Write</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>slice</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>;
 
@@ -456,7 +456,7 @@
             <span class='kw'>fn</span> <span class='ident'>contains</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>byte</span>: <span class='ident'>u8</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
                 <span class='kw'>match</span> <span class='ident'>byte</span> <span class='kw'>as</span> <span class='ident'>char</span> {
                     $(
-                        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ch</span> <span class='op'>=&gt;</span> <span class='boolvalue'>true</span>,
+                        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ch</span> <span class='op'>=&gt;</span> <span class='bool-val'>true</span>,
                     )<span class='op'>*</span>
                     _ <span class='op'>=&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>base_set</span>.<span class='ident'>contains</span>(<span class='ident'>byte</span>)
                 }
@@ -551,7 +551,7 @@
     <span class='ident'>percent_encode</span>(<span class='ident'>input</span>.<span class='ident'>as_bytes</span>(), <span class='ident'>encode_set</span>)
 }
 
-<span class='doccomment'>/// The return type of `percent_decode()`.</span>
+<span class='doccomment'>/// The return type of `percent_encode()` and `utf8_percent_encode()`.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PercentEncode</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>E</span>: <span class='ident'>EncodeSet</span><span class='op'>&gt;</span> {
     <span class='ident'>bytes</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='ident'>u8</span>],

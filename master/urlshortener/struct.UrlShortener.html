@@ -47,16 +47,16 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-247' class='srclink' href='../src/urlshortener/src/lib.rs.html#56-58' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-304' class='srclink' href='../src/urlshortener/src/lib.rs.html#58-60' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct UrlShortener {
     // some fields omitted
-}</pre><div class='docblock'><p>Url shortener - the way to retrieve a short url.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-249' class='srclink' href='../src/urlshortener/src/lib.rs.html#60-155' title='goto source code'>[src]</a></span></h3>
+}</pre><div class='docblock'><p>Url shortener: the way to retrieve a short url.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-306' class='srclink' href='../src/urlshortener/src/lib.rs.html#62-157' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></h4>
 <div class='docblock'><p>Creates new <code>UrlShortener</code> with default (3 seconds) timeout.</p>
 </div><h4 id='method.with_timeout' class='method'><code>fn <a href='#method.with_timeout' class='fnname'>with_timeout</a>(seconds: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>) -&gt; <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></h4>
 <div class='docblock'><p>Creates new <code>UrlShortener</code> with custom read timeout.</p>
-</div><h4 id='method.try_generate' class='method'><code>fn <a href='#method.try_generate' class='fnname'>try_generate</a>(&amp;self, url: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a>&gt;</code></h4>
+</div><h4 id='method.try_generate' class='method'><code>fn <a href='#method.try_generate' class='fnname'>try_generate</a>&lt;S:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html' title='core::convert::Into'>Into</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;&gt;(&amp;self, url: S) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a>&gt;</code></h4>
 <div class='docblock'><p>Try to generate a short URL from each provider, iterating over each
 provider until a short URL is successfully generated.</p>
 
@@ -66,12 +66,12 @@ provider until a short URL is successfully generated.</p>
 
 <span class='kw'>let</span> <span class='ident'>us</span> <span class='op'>=</span> <span class='ident'>UrlShortener</span>::<span class='ident'>new</span>();
 <span class='kw'>let</span> <span class='ident'>long_url</span> <span class='op'>=</span> <span class='string'>&quot;https://rust-lang.org&quot;</span>;
-<span class='kw'>let</span> <span class='ident'>short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>try_generate</span>(<span class='ident'>long_url</span>);</pre>
+<span class='kw'>let</span> <span class='ident'>_short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>try_generate</span>(<span class='ident'>long_url</span>);</pre>
 
 <h1 id='errors' class='section-header'><a href='#errors'>Errors</a></h1>
 <p>Returns an <code>Error&lt;ErrorKind::Other&gt;</code> if there is an error generating a
 short URL from all providers.</p>
-</div><h4 id='method.generate' class='method'><code>fn <a href='#method.generate' class='fnname'>generate</a>(&amp;self, url: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, provider: <a class='enum' href='../urlshortener/providers/enum.Provider.html' title='urlshortener::providers::Provider'>Provider</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a>&gt;</code></h4>
+</div><h4 id='method.generate' class='method'><code>fn <a href='#method.generate' class='fnname'>generate</a>&lt;S:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html' title='core::convert::Into'>Into</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;&gt;(&amp;self, url: S, provider: <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a>&gt;</code></h4>
 <div class='docblock'><p>Attempts to get a short URL using the specified provider.</p>
 
 <h1 id='examples-1' class='section-header'><a href='#examples-1'>Examples</a></h1>
@@ -80,7 +80,7 @@ short URL from all providers.</p>
 
 <span class='kw'>let</span> <span class='ident'>us</span> <span class='op'>=</span> <span class='ident'>UrlShortener</span>::<span class='ident'>new</span>();
 <span class='kw'>let</span> <span class='ident'>long_url</span> <span class='op'>=</span> <span class='string'>&quot;http://rust-lang.org&quot;</span>;
-<span class='kw'>let</span> <span class='ident'>short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>generate</span>(<span class='ident'>long_url</span>, <span class='ident'>Provider</span>::<span class='ident'>IsGd</span>);</pre>
+<span class='kw'>let</span> <span class='ident'>_short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>generate</span>(<span class='ident'>long_url</span>, <span class='ident'>Provider</span>::<span class='ident'>IsGd</span>);</pre>
 
 <h1 id='errors-1' class='section-header'><a href='#errors-1'>Errors</a></h1>
 <p>Returns an <code>std::io::Error</code> if there is an error generating a
@@ -88,6 +88,12 @@ short URL from the given provider due to either:</p>
 
 <p>a. a decode error (ErrorKind::Other);
 b. the service being unavailable (ErrorKind::ConnectionAborted)</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-296' class='srclink' href='../src/urlshortener/src/lib.rs.html#57' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.default' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></h4>
+<div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../urlshortener/struct.UrlShortener.html' title='urlshortener::UrlShortener'>UrlShortener</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-298' class='srclink' href='../src/urlshortener/src/lib.rs.html#57' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
 
