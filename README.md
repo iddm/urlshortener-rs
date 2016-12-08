@@ -5,18 +5,18 @@
 
 A very simple urlshortener for Rust.
 
-This library aims to implement only URL shortener services which do not
-require any authentication (ex: goo.gl, bit.ly) and to provide an interface as
+This library aims to implement only as much URL shortener services as possible and to provide an interface as
 minimal and simple as possible.
-
-The reason for this is that users of such a library might only need to get the
-shortened URL, rather than a service using authentication. This is also a reason
-that this library aims to use as few dependencies as possible.
-
 
 ## Implementations
 
 Currently the following URL shorteners are implemented:
+
+With authentication:
+
+- `goo.gl`
+
+Without authentication:
 
 - `bn.gy`
 - `is.gd`
@@ -45,6 +45,8 @@ restrictions such as rate limits:
 
 ## Usage
 
+Without authentication
+
 ```rust
 extern crate urlshortener;
 
@@ -54,6 +56,21 @@ fn main() {
     let us = UrlShortener::new();
     let long_url = "https://google.com";
     println!("Short url for google: {:?}", us.try_generate(long_url));
+}
+```
+
+With authentication (**Goo.Gl**)
+
+```rust
+extern crate urlshortener;
+
+use urlshortener::{ UrlShortener, Provider };
+
+fn main() {
+    let us = UrlShortener::new();
+    let long_url = "https://google.com";
+    let key = "MY_API_KEY";
+    println!("Short url for google: {:?}", us.generate(long_url, Provider::GooGl { api_key: key.to_owned() }));
 }
 ```
 
