@@ -94,6 +94,8 @@ pub enum Provider {
     BnGy,
     /// http://fifo.cc provider
     FifoCc,
+    /// https://goo.gl provider of Google
+    GoogGl { api_key: String },
     /// https://hec.su provider
     ///
     /// Notes:
@@ -161,6 +163,7 @@ impl Provider {
             Provider::Bmeo => "bmeo.org",
             Provider::BnGy => "bn.gy",
             Provider::FifoCc => "fifo.cc",
+            Provider::GooGl { .. } => "goo.gl",
             Provider::HmmRs => "hmm.rs",
             Provider::HecSu => "hec.su",
             Provider::IsGd => "is.gd",
@@ -180,8 +183,8 @@ impl Provider {
     }
 }
 
-/// Returns a vector of all `Provider` variants. This list is in order of
-/// provider quality.
+/// Returns a vector of all `Provider` variants which do not require authentication.
+/// This list is in order of provider quality.
 ///
 /// The providers which are discouraged from use - due to problems such as rate
 /// limitations - are at the end of the resultant vector.
@@ -248,6 +251,13 @@ request!(bngy_req, get, "https://bn.gy/API.asmx/CreateUrl?real_url={}");
 
 parse_json_tag!(fifocc_parse, "shortner", "http://fifo.cc/");
 request!(fifocc_req, get, "https://fifo.cc/api/v2?url={}");
+
+parse_json_tag!(googl_parse, "id", "");
+request!(googl_req,
+         post,
+         "https://www.googleapis.com/urlshortener/v1/url",
+         r#"{"longUrl": "{}"}"#,
+         ContentType::json());
 
 parse_json_tag!(hmmrs_parse, "shortUrl", "");
 request!(hmmrs_req,
@@ -362,6 +372,9 @@ pub fn request(url: &str,
         Provider::Bmeo => bmeo_req(url, client),
         Provider::BnGy => bngy_req(url, client),
         Provider::FifoCc => fifocc_req(url, client),
+        Provider::GooGl { api_key: key } => googl_req(&String::format("{}?api_key={}", url, key),
+                                                      client,
+                                                      token),
         Provider::HmmRs => hmmrs_req(url, client),
         Provider::HecSu => hecsu_req(url, client),
         Provider::IsGd => isgd_req(url, client),

@@ -38,6 +38,15 @@
 //! let short_url = us.try_generate("https://my-long-url.com");
 //! assert!(short_url.is_ok());
 //! ```
+//! In order to use service with authentication use the appropriate provider directly:
+//!
+//! ```no_run
+//! use urlshortener::UrlShortener;
+//!
+//! let us = UrlShortener::new();
+//! let short_url = us.try_generate("https://my-long-url.com", Provider::GooGl);
+//! assert!(short_url.is_ok());
+//! ```
 
 #[macro_use]
 extern crate log;
@@ -160,6 +169,7 @@ impl UrlShortener {
 mod tests {
     use std::io::ErrorKind;
 
+    /// This test does not cover services which require authentication for obvious reasons.
     #[test]
     fn providers() {
         let us = ::UrlShortener::with_timeout(5);
