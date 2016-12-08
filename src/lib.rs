@@ -148,7 +148,7 @@ impl UrlShortener {
                                      url: S,
                                      provider: Provider)
                                      -> Result<String, Error> {
-        let response_opt = request(&url.into(), &self.client, provider);
+        let response_opt = request(&url.into(), &self.client, provider.clone());
 
         if let Some(mut response) = response_opt {
             if response.status.is_success() {

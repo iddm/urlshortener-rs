@@ -76,7 +76,7 @@ macro_rules! request {
 }
 
 /// Used to specify which provider to use to generate a short URL.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub enum Provider {
     /// http://abv8.me provider
     ///
@@ -95,7 +95,7 @@ pub enum Provider {
     /// http://fifo.cc provider
     FifoCc,
     /// https://goo.gl provider of Google
-    GoogGl { api_key: String },
+    GooGl { api_key: String },
     /// https://hec.su provider
     ///
     /// Notes:
@@ -253,11 +253,13 @@ parse_json_tag!(fifocc_parse, "shortner", "http://fifo.cc/");
 request!(fifocc_req, get, "https://fifo.cc/api/v2?url={}");
 
 parse_json_tag!(googl_parse, "id", "");
-request!(googl_req,
-         post,
-         "https://www.googleapis.com/urlshortener/v1/url",
-         r#"{"longUrl": "{}"}"#,
-         ContentType::json());
+fn googl_req(url: &str, key: &str, client: &Client) -> Option<Response> {
+    client.post(&format!("https://www.googleapis.com/urlshortener/v1/url?key={}", key))
+        .body(&format!(r#"{{"longUrl": "{}"}}"#, url))
+        .header(ContentType::json())
+        .send()
+        .ok()
+}
 
 parse_json_tag!(hmmrs_parse, "shortUrl", "");
 request!(hmmrs_req,
@@ -342,6 +344,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
         Provider::Bmeo => bmeo_parse(res),
         Provider::BnGy => bngy_parse(res),
         Provider::FifoCc => fifocc_parse(res),
+        Provider::GooGl { .. } => googl_parse(res),
         Provider::HmmRs => hmmrs_parse(res),
         Provider::HecSu => hecsu_parse(res),
         Provider::IsGd => isgd_parse(res),
@@ -372,9 +375,7 @@ pub fn request(url: &str,
         Provider::Bmeo => bmeo_req(url, client),
         Provider::BnGy => bngy_req(url, client),
         Provider::FifoCc => fifocc_req(url, client),
-        Provider::GooGl { api_key: key } => googl_req(&String::format("{}?api_key={}", url, key),
-                                                      client,
-                                                      token),
+        Provider::GooGl { api_key: key } => googl_req(url, &key, client),
         Provider::HmmRs => hmmrs_req(url, client),
         Provider::HecSu => hecsu_req(url, client),
         Provider::IsGd => isgd_req(url, client),
