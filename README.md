@@ -5,7 +5,7 @@
 
 A very simple urlshortener for Rust.
 
-This library aims to implement only as much URL shortener services as possible and to provide an interface as
+This library aims to implement as much URL shortener services as possible and to provide an interface as
 minimal and simple as possible.
 
 ## Implementations
