@@ -41,10 +41,12 @@
 //! In order to use service with authentication use the appropriate provider directly:
 //!
 //! ```no_run
-//! use urlshortener::UrlShortener;
+//! use urlshortener::{ UrlShortener, Provider };
 //!
 //! let us = UrlShortener::new();
-//! let short_url = us.try_generate("https://my-long-url.com", Provider::GooGl);
+//! let key = "MY_API_KEY";
+//! let short_url = us.generate("https://my-long-url.com", Provider::GooGl { api_key:
+//! key.to_owned() });
 //! assert!(short_url.is_ok());
 //! ```
 

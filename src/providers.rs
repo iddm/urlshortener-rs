@@ -6,6 +6,7 @@ use hyper::client::{Client, Response};
 use hyper::header::ContentType;
 use url::form_urlencoded;
 
+
 macro_rules! parse_xml_tag {
     ($fname: ident, $tag: expr) => {
         fn $fname(res: &str) -> Option<String> {
