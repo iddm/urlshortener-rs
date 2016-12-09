@@ -139,6 +139,15 @@ impl UrlShortener {
     /// let _short_url = us.generate(long_url, Provider::IsGd);
     /// ```
     ///
+    /// ```no_run
+    /// use urlshortener::{Provider, UrlShortener};
+    ///
+    /// let us = UrlShortener::new();
+    /// let api_key = "MY_API_KEY".to_owned();
+    /// let long_url = "http://rust-lang.org";
+    /// let _short_url = us.generate(long_url, Provider::GooGl { api_key: api_key });
+    /// ```
+    ///
     /// # Errors
     ///
     /// Returns an `std::io::Error` if there is an error generating a
