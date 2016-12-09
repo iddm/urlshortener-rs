@@ -89,6 +89,8 @@ pub enum Provider {
     Abv8,
     /// https://bam.bz provider
     BamBz,
+    /// https://bit.ly provider
+    BitLy { token: String },
     /// http://bmeo.org provider
     Bmeo,
     /// https://bn.gy provider
@@ -161,6 +163,7 @@ impl Provider {
         match *self {
             Provider::Abv8 => "abv8.me",
             Provider::BamBz => "bam.bz",
+            Provider::BitLy { .. } => "bitly.com",
             Provider::Bmeo => "bmeo.org",
             Provider::BnGy => "bn.gy",
             Provider::FifoCc => "fifo.cc",
@@ -243,6 +246,16 @@ request!(bambz_req,
          "https://bam.bz/api/short",
          "target={}",
          ContentType::form_url_encoded());
+
+parse!(bitly_parse);
+fn bitly_req(url: &str, key: &str, client: &Client) -> Option<Response> {
+    let address = format!("https://api-ssl.bitly.com/v3/shorten?access_token={}&longUrl={}&format=txt",
+                          key,
+                          url);
+    client.get(&address)
+          .send()
+          .ok()
+}
 
 parse_json_tag!(bmeo_parse, "short", "");
 request!(bmeo_req, get, "http://bmeo.org/api.php?url={}");
@@ -342,6 +355,7 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
         Provider::Abv8 => abv8_parse(res),
         Provider::BamBz => bambz_parse(res),
+        Provider::BitLy { .. } => bitly_parse(res),
         Provider::Bmeo => bmeo_parse(res),
         Provider::BnGy => bngy_parse(res),
         Provider::FifoCc => fifocc_parse(res),
@@ -373,6 +387,7 @@ pub fn request(url: &str,
     match provider {
         Provider::Abv8 => abv8_req(url, client),
         Provider::BamBz => bambz_req(url, client),
+        Provider::BitLy { token: key } => bitly_req(url, &key, client),
         Provider::Bmeo => bmeo_req(url, client),
         Provider::BnGy => bngy_req(url, client),
         Provider::FifoCc => fifocc_req(url, client),
