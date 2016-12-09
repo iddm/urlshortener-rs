@@ -15,6 +15,7 @@ Currently the following URL shorteners are implemented:
 With authentication:
 
 - `goo.gl`
+- `bit.ly`
 
 Without authentication:
 
