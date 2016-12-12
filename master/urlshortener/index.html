@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-0' class='srclink' href='../src/urlshortener/src/lib.rs.html#1-174' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-0' class='srclink' href='../src/urlshortener/src/lib.rs.html#1-217' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id='urlshortener' class='section-header'><a href='#urlshortener'>urlshortener</a></h1>
 <p>An easy library for retrieving short urls.</p>
@@ -62,7 +62,7 @@ urlshortener = &quot;0.5&quot;
 <p>And add this to your root file:</p>
 
 <pre class='rust rust-example-rendered'>
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>urlshortener</span>;</pre>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>urlshortener</span>;<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <h2 id='usage' class='section-header'><a href='#usage'>Usage</a></h2>
 <p>Creating a short URL via a specified provider is very simple:</p>
@@ -72,7 +72,7 @@ urlshortener = &quot;0.5&quot;
 
 <span class='kw'>let</span> <span class='ident'>us</span> <span class='op'>=</span> <span class='ident'>UrlShortener</span>::<span class='ident'>new</span>();
 <span class='kw'>let</span> <span class='ident'>short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>generate</span>(<span class='string'>&quot;https://my-long-url.com&quot;</span>, <span class='ident'>Provider</span>::<span class='ident'>IsGd</span>);
-<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>short_url</span>.<span class='ident'>is_ok</span>());</pre>
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>short_url</span>.<span class='ident'>is_ok</span>());<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <p>Or attempting all URL shorteners until one is successfully generated:</p>
 
@@ -81,13 +81,24 @@ urlshortener = &quot;0.5&quot;
 
 <span class='kw'>let</span> <span class='ident'>us</span> <span class='op'>=</span> <span class='ident'>UrlShortener</span>::<span class='ident'>new</span>();
 <span class='kw'>let</span> <span class='ident'>short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>try_generate</span>(<span class='string'>&quot;https://my-long-url.com&quot;</span>);
-<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>short_url</span>.<span class='ident'>is_ok</span>());</pre>
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>short_url</span>.<span class='ident'>is_ok</span>());<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+
+<p>In order to use service with authentication use the appropriate provider directly:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>urlshortener</span>::{ <span class='ident'>UrlShortener</span>, <span class='ident'>Provider</span> };
+
+<span class='kw'>let</span> <span class='ident'>us</span> <span class='op'>=</span> <span class='ident'>UrlShortener</span>::<span class='ident'>new</span>();
+<span class='kw'>let</span> <span class='ident'>key</span> <span class='op'>=</span> <span class='string'>&quot;MY_API_KEY&quot;</span>;
+<span class='kw'>let</span> <span class='ident'>short_url</span> <span class='op'>=</span> <span class='ident'>us</span>.<span class='ident'>generate</span>(<span class='string'>&quot;https://my-long-url.com&quot;</span>, <span class='ident'>Provider</span>::<span class='ident'>GooGl</span> { <span class='ident'>api_key</span>:
+<span class='ident'>key</span>.<span class='ident'>to_owned</span>() });
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>short_url</span>.<span class='ident'>is_ok</span>());<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.UrlShortener.html'
                                   title='urlshortener::UrlShortener'>UrlShortener</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Url shortener: the way to retrieve a short url.</p>
                            </td>
                        </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
@@ -95,7 +106,7 @@ urlshortener = &quot;0.5&quot;
                        <tr class=' module-item'>
                            <td><a class='enum' href='enum.Provider.html'
                                   title='urlshortener::Provider'>Provider</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Used to specify which provider to use to generate a short URL.</p>
                            </td>
                        </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
@@ -103,9 +114,9 @@ urlshortener = &quot;0.5&quot;
                        <tr class=' module-item'>
                            <td><a class='fn' href='fn.providers.html'
                                   title='urlshortener::providers'>providers</a></td>
-                           <td class='docblock short'>
-                                <p>Returns a vector of all <code>Provider</code> variants. This list is in order of
-provider quality.</p>
+                           <td class='docblock-short'>
+                                <p>Returns a vector of all <code>Provider</code> variants which do not require authentication.
+This list is in order of provider quality.</p>
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>

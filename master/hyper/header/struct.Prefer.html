@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-3651' class='srclink' href='../../src/hyper/header/common/prefer.rs.html#50' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-3633' class='srclink' href='../../src/hyper/header/common/prefer.rs.html#50' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Prefer(pub <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../hyper/header/enum.Preference.html' title='hyper::header::Preference'>Preference</a>&gt;);</pre><div class='docblock'><p><code>Prefer</code> header, defined in <a href="http://tools.ietf.org/html/rfc7240">RFC7240</a></p>
 
 <p>The <code>Prefer</code> header field is HTTP header field that can be used by a
@@ -75,7 +75,7 @@ parameter  = token [ BWS &quot;=&quot; BWS word ]
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
 <span class='ident'>headers</span>.<span class='ident'>set</span>(
     <span class='ident'>Prefer</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>Preference</span>::<span class='ident'>RespondAsync</span>])
-);</pre>
+);<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>Prefer</span>, <span class='ident'>Preference</span>};
@@ -90,7 +90,7 @@ parameter  = token [ BWS &quot;=&quot; BWS word ]
                               <span class='string'>&quot;bar&quot;</span>.<span class='ident'>to_owned</span>(),
                               <span class='macro'>vec</span><span class='macro'>!</span>[]),
     ])
-);</pre>
+);<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 </div></section>
     <section id='search' class="content hidden"></section>
 

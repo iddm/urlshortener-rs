@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/fx/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.9.10/src/net.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/OMP/v.polevoy/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.9.13/src/net.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>net.rs.html -- source</title>
@@ -1650,7 +1650,7 @@
         <span class='kw'>where</span> <span class='ident'>C</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>Path</span><span class='op'>&gt;</span>, <span class='ident'>K</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>Path</span><span class='op'>&gt;</span> {
             <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>ctx</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>SslContext</span>::<span class='ident'>new</span>(<span class='ident'>SslMethod</span>::<span class='ident'>Sslv23</span>));
             <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>ctx</span>.<span class='ident'>set_cipher_list</span>(<span class='string'>&quot;DEFAULT&quot;</span>));
-            <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>ctx</span>.<span class='ident'>set_certificate_file</span>(<span class='ident'>cert</span>.<span class='ident'>as_ref</span>(), <span class='ident'>X509FileType</span>::<span class='ident'>PEM</span>));
+            <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>ctx</span>.<span class='ident'>set_certificate_chain_file</span>(<span class='ident'>cert</span>.<span class='ident'>as_ref</span>(), <span class='ident'>X509FileType</span>::<span class='ident'>PEM</span>));
             <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>ctx</span>.<span class='ident'>set_private_key_file</span>(<span class='ident'>key</span>.<span class='ident'>as_ref</span>(), <span class='ident'>X509FileType</span>::<span class='ident'>PEM</span>));
             <span class='ident'>ctx</span>.<span class='ident'>set_verify</span>(<span class='ident'>SSL_VERIFY_NONE</span>, <span class='prelude-val'>None</span>);
             <span class='prelude-val'>Ok</span>(<span class='ident'>Openssl</span> { <span class='ident'>context</span>: <span class='ident'>Arc</span>::<span class='ident'>new</span>(<span class='ident'>ctx</span>) })

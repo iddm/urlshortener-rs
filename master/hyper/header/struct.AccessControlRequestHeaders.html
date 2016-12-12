@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-1507' class='srclink' href='../../src/hyper/header/common/mod.rs.html#218' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-1491' class='srclink' href='../../src/hyper/header/common/mod.rs.html#218' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct AccessControlRequestHeaders(pub <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../unicase/struct.UniCase.html' title='unicase::UniCase'>UniCase</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;&gt;);</pre><div class='docblock'><p><code>Access-Control-Request-Headers</code> header, part of
 <a href="http://www.w3.org/TR/cors/#access-control-request-headers-request-header">CORS</a></p>
 
@@ -74,7 +74,7 @@ during the actual request.</p>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
 <span class='ident'>headers</span>.<span class='ident'>set</span>(
     <span class='ident'>AccessControlRequestHeaders</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>UniCase</span>(<span class='string'>&quot;date&quot;</span>.<span class='ident'>to_owned</span>())])
-);</pre>
+);<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <pre class='rust rust-example-rendered'>
 <span class='comment'>// extern crate unicase;</span>
@@ -88,7 +88,7 @@ during the actual request.</p>
         <span class='ident'>UniCase</span>(<span class='string'>&quot;accept-language&quot;</span>.<span class='ident'>to_owned</span>()),
         <span class='ident'>UniCase</span>(<span class='string'>&quot;date&quot;</span>.<span class='ident'>to_owned</span>()),
     ])
-);</pre>
+);<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 </div></section>
     <section id='search' class="content hidden"></section>
 

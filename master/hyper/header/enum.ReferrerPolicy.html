@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-4084' class='srclink' href='../../src/hyper/header/common/referrer_policy.rs.html#34-47' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-4065' class='srclink' href='../../src/hyper/header/common/referrer_policy.rs.html#34-51' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum ReferrerPolicy {
     NoReferrer,
     NoReferrerWhenDowngrade,
@@ -55,6 +55,8 @@
     Origin,
     OriginWhenCrossOrigin,
     UnsafeUrl,
+    StrictOrigin,
+    StrictOriginWhenCrossOrigin,
 }</pre><div class='docblock'><p><code>Referrer-Policy</code> header, part of
 <a href="https://www.w3.org/TR/referrer-policy/#referrer-policy-header">Referrer Policy</a></p>
 
@@ -81,14 +83,16 @@ policy-token   = &quot;no-referrer&quot; / &quot;no-referrer-when-downgrade&quot
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>ReferrerPolicy</span>};
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
-<span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>ReferrerPolicy</span>::<span class='ident'>NoReferrer</span>);</pre>
+<span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>ReferrerPolicy</span>::<span class='ident'>NoReferrer</span>);<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 </div><h2 class='variants'>Variants</h2>
-<span id='variant.NoReferrer' class='variant'><code>NoReferrer</code></span><div class='docblock'><p><code>no-referrer</code></p>
-</div><span id='variant.NoReferrerWhenDowngrade' class='variant'><code>NoReferrerWhenDowngrade</code></span><div class='docblock'><p><code>no-referrer-when-downgrade</code></p>
-</div><span id='variant.SameOrigin' class='variant'><code>SameOrigin</code></span><div class='docblock'><p><code>same-origin</code></p>
-</div><span id='variant.Origin' class='variant'><code>Origin</code></span><div class='docblock'><p><code>origin</code></p>
-</div><span id='variant.OriginWhenCrossOrigin' class='variant'><code>OriginWhenCrossOrigin</code></span><div class='docblock'><p><code>origin-when-cross-origin</code></p>
-</div><span id='variant.UnsafeUrl' class='variant'><code>UnsafeUrl</code></span><div class='docblock'><p><code>unsafe-url</code></p>
+<span id='variant.NoReferrer' class='variant'><span id='NoReferrer.v' class='invisible'><code>NoReferrer</code></span></span><div class='docblock'><p><code>no-referrer</code></p>
+</div><span id='variant.NoReferrerWhenDowngrade' class='variant'><span id='NoReferrerWhenDowngrade.v' class='invisible'><code>NoReferrerWhenDowngrade</code></span></span><div class='docblock'><p><code>no-referrer-when-downgrade</code></p>
+</div><span id='variant.SameOrigin' class='variant'><span id='SameOrigin.v' class='invisible'><code>SameOrigin</code></span></span><div class='docblock'><p><code>same-origin</code></p>
+</div><span id='variant.Origin' class='variant'><span id='Origin.v' class='invisible'><code>Origin</code></span></span><div class='docblock'><p><code>origin</code></p>
+</div><span id='variant.OriginWhenCrossOrigin' class='variant'><span id='OriginWhenCrossOrigin.v' class='invisible'><code>OriginWhenCrossOrigin</code></span></span><div class='docblock'><p><code>origin-when-cross-origin</code></p>
+</div><span id='variant.UnsafeUrl' class='variant'><span id='UnsafeUrl.v' class='invisible'><code>UnsafeUrl</code></span></span><div class='docblock'><p><code>unsafe-url</code></p>
+</div><span id='variant.StrictOrigin' class='variant'><span id='StrictOrigin.v' class='invisible'><code>StrictOrigin</code></span></span><div class='docblock'><p><code>strict-origin</code></p>
+</div><span id='variant.StrictOriginWhenCrossOrigin' class='variant'><span id='StrictOriginWhenCrossOrigin.v' class='invisible'><code>StrictOriginWhenCrossOrigin</code></span></span><div class='docblock'><p><code>strict-origin-when-cross-origin</code></p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

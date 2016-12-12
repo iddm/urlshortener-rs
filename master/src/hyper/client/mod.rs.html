@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/fx/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.9.10/src/client/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/OMP/v.polevoy/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.9.13/src/client/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -686,6 +686,7 @@
 <span id="642">642</span>
 <span id="643">643</span>
 <span id="644">644</span>
+<span id="645">645</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! HTTP Client</span>
 <span class='doccomment'>//!</span>
@@ -991,14 +992,15 @@
                     <span class='ident'>message</span>.<span class='ident'>set_proxied</span>(<span class='bool-val'>true</span>);
                 }
 
-                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>headers</span> {
-                    <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>headers</span>) <span class='op'>=&gt;</span> <span class='ident'>headers</span>.<span class='ident'>clone</span>(),
-                    <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>(),
-                };
-                <span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>Host</span> {
+                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>h</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
+                <span class='ident'>h</span>.<span class='ident'>set</span>(<span class='ident'>Host</span> {
                     <span class='ident'>hostname</span>: <span class='ident'>host</span>.<span class='ident'>to_owned</span>(),
                     <span class='ident'>port</span>: <span class='prelude-val'>Some</span>(<span class='ident'>port</span>),
                 });
+                <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>headers</span>) <span class='op'>=</span> <span class='ident'>headers</span> {
+                    <span class='ident'>h</span>.<span class='ident'>extend</span>(<span class='ident'>headers</span>.<span class='ident'>iter</span>());
+                }
+                <span class='kw'>let</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>h</span>;
                 <span class='ident'>Request</span>::<span class='ident'>with_headers_and_message</span>(<span class='ident'>method</span>.<span class='ident'>clone</span>(), <span class='ident'>url</span>.<span class='ident'>clone</span>(), <span class='ident'>headers</span>, <span class='ident'>message</span>)
             };
 

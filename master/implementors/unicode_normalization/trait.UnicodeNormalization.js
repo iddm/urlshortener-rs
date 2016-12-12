@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors["unicode_normalization"] = [];
+implementors["unicode_normalization"] = [];implementors["hyper"] = [];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);

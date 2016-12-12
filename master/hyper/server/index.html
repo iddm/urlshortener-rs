@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-7213' class='srclink' href='../../src/hyper/server/mod.rs.html#1-510' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-7307' class='srclink' href='../../src/hyper/server/mod.rs.html#1-510' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>HTTP Server</p>
 
 <h1 id='server' class='section-header'><a href='#server'>Server</a></h1>
@@ -67,7 +67,7 @@ those easily.</p>
     <span class='comment'>// handle things here</span>
 }
 
-<span class='ident'>Server</span>::<span class='ident'>http</span>(<span class='string'>&quot;0.0.0.0:0&quot;</span>).<span class='ident'>unwrap</span>().<span class='ident'>handle</span>(<span class='ident'>hello</span>).<span class='ident'>unwrap</span>();</pre>
+<span class='ident'>Server</span>::<span class='ident'>http</span>(<span class='string'>&quot;0.0.0.0:0&quot;</span>).<span class='ident'>unwrap</span>().<span class='ident'>handle</span>(<span class='ident'>hello</span>).<span class='ident'>unwrap</span>();<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <p>As with any trait, you can also define a struct and implement <code>Handler</code>
 directly on your own type, and pass that to the <code>Server</code> instead.</p>
@@ -91,7 +91,7 @@ directly on your own type, and pass that to the <code>Server</code> instead.</p>
 <span class='kw'>let</span> (<span class='ident'>tx</span>, <span class='ident'>rx</span>) <span class='op'>=</span> <span class='ident'>channel</span>();
 <span class='ident'>Server</span>::<span class='ident'>http</span>(<span class='string'>&quot;0.0.0.0:0&quot;</span>).<span class='ident'>unwrap</span>().<span class='ident'>handle</span>(<span class='ident'>SenderHandler</span> {
     <span class='ident'>sender</span>: <span class='ident'>Mutex</span>::<span class='ident'>new</span>(<span class='ident'>tx</span>)
-}).<span class='ident'>unwrap</span>();</pre>
+}).<span class='ident'>unwrap</span>();<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <p>Since the <code>Server</code> will be listening on multiple threads, the <code>Handler</code>
 must implement <code>Sync</code>: any mutable state must be synchronized.</p>
@@ -103,7 +103,7 @@ must implement <code>Sync</code>: any mutable state must be synchronized.</p>
 <span class='kw'>let</span> <span class='ident'>counter</span> <span class='op'>=</span> <span class='ident'>AtomicUsize</span>::<span class='ident'>new</span>(<span class='number'>0</span>);
 <span class='ident'>Server</span>::<span class='ident'>http</span>(<span class='string'>&quot;0.0.0.0:0&quot;</span>).<span class='ident'>unwrap</span>().<span class='ident'>handle</span>(<span class='kw'>move</span> <span class='op'>|</span><span class='ident'>req</span>: <span class='ident'>Request</span>, <span class='ident'>res</span>: <span class='ident'>Response</span><span class='op'>|</span> {
     <span class='ident'>counter</span>.<span class='ident'>fetch_add</span>(<span class='number'>1</span>, <span class='ident'>Ordering</span>::<span class='ident'>Relaxed</span>);
-}).<span class='ident'>unwrap</span>();</pre>
+}).<span class='ident'>unwrap</span>();<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <h1 id='the-request-and-response-pair' class='section-header'><a href='#the-request-and-response-pair'>The <code>Request</code> and <code>Response</code> pair</a></h1>
 <p>A <code>Handler</code> receives a pair of arguments, a <code>Request</code> and a <code>Response</code>. The
@@ -126,7 +126,7 @@ and implements <code>std::io::Write</code> to allow writing the response body.</
         },
         _ <span class='op'>=&gt;</span> <span class='op'>*</span><span class='ident'>res</span>.<span class='ident'>status_mut</span>() <span class='op'>=</span> <span class='ident'>StatusCode</span>::<span class='ident'>MethodNotAllowed</span>
     }
-}).<span class='ident'>unwrap</span>();</pre>
+}).<span class='ident'>unwrap</span>();<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <h2 id='an-aside-write-status' class='section-header'><a href='#an-aside-write-status'>An aside: Write Status</a></h2>
 <p>The <code>Response</code> uses a phantom type parameter to determine its write status.
@@ -158,14 +158,14 @@ implement <code>Write</code>.</p>
                        <tr class=' module-item'>
                            <td><a class='mod' href='request/index.html'
                                   title='hyper::server::request'>request</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Server Requests</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='mod' href='response/index.html'
                                   title='hyper::server::response'>response</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Server Responses</p>
                            </td>
                        </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
@@ -173,14 +173,14 @@ implement <code>Write</code>.</p>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.Listening.html'
                                   title='hyper::server::Listening'>Listening</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>A listening server, which can later be closed.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.Server.html'
                                   title='hyper::server::Server'>Server</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>A server can listen on a TCP socket.</p>
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
@@ -188,7 +188,7 @@ implement <code>Write</code>.</p>
                        <tr class=' module-item'>
                            <td><a class='trait' href='trait.Handler.html'
                                   title='hyper::server::Handler'>Handler</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>A handler that can handle incoming requests for a server.</p>
                            </td>
                        </tr></table></section>

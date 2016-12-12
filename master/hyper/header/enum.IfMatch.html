@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-3225' class='srclink' href='../../src/hyper/header/common/mod.rs.html#299-304' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-3202' class='srclink' href='../../src/hyper/header/common/mod.rs.html#299-304' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum IfMatch {
     Any,
     Items(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../hyper/header/struct.EntityTag.html' title='hyper::header::EntityTag'>EntityTag</a>&gt;),
@@ -81,7 +81,7 @@ there have been any changes to the representation data.</p>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>IfMatch</span>};
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
-<span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>IfMatch</span>::<span class='ident'>Any</span>);</pre>
+<span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>IfMatch</span>::<span class='ident'>Any</span>);<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>IfMatch</span>, <span class='ident'>EntityTag</span>};
@@ -93,10 +93,10 @@ there have been any changes to the representation data.</p>
         <span class='ident'>EntityTag</span>::<span class='ident'>new</span>(<span class='bool-val'>false</span>, <span class='string'>&quot;foobar&quot;</span>.<span class='ident'>to_owned</span>()),
         <span class='ident'>EntityTag</span>::<span class='ident'>new</span>(<span class='bool-val'>false</span>, <span class='string'>&quot;bazquux&quot;</span>.<span class='ident'>to_owned</span>()),
     ])
-);</pre>
+);<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 </div><h2 class='variants'>Variants</h2>
-<span id='variant.Any' class='variant'><code>Any</code></span><div class='docblock'><p>Any value is a match</p>
-</div><span id='variant.Items' class='variant'><code>Items(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../hyper/header/struct.EntityTag.html' title='hyper::header::EntityTag'>EntityTag</a>&gt;)</code></span><div class='docblock'><p>Only the listed items are a match</p>
+<span id='variant.Any' class='variant'><span id='Any.v' class='invisible'><code>Any</code></span></span><div class='docblock'><p>Any value is a match</p>
+</div><span id='variant.Items' class='variant'><span id='Items.v' class='invisible'><code>Items(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../hyper/header/struct.EntityTag.html' title='hyper::header::EntityTag'>EntityTag</a>&gt;)</code></span></span><div class='docblock'><p>Only the listed items are a match</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

@@ -80,13 +80,13 @@ verification callback:</p>
 <span class='kw'>let</span> <span class='ident'>domain</span> <span class='op'>=</span> <span class='ident'>domain</span>.<span class='ident'>to_owned</span>();
 <span class='ident'>ssl</span>.<span class='ident'>set_verify_callback</span>(<span class='ident'>SSL_VERIFY_PEER</span>, <span class='kw'>move</span> <span class='op'>|</span><span class='ident'>p</span>, <span class='ident'>x</span><span class='op'>|</span> <span class='ident'>verify_callback</span>(<span class='kw-2'>&amp;</span><span class='ident'>domain</span>, <span class='ident'>p</span>, <span class='ident'>x</span>));
 
-<span class='kw'>let</span> <span class='ident'>ssl_stream</span> <span class='op'>=</span> <span class='ident'>SslStream</span>::<span class='ident'>connect</span>(<span class='ident'>ssl</span>, <span class='ident'>stream</span>).<span class='ident'>unwrap</span>();</pre>
+<span class='kw'>let</span> <span class='ident'>ssl_stream</span> <span class='op'>=</span> <span class='ident'>SslStream</span>::<span class='ident'>connect</span>(<span class='ident'>ssl</span>, <span class='ident'>stream</span>).<span class='ident'>unwrap</span>();<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 </div><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class='fn' href='fn.verify_callback.html'
                                   title='openssl_verify::verify_callback'>verify_callback</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>A convenience wrapper around verify_hostname that implements the logic for
 OpenSSL&#39;s certificate verification callback.</p>
                            </td>
@@ -94,7 +94,7 @@ OpenSSL&#39;s certificate verification callback.</p>
                        <tr class=' module-item'>
                            <td><a class='fn' href='fn.verify_hostname.html'
                                   title='openssl_verify::verify_hostname'>verify_hostname</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Validates that the certificate matches the provided fully qualified domain
 name.</p>
                            </td>

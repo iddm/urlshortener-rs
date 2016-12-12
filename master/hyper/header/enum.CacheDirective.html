@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-2135' class='srclink' href='../../src/hyper/header/common/cache_control.rs.html#75-107' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-2072' class='srclink' href='../../src/hyper/header/common/cache_control.rs.html#75-107' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum CacheDirective {
     NoCache,
     NoStore,
@@ -64,19 +64,19 @@
     Extension(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,&nbsp;<a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;),
 }</pre><div class='docblock'><p><code>CacheControl</code> contains a list of these directives.</p>
 </div><h2 class='variants'>Variants</h2>
-<span id='variant.NoCache' class='variant'><code>NoCache</code></span><div class='docblock'><p>&quot;no-cache&quot;</p>
-</div><span id='variant.NoStore' class='variant'><code>NoStore</code></span><div class='docblock'><p>&quot;no-store&quot;</p>
-</div><span id='variant.NoTransform' class='variant'><code>NoTransform</code></span><div class='docblock'><p>&quot;no-transform&quot;</p>
-</div><span id='variant.OnlyIfCached' class='variant'><code>OnlyIfCached</code></span><div class='docblock'><p>&quot;only-if-cached&quot;</p>
-</div><span id='variant.MaxAge' class='variant'><code>MaxAge(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></span><div class='docblock'><p>&quot;max-age=delta&quot;</p>
-</div><span id='variant.MaxStale' class='variant'><code>MaxStale(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></span><div class='docblock'><p>&quot;max-stale=delta&quot;</p>
-</div><span id='variant.MinFresh' class='variant'><code>MinFresh(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></span><div class='docblock'><p>&quot;min-fresh=delta&quot;</p>
-</div><span id='variant.MustRevalidate' class='variant'><code>MustRevalidate</code></span><div class='docblock'><p>&quot;must-revalidate&quot;</p>
-</div><span id='variant.Public' class='variant'><code>Public</code></span><div class='docblock'><p>&quot;public&quot;</p>
-</div><span id='variant.Private' class='variant'><code>Private</code></span><div class='docblock'><p>&quot;private&quot;</p>
-</div><span id='variant.ProxyRevalidate' class='variant'><code>ProxyRevalidate</code></span><div class='docblock'><p>&quot;proxy-revalidate&quot;</p>
-</div><span id='variant.SMaxAge' class='variant'><code>SMaxAge(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></span><div class='docblock'><p>&quot;s-maxage=delta&quot;</p>
-</div><span id='variant.Extension' class='variant'><code>Extension(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,&nbsp;<a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;)</code></span><div class='docblock'><p>Extension directives. Optionally include an argument.</p>
+<span id='variant.NoCache' class='variant'><span id='NoCache.v' class='invisible'><code>NoCache</code></span></span><div class='docblock'><p>&quot;no-cache&quot;</p>
+</div><span id='variant.NoStore' class='variant'><span id='NoStore.v' class='invisible'><code>NoStore</code></span></span><div class='docblock'><p>&quot;no-store&quot;</p>
+</div><span id='variant.NoTransform' class='variant'><span id='NoTransform.v' class='invisible'><code>NoTransform</code></span></span><div class='docblock'><p>&quot;no-transform&quot;</p>
+</div><span id='variant.OnlyIfCached' class='variant'><span id='OnlyIfCached.v' class='invisible'><code>OnlyIfCached</code></span></span><div class='docblock'><p>&quot;only-if-cached&quot;</p>
+</div><span id='variant.MaxAge' class='variant'><span id='MaxAge.v' class='invisible'><code>MaxAge(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></span></span><div class='docblock'><p>&quot;max-age=delta&quot;</p>
+</div><span id='variant.MaxStale' class='variant'><span id='MaxStale.v' class='invisible'><code>MaxStale(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></span></span><div class='docblock'><p>&quot;max-stale=delta&quot;</p>
+</div><span id='variant.MinFresh' class='variant'><span id='MinFresh.v' class='invisible'><code>MinFresh(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></span></span><div class='docblock'><p>&quot;min-fresh=delta&quot;</p>
+</div><span id='variant.MustRevalidate' class='variant'><span id='MustRevalidate.v' class='invisible'><code>MustRevalidate</code></span></span><div class='docblock'><p>&quot;must-revalidate&quot;</p>
+</div><span id='variant.Public' class='variant'><span id='Public.v' class='invisible'><code>Public</code></span></span><div class='docblock'><p>&quot;public&quot;</p>
+</div><span id='variant.Private' class='variant'><span id='Private.v' class='invisible'><code>Private</code></span></span><div class='docblock'><p>&quot;private&quot;</p>
+</div><span id='variant.ProxyRevalidate' class='variant'><span id='ProxyRevalidate.v' class='invisible'><code>ProxyRevalidate</code></span></span><div class='docblock'><p>&quot;proxy-revalidate&quot;</p>
+</div><span id='variant.SMaxAge' class='variant'><span id='SMaxAge.v' class='invisible'><code>SMaxAge(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</code></span></span><div class='docblock'><p>&quot;s-maxage=delta&quot;</p>
+</div><span id='variant.Extension' class='variant'><span id='Extension.v' class='invisible'><code>Extension(<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,&nbsp;<a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;)</code></span></span><div class='docblock'><p>Extension directives. Optionally include an argument.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

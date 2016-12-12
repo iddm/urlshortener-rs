@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/fx/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.9.10/src/header/common/origin.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/OMP/v.polevoy/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.9.13/src/header/common/origin.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>origin.rs.html -- source</title>
@@ -154,6 +154,7 @@
 <span id="110">110</span>
 <span id="111">111</span>
 <span id="112">112</span>
+<span id="113">113</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>header</span>::{<span class='ident'>Header</span>, <span class='ident'>Host</span>, <span class='ident'>HeaderFormat</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
@@ -196,6 +197,7 @@
 }
 
 <span class='kw'>impl</span> <span class='ident'>Origin</span> {
+    <span class='doccomment'>/// Creates a new `Origin` header.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span><span class='op'>&lt;</span><span class='ident'>S</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>, <span class='ident'>H</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;&gt;</span>(<span class='ident'>scheme</span>: <span class='ident'>S</span>, <span class='ident'>hostname</span>: <span class='ident'>H</span>, <span class='ident'>port</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>u16</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Origin</span>{
         <span class='ident'>Origin</span> {
             <span class='ident'>scheme</span>: <span class='ident'>scheme</span>.<span class='ident'>into</span>(),

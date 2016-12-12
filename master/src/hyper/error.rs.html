@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/fx/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.9.10/src/error.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/OMP/v.polevoy/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.9.13/src/error.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>error.rs.html -- source</title>
@@ -273,6 +273,7 @@
 <span id="229">229</span>
 <span id="230">230</span>
 <span id="231">231</span>
+<span id="232">232</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Error and Result module.</span>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='kw'>as</span> <span class='ident'>StdError</span>;
@@ -301,6 +302,7 @@
     <span class='ident'>Utf8</span>
 };
 
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>url</span>::<span class='ident'>ParseError</span>;
 
 <span class='doccomment'>/// Result type often returned from methods that can have hyper `Error`s.</span>
 <span class='kw'>pub</span> <span class='kw'>type</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='op'>=</span> ::<span class='ident'>std</span>::<span class='ident'>result</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='ident'>Error</span><span class='op'>&gt;</span>;

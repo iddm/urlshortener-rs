@@ -47,13 +47,19 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-40' class='srclink' href='../src/urlshortener/src/providers.rs.html#80-153' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-12' class='srclink' href='../src/urlshortener/src/providers.rs.html#81-158' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum Provider {
     Abv8,
     BamBz,
+    BitLy {
+        token: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
+    },
     Bmeo,
     BnGy,
     FifoCc,
+    GooGl {
+        api_key: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
+    },
     HecSu,
     HmmRs,
     IsGd,
@@ -71,7 +77,7 @@
     VGd,
 }</pre><div class='docblock'><p>Used to specify which provider to use to generate a short URL.</p>
 </div><h2 class='variants'>Variants</h2>
-<span id='variant.Abv8' class='variant'><code>Abv8</code></span><div class='docblock'><p><a href="http://abv8.me">http://abv8.me</a> provider</p>
+<span id='variant.Abv8' class='variant'><span id='Abv8.v' class='invisible'><code>Abv8</code></span></span><div class='docblock'><p><a href="http://abv8.me">http://abv8.me</a> provider</p>
 
 <p>Notes:</p>
 
@@ -80,21 +86,27 @@
 <li>You may not shorten more than 60 unique URLs within a 15-minute
 period.</li>
 </ul>
-</div><span id='variant.BamBz' class='variant'><code>BamBz</code></span><div class='docblock'><p><a href="https://bam.bz">https://bam.bz</a> provider</p>
-</div><span id='variant.Bmeo' class='variant'><code>Bmeo</code></span><div class='docblock'><p><a href="http://bmeo.org">http://bmeo.org</a> provider</p>
-</div><span id='variant.BnGy' class='variant'><code>BnGy</code></span><div class='docblock'><p><a href="https://bn.gy">https://bn.gy</a> provider</p>
-</div><span id='variant.FifoCc' class='variant'><code>FifoCc</code></span><div class='docblock'><p><a href="http://fifo.cc">http://fifo.cc</a> provider</p>
-</div><span id='variant.HecSu' class='variant'><code>HecSu</code></span><div class='docblock'><p><a href="https://hec.su">https://hec.su</a> provider</p>
+</div><span id='variant.BamBz' class='variant'><span id='BamBz.v' class='invisible'><code>BamBz</code></span></span><div class='docblock'><p><a href="https://bam.bz">https://bam.bz</a> provider</p>
+</div><span id='variant.BitLy' class='variant'><span id='BitLy.v' class='invisible'><code>BitLy</code></span></span><div class='docblock'><p><a href="https://bit.ly">https://bit.ly</a> provider</p>
+</div><h3 class='fields'>Fields</h3>
+
+                           <table><tr><td id='variant.BitLy.field.token'><span id='BitLy.v.token.v' class='invisible'><code>token:&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></span></td><td></td></tr></table><span id='variant.Bmeo' class='variant'><span id='Bmeo.v' class='invisible'><code>Bmeo</code></span></span><div class='docblock'><p><a href="http://bmeo.org">http://bmeo.org</a> provider</p>
+</div><span id='variant.BnGy' class='variant'><span id='BnGy.v' class='invisible'><code>BnGy</code></span></span><div class='docblock'><p><a href="https://bn.gy">https://bn.gy</a> provider</p>
+</div><span id='variant.FifoCc' class='variant'><span id='FifoCc.v' class='invisible'><code>FifoCc</code></span></span><div class='docblock'><p><a href="http://fifo.cc">http://fifo.cc</a> provider</p>
+</div><span id='variant.GooGl' class='variant'><span id='GooGl.v' class='invisible'><code>GooGl</code></span></span><div class='docblock'><p><a href="https://goo.gl">https://goo.gl</a> provider of Google</p>
+</div><h3 class='fields'>Fields</h3>
+
+                           <table><tr><td id='variant.GooGl.field.api_key'><span id='GooGl.v.api_key.v' class='invisible'><code>api_key:&nbsp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></span></td><td></td></tr></table><span id='variant.HecSu' class='variant'><span id='HecSu.v' class='invisible'><code>HecSu</code></span></span><div class='docblock'><p><a href="https://hec.su">https://hec.su</a> provider</p>
 
 <p>Notes:</p>
 
 <ul>
 <li>Limited to 3000 API requests per day</li>
 </ul>
-</div><span id='variant.HmmRs' class='variant'><code>HmmRs</code></span><div class='docblock'><p><a href="http://hmm.rs">http://hmm.rs</a> provider</p>
-</div><span id='variant.IsGd' class='variant'><code>IsGd</code></span><div class='docblock'><p><a href="https://is.gd">https://is.gd</a> provider</p>
-</div><span id='variant.NowLinks' class='variant'><code>NowLinks</code></span><div class='docblock'><p><a href="http://nowlinks.net">http://nowlinks.net</a> provider</p>
-</div><span id='variant.PhxCoIn' class='variant'><code>PhxCoIn</code></span><div class='docblock'><p><a href="http://phx.co.in">http://phx.co.in</a> provider</p>
+</div><span id='variant.HmmRs' class='variant'><span id='HmmRs.v' class='invisible'><code>HmmRs</code></span></span><div class='docblock'><p><a href="http://hmm.rs">http://hmm.rs</a> provider</p>
+</div><span id='variant.IsGd' class='variant'><span id='IsGd.v' class='invisible'><code>IsGd</code></span></span><div class='docblock'><p><a href="https://is.gd">https://is.gd</a> provider</p>
+</div><span id='variant.NowLinks' class='variant'><span id='NowLinks.v' class='invisible'><code>NowLinks</code></span></span><div class='docblock'><p><a href="http://nowlinks.net">http://nowlinks.net</a> provider</p>
+</div><span id='variant.PhxCoIn' class='variant'><span id='PhxCoIn.v' class='invisible'><code>PhxCoIn</code></span></span><div class='docblock'><p><a href="http://phx.co.in">http://phx.co.in</a> provider</p>
 
 <p>Notes:</p>
 
@@ -103,10 +115,10 @@ period.</li>
 <li>Instead of redirecting, a preview page will be displayed</li>
 <li>Currently unstable</li>
 </ul>
-</div><span id='variant.PsbeCo' class='variant'><code>PsbeCo</code></span><div class='docblock'><p><a href="http://psbe.co">http://psbe.co</a> provider</p>
-</div><span id='variant.SCoop' class='variant'><code>SCoop</code></span><div class='docblock'><p><a href="http://s.coop">http://s.coop</a> provider</p>
-</div><span id='variant.Rdd' class='variant'><code>Rdd</code></span><div class='docblock'><p><a href="http://readbility.com">http://readbility.com</a> provider</p>
-</div><span id='variant.Rlu' class='variant'><code>Rlu</code></span><div class='docblock'><p><a href="http://rlu.ru">http://rlu.ru</a> provider</p>
+</div><span id='variant.PsbeCo' class='variant'><span id='PsbeCo.v' class='invisible'><code>PsbeCo</code></span></span><div class='docblock'><p><a href="http://psbe.co">http://psbe.co</a> provider</p>
+</div><span id='variant.SCoop' class='variant'><span id='SCoop.v' class='invisible'><code>SCoop</code></span></span><div class='docblock'><p><a href="http://s.coop">http://s.coop</a> provider</p>
+</div><span id='variant.Rdd' class='variant'><span id='Rdd.v' class='invisible'><code>Rdd</code></span></span><div class='docblock'><p><a href="http://readbility.com">http://readbility.com</a> provider</p>
+</div><span id='variant.Rlu' class='variant'><span id='Rlu.v' class='invisible'><code>Rlu</code></span></span><div class='docblock'><p><a href="http://rlu.ru">http://rlu.ru</a> provider</p>
 
 <p>Notes:</p>
 
@@ -116,14 +128,14 @@ blocked. If you plan to add more then 100 URLs in one hour, please let
 the technical support know. Otherwise your IP can be blocked
 unexpectedly. Prior added URLs can be deleted.</li>
 </ul>
-</div><span id='variant.SirBz' class='variant'><code>SirBz</code></span><div class='docblock'><p><a href="http://sirbz.com">http://sirbz.com</a> provider</p>
+</div><span id='variant.SirBz' class='variant'><span id='SirBz.v' class='invisible'><code>SirBz</code></span></span><div class='docblock'><p><a href="http://sirbz.com">http://sirbz.com</a> provider</p>
 
 <p>Notes:</p>
 
 <ul>
 <li>By default, you are limited to 250 requests per 15 minutes.</li>
 </ul>
-</div><span id='variant.TinyUrl' class='variant'><code>TinyUrl</code></span><div class='docblock'><p><a href="http://tinyurl.com">http://tinyurl.com</a> provider</p>
+</div><span id='variant.TinyUrl' class='variant'><span id='TinyUrl.v' class='invisible'><code>TinyUrl</code></span></span><div class='docblock'><p><a href="http://tinyurl.com">http://tinyurl.com</a> provider</p>
 
 <p>Notes:</p>
 
@@ -131,22 +143,21 @@ unexpectedly. Prior added URLs can be deleted.</li>
 <li>This service does not provide any API.</li>
 <li>The implementation result depends on the service result web page.</li>
 </ul>
-</div><span id='variant.TinyPh' class='variant'><code>TinyPh</code></span><div class='docblock'><p><a href="http://tiny.ph">http://tiny.ph</a> provider</p>
-</div><span id='variant.TnyIm' class='variant'><code>TnyIm</code></span><div class='docblock'><p><a href="http://tny.im">http://tny.im</a> provider</p>
-</div><span id='variant.UrlShortenerIo' class='variant'><code>UrlShortenerIo</code></span><div class='docblock'><p><a href="http://url-shortener.io">http://url-shortener.io</a> provider</p>
-</div><span id='variant.VGd' class='variant'><code>VGd</code></span><div class='docblock'><p><a href="https://v.gd">https://v.gd</a> provider</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-61' class='srclink' href='../src/urlshortener/src/providers.rs.html#155-181' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.to_name' class='method'><code>fn <a href='#method.to_name' class='fnname'>to_name</a>(&amp;self) -&gt; &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
+</div><span id='variant.TinyPh' class='variant'><span id='TinyPh.v' class='invisible'><code>TinyPh</code></span></span><div class='docblock'><p><a href="http://tiny.ph">http://tiny.ph</a> provider</p>
+</div><span id='variant.TnyIm' class='variant'><span id='TnyIm.v' class='invisible'><code>TnyIm</code></span></span><div class='docblock'><p><a href="http://tny.im">http://tny.im</a> provider</p>
+</div><span id='variant.UrlShortenerIo' class='variant'><span id='UrlShortenerIo.v' class='invisible'><code>UrlShortenerIo</code></span></span><div class='docblock'><p><a href="http://url-shortener.io">http://url-shortener.io</a> provider</p>
+</div><span id='variant.VGd' class='variant'><span id='VGd.v' class='invisible'><code>VGd</code></span></span><div class='docblock'><p><a href="https://v.gd">https://v.gd</a> provider</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-70' class='srclink' href='../src/urlshortener/src/providers.rs.html#160-188' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.to_name' class='method'><span id='to_name.v' class='invisible'><code>fn <a href='#method.to_name' class='fnname'>to_name</a>(&amp;self) -&gt; &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></span></h4>
 <div class='docblock'><p>Converts the Provider variant into its domain name equivilant</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-12' class='srclink' href='../src/urlshortener/src/providers.rs.html#79' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
-<div class='docblock'><p>Formats the value using the given formatter.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-36' class='srclink' href='../src/urlshortener/src/providers.rs.html#79' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-37' class='srclink' href='../src/urlshortener/src/providers.rs.html#79' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a></code></h4>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-37' class='srclink' href='../src/urlshortener/src/providers.rs.html#80' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a></code></span></h4>
 <div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
-</div><h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+</div><h4 id='method.clone_from' class='method'><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
 <div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../urlshortener/enum.Provider.html' title='urlshortener::Provider'>Provider</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-42' class='srclink' href='../src/urlshortener/src/providers.rs.html#80' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
 
