@@ -86,6 +86,8 @@ impl UrlShortener {
 
     /// Try to generate a short URL from each provider, iterating over each
     /// provider until a short URL is successfully generated.
+    /// If you wish to override the list or providers or their priority,
+    /// provide your own list of providers as second argument.
     ///
     /// # Examples
     ///
@@ -94,7 +96,19 @@ impl UrlShortener {
     ///
     /// let us = UrlShortener::new();
     /// let long_url = "https://rust-lang.org";
-    /// let _short_url = us.try_generate(long_url);
+    /// let _short_url = us.try_generate(long_url, None);
+    /// ```
+    ///
+    /// ```no_run
+    /// use urlshortener::UrlShortener;
+    ///
+    /// let us = UrlShortener::new();
+    /// let providers = vec![
+    ///     Provider::GooGl { api_key: "MY_API_KEY".to_owned() },
+    ///     Provider::IsGd,
+    /// ];
+    /// let long_url = "https://rust-lang.org";
+    /// let _short_url = us.try_generate(long_url, Some(providers));
     /// ```
     ///
     /// # Errors
@@ -102,18 +116,26 @@ impl UrlShortener {
     /// Returns an `Error<ErrorKind::Other>` if there is an error generating a
     /// short URL from all providers.
     pub fn try_generate<S: Into<String>>(&self,
-                                         url: S) -> Result<String, Error> {
+                                         url: S,
+                                         use_providers: Option<Vec<Provider>>)
+        -> Result<String, Error> {
+
         let url = &url.into()[..];
-        let mut providers = providers();
+        let mut chosen_providers;
+        if let Some(chosen) = use_providers {
+            chosen_providers = chosen;
+        } else {
+            chosen_providers = providers();
+        }
 
         loop {
-            if providers.is_empty() {
+            if chosen_providers.is_empty() {
                 break;
             }
 
             // This would normally have the potential to panic, except that a
             // check to ensure there is an element at this index is performed.
-            let res = self.generate(url, providers.remove(0));
+            let res = self.generate(url, chosen_providers.remove(0));
 
             if let Ok(s) = res {
                 return Ok(s);

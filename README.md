@@ -56,7 +56,7 @@ use urlshortener::UrlShortener;
 fn main() {
     let us = UrlShortener::new();
     let long_url = "https://google.com";
-    println!("Short url for google: {:?}", us.try_generate(long_url));
+    println!("Short url for google: {:?}", us.try_generate(long_url, None));
 }
 ```
 
@@ -72,6 +72,27 @@ fn main() {
     let long_url = "https://google.com";
     let key = "MY_API_KEY";
     println!("Short url for google: {:?}", us.generate(long_url, Provider::GooGl { api_key: key.to_owned() }));
+}
+```
+
+Combined (**Goo.Gl** + **Is.Gd**)
+
+```rust
+extern crate urlshortener;
+
+use urlshortener::{ UrlShortener, Provider };
+
+fn main() {
+    use urlshortener::UrlShortener;
+    
+    let us = UrlShortener::new();
+    let providers = vec![
+        Provider::GooGl { api_key: "MY_API_KEY".to_owned() },
+        Provider::IsGd,
+    ];
+    let long_url = "https://rust-lang.org";
+    let _short_url = 
+    println!("Short url for google: {:?}", us.try_generate(long_url, Some(providers)));
 }
 ```
 
