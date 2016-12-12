@@ -6,6 +6,7 @@ use hyper::client::{Client, Response};
 use hyper::header::ContentType;
 use url::form_urlencoded;
 
+
 macro_rules! parse_xml_tag {
     ($fname: ident, $tag: expr) => {
         fn $fname(res: &str) -> Option<String> {
@@ -76,7 +77,7 @@ macro_rules! request {
 }
 
 /// Used to specify which provider to use to generate a short URL.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub enum Provider {
     /// http://abv8.me provider
     ///
@@ -88,12 +89,16 @@ pub enum Provider {
     Abv8,
     /// https://bam.bz provider
     BamBz,
+    /// https://bit.ly provider
+    BitLy { token: String },
     /// http://bmeo.org provider
     Bmeo,
     /// https://bn.gy provider
     BnGy,
     /// http://fifo.cc provider
     FifoCc,
+    /// https://goo.gl provider of Google
+    GooGl { api_key: String },
     /// https://hec.su provider
     ///
     /// Notes:
@@ -158,9 +163,11 @@ impl Provider {
         match *self {
             Provider::Abv8 => "abv8.me",
             Provider::BamBz => "bam.bz",
+            Provider::BitLy { .. } => "bitly.com",
             Provider::Bmeo => "bmeo.org",
             Provider::BnGy => "bn.gy",
             Provider::FifoCc => "fifo.cc",
+            Provider::GooGl { .. } => "goo.gl",
             Provider::HmmRs => "hmm.rs",
             Provider::HecSu => "hec.su",
             Provider::IsGd => "is.gd",
@@ -180,8 +187,8 @@ impl Provider {
     }
 }
 
-/// Returns a vector of all `Provider` variants. This list is in order of
-/// provider quality.
+/// Returns a vector of all `Provider` variants which do not require authentication.
+/// This list is in order of provider quality.
 ///
 /// The providers which are discouraged from use - due to problems such as rate
 /// limitations - are at the end of the resultant vector.
@@ -240,6 +247,16 @@ request!(bambz_req,
          "target={}",
          ContentType::form_url_encoded());
 
+parse!(bitly_parse);
+fn bitly_req(url: &str, key: &str, client: &Client) -> Option<Response> {
+    let address = format!("https://api-ssl.bitly.com/v3/shorten?access_token={}&longUrl={}&format=txt",
+                          key,
+                          url);
+    client.get(&address)
+          .send()
+          .ok()
+}
+
 parse_json_tag!(bmeo_parse, "short", "");
 request!(bmeo_req, get, "http://bmeo.org/api.php?url={}");
 
@@ -248,6 +265,15 @@ request!(bngy_req, get, "https://bn.gy/API.asmx/CreateUrl?real_url={}");
 
 parse_json_tag!(fifocc_parse, "shortner", "http://fifo.cc/");
 request!(fifocc_req, get, "https://fifo.cc/api/v2?url={}");
+
+parse_json_tag!(googl_parse, "id", "");
+fn googl_req(url: &str, key: &str, client: &Client) -> Option<Response> {
+    client.post(&format!("https://www.googleapis.com/urlshortener/v1/url?key={}", key))
+        .body(&format!(r#"{{"longUrl": "{}"}}"#, url))
+        .header(ContentType::json())
+        .send()
+        .ok()
+}
 
 parse_json_tag!(hmmrs_parse, "shortUrl", "");
 request!(hmmrs_req,
@@ -329,9 +355,11 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
     match provider {
         Provider::Abv8 => abv8_parse(res),
         Provider::BamBz => bambz_parse(res),
+        Provider::BitLy { .. } => bitly_parse(res),
         Provider::Bmeo => bmeo_parse(res),
         Provider::BnGy => bngy_parse(res),
         Provider::FifoCc => fifocc_parse(res),
+        Provider::GooGl { .. } => googl_parse(res),
         Provider::HmmRs => hmmrs_parse(res),
         Provider::HecSu => hecsu_parse(res),
         Provider::IsGd => isgd_parse(res),
@@ -359,9 +387,11 @@ pub fn request(url: &str,
     match provider {
         Provider::Abv8 => abv8_req(url, client),
         Provider::BamBz => bambz_req(url, client),
+        Provider::BitLy { token: key } => bitly_req(url, &key, client),
         Provider::Bmeo => bmeo_req(url, client),
         Provider::BnGy => bngy_req(url, client),
         Provider::FifoCc => fifocc_req(url, client),
+        Provider::GooGl { api_key: key } => googl_req(url, &key, client),
         Provider::HmmRs => hmmrs_req(url, client),
         Provider::HecSu => hecsu_req(url, client),
         Provider::IsGd => isgd_req(url, client),

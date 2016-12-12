@@ -38,6 +38,17 @@
 //! let short_url = us.try_generate("https://my-long-url.com");
 //! assert!(short_url.is_ok());
 //! ```
+//! In order to use service with authentication use the appropriate provider directly:
+//!
+//! ```no_run
+//! use urlshortener::{ UrlShortener, Provider };
+//!
+//! let us = UrlShortener::new();
+//! let key = "MY_API_KEY";
+//! let short_url = us.generate("https://my-long-url.com", Provider::GooGl { api_key:
+//! key.to_owned() });
+//! assert!(short_url.is_ok());
+//! ```
 
 #[macro_use]
 extern crate log;
@@ -128,6 +139,15 @@ impl UrlShortener {
     /// let _short_url = us.generate(long_url, Provider::IsGd);
     /// ```
     ///
+    /// ```no_run
+    /// use urlshortener::{Provider, UrlShortener};
+    ///
+    /// let us = UrlShortener::new();
+    /// let api_key = "MY_API_KEY".to_owned();
+    /// let long_url = "http://rust-lang.org";
+    /// let _short_url = us.generate(long_url, Provider::GooGl { api_key: api_key });
+    /// ```
+    ///
     /// # Errors
     ///
     /// Returns an `std::io::Error` if there is an error generating a
@@ -139,7 +159,7 @@ impl UrlShortener {
                                      url: S,
                                      provider: Provider)
                                      -> Result<String, Error> {
-        let response_opt = request(&url.into(), &self.client, provider);
+        let response_opt = request(&url.into(), &self.client, provider.clone());
 
         if let Some(mut response) = response_opt {
             if response.status.is_success() {
@@ -160,6 +180,7 @@ impl UrlShortener {
 mod tests {
     use std::io::ErrorKind;
 
+    /// This test does not cover services which require authentication for obvious reasons.
     #[test]
     fn providers() {
         let us = ::UrlShortener::with_timeout(5);
