@@ -91,7 +91,6 @@ fn main() {
         Provider::IsGd,
     ];
     let long_url = "https://rust-lang.org";
-    let _short_url = 
     println!("Short url for google: {:?}", us.try_generate(long_url, Some(providers)));
 }
 ```
