@@ -35,7 +35,7 @@
 //! use urlshortener::UrlShortener;
 //!
 //! let us = UrlShortener::new();
-//! let short_url = us.try_generate("https://my-long-url.com");
+//! let short_url = us.try_generate("https://my-long-url.com", None);
 //! assert!(short_url.is_ok());
 //! ```
 //! In order to use service with authentication use the appropriate provider directly:
@@ -100,7 +100,7 @@ impl UrlShortener {
     /// ```
     ///
     /// ```no_run
-    /// use urlshortener::UrlShortener;
+    /// use urlshortener::{UrlShortener, Provider};
     ///
     /// let us = UrlShortener::new();
     /// let providers = vec![
