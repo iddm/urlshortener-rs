@@ -200,7 +200,7 @@ mod tests {
         let us = ::UrlShortener::with_timeout(5);
         let url = "http://stackoverflow.com";
 
-        for provider in ::providers() {
+        for provider in &::providers() {
             if let Some(err) = us.generate(url, provider).err() {
                 assert!(err.kind() == ErrorKind::ConnectionAborted);
             }

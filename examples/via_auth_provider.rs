@@ -9,7 +9,7 @@ fn main() {
 
     let us = UrlShortener::new();
     let key = "MY_API_KEY";
-    let short_url = us.generate(long_url, Provider::GooGl { api_key: key.to_owned() });
+    let short_url = us.generate(long_url, &Provider::GooGl { api_key: key.to_owned() });
 
     println!("{:?}", short_url);
 }
