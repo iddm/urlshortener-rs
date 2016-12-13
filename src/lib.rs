@@ -127,7 +127,7 @@ impl UrlShortener {
 
             // This would normally have the potential to panic, except that a
             // check to ensure there is an element at this index is performed.
-            let res = self.generate(url, providers.remove(0));
+            let res = self.generate(url, &providers.remove(0));
 
             if let Ok(s) = res {
                 return Ok(s);
@@ -171,9 +171,9 @@ impl UrlShortener {
     /// b. the service being unavailable (ErrorKind::ConnectionAborted)
     pub fn generate<S: Into<String>>(&self,
                                      url: S,
-                                     provider: Provider)
+                                     provider: &Provider)
                                      -> Result<String, Error> {
-        let response_opt = request(&url.into(), &self.client, provider.clone());
+        let response_opt = request(&url.into(), &self.client, provider);
 
         if let Some(mut response) = response_opt {
             if response.status.is_success() {

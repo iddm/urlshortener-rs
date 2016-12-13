@@ -351,8 +351,8 @@ request!(vgd_req, get, "http://is.gd/create.php?format=simple&url={}");
 
 /// Parses the response from a successful request to a provider into the
 /// URL-shortened string.
-pub fn parse(res: &str, provider: Provider) -> Option<String> {
-    match provider {
+pub fn parse(res: &str, provider: &Provider) -> Option<String> {
+    match *provider {
         Provider::Abv8 => abv8_parse(res),
         Provider::BamBz => bambz_parse(res),
         Provider::BitLy { .. } => bitly_parse(res),
@@ -382,16 +382,16 @@ pub fn parse(res: &str, provider: Provider) -> Option<String> {
 /// Returns the parsed response on success or a `None` on error.
 pub fn request(url: &str,
                client: &Client,
-               provider: Provider)
+               provider: &Provider)
                -> Option<Response> {
-    match provider {
+    match *provider {
         Provider::Abv8 => abv8_req(url, client),
         Provider::BamBz => bambz_req(url, client),
-        Provider::BitLy { token: key } => bitly_req(url, &key, client),
+        Provider::BitLy { token: ref key } => bitly_req(url, &key, client),
         Provider::Bmeo => bmeo_req(url, client),
         Provider::BnGy => bngy_req(url, client),
         Provider::FifoCc => fifocc_req(url, client),
-        Provider::GooGl { api_key: key } => googl_req(url, &key, client),
+        Provider::GooGl { api_key: ref key } => googl_req(url, &key, client),
         Provider::HmmRs => hmmrs_req(url, client),
         Provider::HecSu => hecsu_req(url, client),
         Provider::IsGd => isgd_req(url, client),
