@@ -115,27 +115,19 @@ impl UrlShortener {
     ///
     /// Returns an `Error<ErrorKind::Other>` if there is an error generating a
     /// short URL from all providers.
-    pub fn try_generate<S: Into<String>>(&self,
-                                         url: S,
-                                         use_providers: Option<Vec<Provider>>)
+    pub fn try_generate(&self,
+                        url: &str,
+                        use_providers: Option<Vec<Provider>>)
         -> Result<String, Error> {
-
-        let url = &url.into()[..];
-        let mut chosen_providers;
-        if let Some(chosen) = use_providers {
-            chosen_providers = chosen;
-        } else {
-            chosen_providers = providers();
-        }
-
+        let mut providers = use_providers.unwrap_or(providers());
         loop {
-            if chosen_providers.is_empty() {
+            if providers.is_empty() {
                 break;
             }
 
             // This would normally have the potential to panic, except that a
             // check to ensure there is an element at this index is performed.
-            let res = self.generate(url, chosen_providers.remove(0));
+            let res = self.generate(url, providers.remove(0));
 
             if let Ok(s) = res {
                 return Ok(s);

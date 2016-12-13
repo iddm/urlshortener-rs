@@ -1,9 +1,9 @@
 [package]
 name = "urlshortener"
-version = "0.6.0"
+version = "0.6.1"
 authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
 
-description = "A very simple url shortener library"
+description = "A very simple url shortener client library"
 readme = "README.md"
 license = "MIT"
 keywords = ["url", "short", "shortener", "link"]
