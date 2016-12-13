@@ -82,9 +82,7 @@ extern crate urlshortener;
 
 use urlshortener::{ UrlShortener, Provider };
 
-fn main() {
-    use urlshortener::UrlShortener;
-    
+fn main() {    
     let us = UrlShortener::new();
     let providers = vec![
         Provider::GooGl { api_key: "MY_API_KEY".to_owned() },
