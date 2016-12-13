@@ -25,7 +25,7 @@
 //! use urlshortener::{Provider, UrlShortener};
 //!
 //! let us = UrlShortener::new();
-//! let short_url = us.generate("https://my-long-url.com", Provider::IsGd);
+//! let short_url = us.generate("https://my-long-url.com", &Provider::IsGd);
 //! assert!(short_url.is_ok());
 //! ```
 //!
@@ -45,7 +45,7 @@
 //!
 //! let us = UrlShortener::new();
 //! let key = "MY_API_KEY";
-//! let short_url = us.generate("https://my-long-url.com", Provider::GooGl { api_key:
+//! let short_url = us.generate("https://my-long-url.com", &Provider::GooGl { api_key:
 //! key.to_owned() });
 //! assert!(short_url.is_ok());
 //! ```
@@ -150,7 +150,7 @@ impl UrlShortener {
     ///
     /// let us = UrlShortener::new();
     /// let long_url = "http://rust-lang.org";
-    /// let _short_url = us.generate(long_url, Provider::IsGd);
+    /// let _short_url = us.generate(long_url, &Provider::IsGd);
     /// ```
     ///
     /// ```no_run
@@ -159,7 +159,7 @@ impl UrlShortener {
     /// let us = UrlShortener::new();
     /// let api_key = "MY_API_KEY".to_owned();
     /// let long_url = "http://rust-lang.org";
-    /// let _short_url = us.generate(long_url, Provider::GooGl { api_key: api_key });
+    /// let _short_url = us.generate(long_url, &Provider::GooGl { api_key: api_key });
     /// ```
     ///
     /// # Errors
