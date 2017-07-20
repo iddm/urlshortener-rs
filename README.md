@@ -1,5 +1,5 @@
 # urlshortener-rs
-[![](https://meritbadge.herokuapp.com/urlshortener)](https://crates.io/crates/urlshortener) [![](https://travis-ci.org/vityafx/urlshortener-rs.svg?branch=master)](https://travis-ci.org/vityafx/urlshortener-rs) [![](https://img.shields.io/badge/docs-online-2020ff.svg)](https://vityafx.github.io/urlshortener-rs/master/urlshortener/)
+[![](https://meritbadge.herokuapp.com/urlshortener)](https://crates.io/crates/urlshortener) [![](https://travis-ci.org/vityafx/urlshortener-rs.svg?branch=master)](https://travis-ci.org/vityafx/urlshortener-rs) [![](https://docs.rs/urlshortener/badge.svg)](https://docs.rs/urlshortener)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 
@@ -53,7 +53,7 @@ extern crate urlshortener;
 use urlshortener::UrlShortener;
 
 fn main() {
-    let us = UrlShortener::new();
+    let us = UrlShortener::new().unwrap();
     let long_url = "https://google.com";
     println!("Short url for google: {:?}", us.try_generate(long_url, None));
 }
@@ -67,7 +67,7 @@ extern crate urlshortener;
 use urlshortener::{ UrlShortener, Provider };
 
 fn main() {
-    let us = UrlShortener::new();
+    let us = UrlShortener::new().unwrap();
     let long_url = "https://google.com";
     let key = "MY_API_KEY";
     println!("Short url for google: {:?}", us.generate(long_url, Provider::GooGl { api_key: key.to_owned() }));
@@ -82,7 +82,7 @@ extern crate urlshortener;
 use urlshortener::{ UrlShortener, Provider };
 
 fn main() {    
-    let us = UrlShortener::new();
+    let us = UrlShortener::new().unwrap();
     let providers = vec![
         Provider::GooGl { api_key: "MY_API_KEY".to_owned() },
         Provider::IsGd,

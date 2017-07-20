@@ -9,7 +9,7 @@ license = "MIT"
 keywords = ["url", "short", "shortener", "link"]
 
 repository = "https://github.com/vityafx/urlshortener-rs"
-documentation = "https://vityafx.github.io/urlshortener-rs/master/urlshortener/"
+documentation = "https://docs.rs/urlshortener"
 
 [dependencies]
 log = "0.3"
