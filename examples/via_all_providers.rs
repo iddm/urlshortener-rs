@@ -8,7 +8,7 @@ use urlshortener::UrlShortener;
 fn main() {
     let long_url = "https://doc.rust-lang.org/std/";
 
-    let us = UrlShortener::new();
+    let us = UrlShortener::new().unwrap();
     let short_url = us.try_generate(long_url, None);
 
     println!("{:?}", short_url);

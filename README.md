@@ -21,7 +21,6 @@ Without authentication:
 
 - `bn.gy`
 - `is.gd`
-- `readability.com`
 - `v.gd`
 - `bam.bz`
 - `fifo.cc`

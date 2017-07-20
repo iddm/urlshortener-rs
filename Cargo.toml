@@ -1,6 +1,6 @@
 [package]
 name = "urlshortener"
-version = "0.6.2"
+version = "0.7.0"
 authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
 
 description = "A very simple url shortener client library"
@@ -12,6 +12,6 @@ repository = "https://github.com/vityafx/urlshortener-rs"
 documentation = "https://vityafx.github.io/urlshortener-rs/master/urlshortener/"
 
 [dependencies]
-log = "0.3.6"
-hyper = "0.9.9"
-url = "1.2.0"
+log = "0.3"
+reqwest = "0.7"
+url = "1"

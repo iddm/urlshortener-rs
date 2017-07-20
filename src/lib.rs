@@ -8,7 +8,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! urlshortener = "0.6"
+//! urlshortener = "0.7"
 //! ```
 //!
 //! And add this to your root file:
@@ -24,7 +24,7 @@
 //! ```no_run
 //! use urlshortener::{Provider, UrlShortener};
 //!
-//! let us = UrlShortener::new();
+//! let us = UrlShortener::new().unwrap();
 //! let short_url = us.generate("https://my-long-url.com", &Provider::IsGd);
 //! assert!(short_url.is_ok());
 //! ```
@@ -34,7 +34,7 @@
 //! ```no_run
 //! use urlshortener::UrlShortener;
 //!
-//! let us = UrlShortener::new();
+//! let us = UrlShortener::new().unwrap();
 //! let short_url = us.try_generate("https://my-long-url.com", None);
 //! assert!(short_url.is_ok());
 //! ```
@@ -43,7 +43,7 @@
 //! ```no_run
 //! use urlshortener::{ UrlShortener, Provider };
 //!
-//! let us = UrlShortener::new();
+//! let us = UrlShortener::new().unwrap();
 //! let key = "MY_API_KEY";
 //! let short_url = us.generate("https://my-long-url.com", &Provider::GooGl { api_key:
 //! key.to_owned() });
@@ -52,7 +52,7 @@
 
 #[macro_use]
 extern crate log;
-extern crate hyper;
+extern crate reqwest;
 extern crate url;
 
 mod providers;
@@ -60,28 +60,28 @@ mod providers;
 pub use providers::{Provider, providers};
 
 use providers::{parse, request};
-use hyper::Client;
+use reqwest::Client;
 use std::io::{Error, ErrorKind, Read};
 use std::time::Duration;
 
+
 /// Url shortener: the way to retrieve a short url.
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct UrlShortener {
     client: Client,
 }
 
 impl UrlShortener {
     /// Creates new `UrlShortener` with default (3 seconds) timeout.
-    pub fn new() -> UrlShortener {
+    pub fn new() -> Result<UrlShortener, reqwest::Error> {
         UrlShortener::with_timeout(3)
     }
 
     /// Creates new `UrlShortener` with custom read timeout.
-    pub fn with_timeout(seconds: u64) -> UrlShortener {
-        let mut client = hyper::Client::new();
-        client.set_read_timeout(Some(Duration::from_secs(seconds)));
+    pub fn with_timeout(seconds: u64) -> Result<UrlShortener, reqwest::Error> {
+        let client = reqwest::ClientBuilder::new()?.timeout(Duration::from_secs(seconds)).build()?;
 
-        UrlShortener { client: client }
+        Ok(UrlShortener { client: client })
     }
 
     /// Try to generate a short URL from each provider, iterating over each
@@ -94,7 +94,7 @@ impl UrlShortener {
     /// ```no_run
     /// use urlshortener::UrlShortener;
     ///
-    /// let us = UrlShortener::new();
+    /// let us = UrlShortener::new().unwrap();
     /// let long_url = "https://rust-lang.org";
     /// let _short_url = us.try_generate(long_url, None);
     /// ```
@@ -102,7 +102,7 @@ impl UrlShortener {
     /// ```no_run
     /// use urlshortener::{UrlShortener, Provider};
     ///
-    /// let us = UrlShortener::new();
+    /// let us = UrlShortener::new().unwrap();
     /// let providers = vec![
     ///     Provider::GooGl { api_key: "MY_API_KEY".to_owned() },
     ///     Provider::IsGd,
@@ -148,7 +148,7 @@ impl UrlShortener {
     /// ```no_run
     /// use urlshortener::{Provider, UrlShortener};
     ///
-    /// let us = UrlShortener::new();
+    /// let us = UrlShortener::new().unwrap();
     /// let long_url = "http://rust-lang.org";
     /// let _short_url = us.generate(long_url, &Provider::IsGd);
     /// ```
@@ -156,7 +156,7 @@ impl UrlShortener {
     /// ```no_run
     /// use urlshortener::{Provider, UrlShortener};
     ///
-    /// let us = UrlShortener::new();
+    /// let us = UrlShortener::new().unwrap();
     /// let api_key = "MY_API_KEY".to_owned();
     /// let long_url = "http://rust-lang.org";
     /// let _short_url = us.generate(long_url, &Provider::GooGl { api_key: api_key });
@@ -176,7 +176,7 @@ impl UrlShortener {
         let response_opt = request(&url.into(), &self.client, provider);
 
         if let Some(mut response) = response_opt {
-            if response.status.is_success() {
+            if response.status().is_success() {
                 let mut short_url = String::new();
 
                 if try!(response.read_to_string(&mut short_url)) > 0 {
@@ -197,12 +197,14 @@ mod tests {
     /// This test does not cover services which require authentication for obvious reasons.
     #[test]
     fn providers() {
-        let us = ::UrlShortener::with_timeout(5);
+        let us = ::UrlShortener::with_timeout(5).unwrap();
         let url = "http://stackoverflow.com";
 
         for provider in &::providers() {
+            println!("Request shortening via provider: {}", provider.to_name());
             if let Some(err) = us.generate(url, provider).err() {
-                assert!(err.kind() == ErrorKind::ConnectionAborted);
+                println!("Error: {:?}", err);
+                assert_eq!(err.kind(), ErrorKind::ConnectionAborted);
             }
         }
     }

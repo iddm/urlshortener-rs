@@ -1,9 +1,7 @@
 //! Library service providers implementation.
 
-extern crate hyper;
-
-use hyper::client::{Client, Response};
-use hyper::header::ContentType;
+use reqwest::{Client, Response};
+use reqwest::header::ContentType;
 use url::form_urlencoded;
 
 
@@ -50,28 +48,31 @@ macro_rules! request {
         fn $name(url: &str, client: &Client) -> Option<Response> {
             let url = form_urlencoded::byte_serialize(url.as_bytes())
                 .collect::<String>();
-            client.$method(&format!($req_url, url))
-                .send()
-                .ok()
+            let mut client = match client.$method(&format!($req_url, url)) {
+                Ok(c) => c,
+                _ => return None,
+            };
+            client.send().ok()
         }
     };
 
     (B, $name:ident, $method: ident, $req_url:expr, $body:expr) => {
         fn $name(url: &str, client: &Client) -> Option<Response> {
-            client.$method($req_url)
-                .body(&format!($body, url))
-                .send()
-                .ok()
+            let mut client = match client.$method($req_url) {
+                Ok(c) => c,
+                _ => return None,
+            };
+            client.body(format!($body, url)).send().ok()
         }
     };
 
     ($name:ident, $method:ident, $req_url:expr, $body:expr, $header:expr) => {
         fn $name(url: &str, client: &Client) -> Option<Response> {
-            client.$method($req_url)
-                .body(&format!($body, url))
-                .header($header)
-                .send()
-                .ok()
+            let mut client = match client.$method($req_url) {
+                Ok(c) => c,
+                _ => return None,
+            };
+            client.body(format!($body, url)).header($header).send().ok()
         }
     };
 }
@@ -123,8 +124,6 @@ pub enum Provider {
     PsbeCo,
     /// http://s.coop provider
     SCoop,
-    /// http://readbility.com provider
-    Rdd,
     /// http://rlu.ru provider
     ///
     /// Notes:
@@ -176,7 +175,6 @@ impl Provider {
             Provider::PsbeCo => "psbe.co",
             Provider::SCoop => "s.coop",
             Provider::SirBz => "sirbz.com",
-            Provider::Rdd => "readability.com",
             Provider::Rlu => "rlu.ru",
             Provider::TinyUrl => "tinyurl.com",
             Provider::TinyPh => "tiny.ph",
@@ -201,7 +199,6 @@ pub fn providers() -> Vec<Provider> {
         Provider::IsGd,
         Provider::BnGy,
         Provider::VGd,
-        Provider::Rdd,
         Provider::BamBz,
         Provider::TinyPh,
         Provider::FifoCc,
@@ -252,9 +249,11 @@ fn bitly_req(url: &str, key: &str, client: &Client) -> Option<Response> {
     let address = format!("https://api-ssl.bitly.com/v3/shorten?access_token={}&longUrl={}&format=txt",
                           key,
                           url);
-    client.get(&address)
-          .send()
-          .ok()
+    if let Ok(mut c) = client.get(&address) {
+        c.send().ok()
+    } else {
+        None
+    }
 }
 
 parse_json_tag!(bmeo_parse, "short", "");
@@ -268,11 +267,16 @@ request!(fifocc_req, get, "https://fifo.cc/api/v2?url={}");
 
 parse_json_tag!(googl_parse, "id", "");
 fn googl_req(url: &str, key: &str, client: &Client) -> Option<Response> {
-    client.post(&format!("https://www.googleapis.com/urlshortener/v1/url?key={}", key))
-        .body(&format!(r#"{{"longUrl": "{}"}}"#, url))
-        .header(ContentType::json())
-        .send()
-        .ok()
+    let client_post = client.post(&format!("https://www.googleapis.com/urlshortener/v1/url?key={}",
+                                           key));
+    if let Ok(mut client_post) = client_post {
+        client_post.body(format!(r#"{{"longUrl": "{}"}}"#, url))
+                   .header(ContentType::json())
+                   .send()
+                   .ok()
+    } else {
+        None
+    }
 }
 
 parse_json_tag!(hmmrs_parse, "shortUrl", "");
@@ -301,13 +305,6 @@ parse!(scoop_parse);
 request!(scoop_req,
          get,
          "http://s.coop/devapi.php?action=shorturl&url={}&format=RETURN");
-
-parse_json_tag!(rdd_parse, "rdd_url", "");
-request!(B,
-         rdd_req,
-         post,
-         "https://readability.com/api/shortener/v1/urls",
-         "url={}");
 
 parse!(rlu_parse);
 request!(rlu_req, get, "http://rlu.ru/index.sema?a=api&link={}");
@@ -368,7 +365,6 @@ pub fn parse(res: &str, provider: &Provider) -> Option<String> {
         Provider::PsbeCo => psbeco_parse(res),
         Provider::SCoop => scoop_parse(res),
         Provider::SirBz => sirbz_parse(res),
-        Provider::Rdd => rdd_parse(res),
         Provider::Rlu => rlu_parse(res),
         Provider::TinyUrl => tinyurl_parse(res),
         Provider::TinyPh => tinyph_parse(res),
@@ -400,7 +396,6 @@ pub fn request(url: &str,
         Provider::PsbeCo => psbeco_req(url, client),
         Provider::SCoop => scoop_req(url, client),
         Provider::SirBz => sirbz_req(url, client),
-        Provider::Rdd => rdd_req(url, client),
         Provider::Rlu => rlu_req(url, client),
         Provider::TinyUrl => tinyurl_req(url, client),
         Provider::TinyPh => tinyph_req(url, client),
