@@ -20,7 +20,7 @@ script:
 addons:
   apt:
     packages:
-      - openssl-dev
+      - libssl-dev
 
 notifications:
 email: false
