@@ -4,6 +4,53 @@ use reqwest::{Client, Response};
 use reqwest::header::ContentType;
 use url::form_urlencoded;
 
+/// A slice of all `Provider` variants which do not require authentication.
+/// This list is in order of provider quality.
+///
+/// The providers which are discouraged from use - due to problems such as rate
+/// limitations - are at the end of the resultant slice.
+///
+/// Note that some providers may not provide a generated short URL because the
+/// submitted URL may already be short enough and would not benefit from
+/// shortening via their service.
+pub const PROVIDERS: &[Provider] = &[
+    Provider::IsGd,
+    Provider::BnGy,
+    Provider::VGd,
+    Provider::BamBz,
+    Provider::TinyPh,
+    Provider::FifoCc,
+    Provider::SCoop,
+    Provider::Bmeo,
+    Provider::UrlShortenerIo,
+    Provider::HmmRs,
+
+    // The following list are items that have long response sometimes:
+    Provider::TnyIm,
+
+    // The following list are items that are discouraged from use:
+
+        // Reasons:
+        //
+        // * rate limit (250 requests per 15 minutes)
+        // * does not accept short urls (ex: http://google.com)
+    Provider::SirBz,
+    // Reason: rate limit (100 requests per hour)
+    Provider::Rlu,
+    // Reason: rate limit (3000 requests per day)
+    Provider::HecSu,
+    // Reason: rate limit (20r/3min; 60r/15min for a UNIQUE urls only)
+    Provider::Abv8,
+    // Reason: does not provide an api
+    Provider::TinyUrl,
+    // Reason: unstable work
+    Provider::PsbeCo,
+
+    // The following list are items that show previews instead of direct
+    // links.
+    Provider::NowLinks,
+];
+
 
 macro_rules! parse_xml_tag {
     ($fname: ident, $tag: expr) => {
@@ -185,70 +232,25 @@ impl Provider {
     }
 }
 
-/// Returns a vector of all `Provider` variants which do not require authentication.
-/// This list is in order of provider quality.
-///
-/// The providers which are discouraged from use - due to problems such as rate
-/// limitations - are at the end of the resultant vector.
-///
-/// Note that some providers may not provide a generated short URL because the
-/// submitted URL may already be short enough and would not benefit from
-/// shortening via their service.
-pub fn providers() -> Vec<Provider> {
-    vec![
-        Provider::IsGd,
-        Provider::BnGy,
-        Provider::VGd,
-        Provider::BamBz,
-        Provider::TinyPh,
-        Provider::FifoCc,
-        Provider::SCoop,
-        Provider::Bmeo,
-        Provider::UrlShortenerIo,
-        Provider::HmmRs,
-
-        // The following list are items that have long response sometimes:
-        Provider::TnyIm,
-
-        // The following list are items that are discouraged from use:
-
-        // Reasons:
-        //
-        // * rate limit (250 requests per 15 minutes)
-        // * does not accept short urls (ex: http://google.com)
-        Provider::SirBz,
-        // Reason: rate limit (100 requests per hour)
-        Provider::Rlu,
-        // Reason: rate limit (3000 requests per day)
-        Provider::HecSu,
-        // Reason: rate limit (20r/3min; 60r/15min for a UNIQUE urls only)
-        Provider::Abv8,
-        // Reason: does not provide an api
-        Provider::TinyUrl,
-        // Reason: unstable work
-        Provider::PsbeCo,
-
-        // The following list are items that show previews instead of direct
-        // links.
-        Provider::NowLinks,
-    ]
-}
-
 parse!(abv8_parse);
 request!(abv8_req, get, "http://abv8.me/?url={}");
 
 parse_json_tag!(bambz_parse, "url", "");
-request!(bambz_req,
-         post,
-         "https://bam.bz/api/short",
-         "target={}",
-         ContentType::form_url_encoded());
+request!(
+    bambz_req,
+    post,
+    "https://bam.bz/api/short",
+    "target={}",
+    ContentType::form_url_encoded()
+);
 
 parse!(bitly_parse);
 fn bitly_req(url: &str, key: &str, client: &Client) -> Option<Response> {
-    let address = format!("https://api-ssl.bitly.com/v3/shorten?access_token={}&longUrl={}&format=txt",
-                          key,
-                          url);
+    let address = format!(
+        "https://api-ssl.bitly.com/v3/shorten?access_token={}&longUrl={}&format=txt",
+        key,
+        url
+    );
     if let Ok(mut c) = client.get(&address) {
         c.send().ok()
     } else {
@@ -260,37 +262,50 @@ parse_json_tag!(bmeo_parse, "short", "");
 request!(bmeo_req, get, "http://bmeo.org/api.php?url={}");
 
 parse_xml_tag!(bngy_parse, "ShortenedUrl");
-request!(bngy_req, get, "https://bn.gy/API.asmx/CreateUrl?real_url={}");
+request!(
+    bngy_req,
+    get,
+    "https://bn.gy/API.asmx/CreateUrl?real_url={}"
+);
 
 parse_json_tag!(fifocc_parse, "shortner", "http://fifo.cc/");
 request!(fifocc_req, get, "https://fifo.cc/api/v2?url={}");
 
 parse_json_tag!(googl_parse, "id", "");
 fn googl_req(url: &str, key: &str, client: &Client) -> Option<Response> {
-    let client_post = client.post(&format!("https://www.googleapis.com/urlshortener/v1/url?key={}",
-                                           key));
+    let client_post = client.post(&format!(
+        "https://www.googleapis.com/urlshortener/v1/url?key={}",
+        key
+    ));
     if let Ok(mut client_post) = client_post {
-        client_post.body(format!(r#"{{"longUrl": "{}"}}"#, url))
-                   .header(ContentType::json())
-                   .send()
-                   .ok()
+        client_post
+            .body(format!(r#"{{"longUrl": "{}"}}"#, url))
+            .header(ContentType::json())
+            .send()
+            .ok()
     } else {
         None
     }
 }
 
 parse_json_tag!(hmmrs_parse, "shortUrl", "");
-request!(hmmrs_req,
-         post,
-         "http://hmm.rs/x/shorten",
-         "url={}",
-         ContentType::form_url_encoded());
+request!(
+    hmmrs_req,
+    post,
+    "http://hmm.rs/x/shorten",
+    "url={}",
+    ContentType::form_url_encoded()
+);
 
 parse_xml_tag!(hecsu_parse, "short");
 request!(hecsu_req, get, "https://hec.su/api?url={}&method=xml");
 
 parse!(isgd_parse);
-request!(isgd_req, get, "https://is.gd/create.php?format=simple&url={}");
+request!(
+    isgd_req,
+    get,
+    "https://is.gd/create.php?format=simple&url={}"
+);
 
 parse!(nowlinks_parse);
 request!(nowlinks_req, get, "http://nowlinks.net/api?url={}");
@@ -299,22 +314,30 @@ parse!(phxcoin_parse);
 request!(phxcoin_req, get, "http://phx.co.in/shrink.asp?url={}");
 
 parse_xml_tag!(psbeco_parse, "ShortUrl");
-request!(psbeco_req, get, "http://psbe.co/API.asmx/CreateUrl?real_url={}");
+request!(
+    psbeco_req,
+    get,
+    "http://psbe.co/API.asmx/CreateUrl?real_url={}"
+);
 
 parse!(scoop_parse);
-request!(scoop_req,
-         get,
-         "http://s.coop/devapi.php?action=shorturl&url={}&format=RETURN");
+request!(
+    scoop_req,
+    get,
+    "http://s.coop/devapi.php?action=shorturl&url={}&format=RETURN"
+);
 
 parse!(rlu_parse);
 request!(rlu_req, get, "http://rlu.ru/index.sema?a=api&link={}");
 
 parse_json_tag!(sirbz_parse, "short_link", "");
-request!(sirbz_req,
-         post,
-         "http://sirbz.com/api/shorten_url",
-         "url={}",
-         ContentType::form_url_encoded());
+request!(
+    sirbz_req,
+    post,
+    "http://sirbz.com/api/shorten_url",
+    "url={}",
+    ContentType::form_url_encoded()
+);
 
 fn tinyurl_parse(res: &str) -> Option<String> {
     res.split("data-clipboard-text=\"")
@@ -327,21 +350,29 @@ fn tinyurl_parse(res: &str) -> Option<String> {
 request!(tinyurl_req, get, "http://tinyurl.com/create.php?url={}");
 
 parse_json_tag!(tinyph_parse, "hash", "http://tiny.ph/");
-request!(tinyph_req,
-         post,
-         "http://tiny.ph/api/url/create",
-         "url={}",
-         ContentType::form_url_encoded());
+request!(
+    tinyph_req,
+    post,
+    "http://tiny.ph/api/url/create",
+    "url={}",
+    ContentType::form_url_encoded()
+);
 
 parse_xml_tag!(tnyim_parse, "shorturl");
-request!(tnyim_req, get, "http://tny.im/yourls-api.php?action=shorturl&url={}");
+request!(
+    tnyim_req,
+    get,
+    "http://tny.im/yourls-api.php?action=shorturl&url={}"
+);
 
 parse!(urlshortenerio_parse);
-request!(urlshortenerio_req,
-         post,
-         "http://url-shortener.io/shorten",
-         "url_param={}",
-         ContentType::form_url_encoded());
+request!(
+    urlshortenerio_req,
+    post,
+    "http://url-shortener.io/shorten",
+    "url_param={}",
+    ContentType::form_url_encoded()
+);
 
 parse!(vgd_parse);
 request!(vgd_req, get, "http://is.gd/create.php?format=simple&url={}");
@@ -376,10 +407,7 @@ pub fn parse(res: &str, provider: &Provider) -> Option<String> {
 
 /// Performs a request to the short link provider.
 /// Returns the parsed response on success or a `None` on error.
-pub fn request(url: &str,
-               client: &Client,
-               provider: &Provider)
-               -> Option<Response> {
+pub fn request(url: &str, client: &Client, provider: &Provider) -> Option<Response> {
     match *provider {
         Provider::Abv8 => abv8_req(url, client),
         Provider::BamBz => bambz_req(url, client),
