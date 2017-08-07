@@ -57,7 +57,7 @@ extern crate url;
 
 mod providers;
 
-pub use providers::{Provider, providers};
+pub use providers::{Provider, PROVIDERS};
 
 use providers::{parse, request};
 use reqwest::Client;
@@ -103,12 +103,12 @@ impl UrlShortener {
     /// use urlshortener::{UrlShortener, Provider};
     ///
     /// let us = UrlShortener::new().unwrap();
-    /// let providers = vec![
+    /// let providers = [
     ///     Provider::GooGl { api_key: "MY_API_KEY".to_owned() },
     ///     Provider::IsGd,
     /// ];
     /// let long_url = "https://rust-lang.org";
-    /// let _short_url = us.try_generate(long_url, Some(providers));
+    /// let _short_url = us.try_generate(long_url, Some(&providers));
     /// ```
     ///
     /// # Errors
@@ -117,25 +117,21 @@ impl UrlShortener {
     /// short URL from all providers.
     pub fn try_generate(&self,
                         url: &str,
-                        use_providers: Option<Vec<Provider>>)
+                        use_providers: Option<&[Provider]>)
         -> Result<String, Error> {
-        let mut providers = use_providers.unwrap_or(providers());
-        loop {
-            if providers.is_empty() {
-                break;
-            }
-
+        let providers = use_providers.unwrap_or(PROVIDERS);
+	for provider in providers {
             // This would normally have the potential to panic, except that a
             // check to ensure there is an element at this index is performed.
-            let res = self.generate(url, &providers.remove(0));
+            let res = self.generate(url, provider);
 
             if let Ok(s) = res {
                 return Ok(s);
             } else {
                 warn!("Failed to get short link from service: {}",
                       res.unwrap_err());
-            }
-        }
+            }	
+	}
         error!("Failed to get short link from any service");
         Err(Error::new(ErrorKind::Other,
                        "Failed to get short link from any service"))
@@ -181,7 +177,7 @@ impl UrlShortener {
 
                 if try!(response.read_to_string(&mut short_url)) > 0 {
                     return parse(&short_url, provider)
-                        .ok_or(Error::new(ErrorKind::Other, "Decode error"));
+                        .ok_or_else(|| Error::new(ErrorKind::Other, "Decode error"));
                 }
             }
         }
@@ -200,7 +196,7 @@ mod tests {
         let us = ::UrlShortener::with_timeout(5).unwrap();
         let url = "http://stackoverflow.com";
 
-        for provider in &::providers() {
+        for provider in ::PROVIDERS {
             println!("Request shortening via provider: {}", provider.to_name());
             if let Some(err) = us.generate(url, provider).err() {
                 println!("Error: {:?}", err);

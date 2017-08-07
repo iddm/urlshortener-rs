@@ -4,6 +4,53 @@ use reqwest::{Client, Response};
 use reqwest::header::ContentType;
 use url::form_urlencoded;
 
+/// A slice of all `Provider` variants which do not require authentication.
+/// This list is in order of provider quality.
+///
+/// The providers which are discouraged from use - due to problems such as rate
+/// limitations - are at the end of the resultant slice.
+///
+/// Note that some providers may not provide a generated short URL because the
+/// submitted URL may already be short enough and would not benefit from
+/// shortening via their service.
+pub const PROVIDERS: &[Provider] =     &[
+        Provider::IsGd,
+        Provider::BnGy,
+        Provider::VGd,
+        Provider::BamBz,
+        Provider::TinyPh,
+        Provider::FifoCc,
+        Provider::SCoop,
+        Provider::Bmeo,
+        Provider::UrlShortenerIo,
+        Provider::HmmRs,
+
+        // The following list are items that have long response sometimes:
+        Provider::TnyIm,
+
+        // The following list are items that are discouraged from use:
+
+        // Reasons:
+        //
+        // * rate limit (250 requests per 15 minutes)
+        // * does not accept short urls (ex: http://google.com)
+        Provider::SirBz,
+        // Reason: rate limit (100 requests per hour)
+        Provider::Rlu,
+        // Reason: rate limit (3000 requests per day)
+        Provider::HecSu,
+        // Reason: rate limit (20r/3min; 60r/15min for a UNIQUE urls only)
+        Provider::Abv8,
+        // Reason: does not provide an api
+        Provider::TinyUrl,
+        // Reason: unstable work
+        Provider::PsbeCo,
+
+        // The following list are items that show previews instead of direct
+        // links.
+        Provider::NowLinks,
+    ];
+
 
 macro_rules! parse_xml_tag {
     ($fname: ident, $tag: expr) => {
@@ -183,55 +230,6 @@ impl Provider {
             Provider::VGd => "v.gd",
         }
     }
-}
-
-/// Returns a vector of all `Provider` variants which do not require authentication.
-/// This list is in order of provider quality.
-///
-/// The providers which are discouraged from use - due to problems such as rate
-/// limitations - are at the end of the resultant vector.
-///
-/// Note that some providers may not provide a generated short URL because the
-/// submitted URL may already be short enough and would not benefit from
-/// shortening via their service.
-pub fn providers() -> Vec<Provider> {
-    vec![
-        Provider::IsGd,
-        Provider::BnGy,
-        Provider::VGd,
-        Provider::BamBz,
-        Provider::TinyPh,
-        Provider::FifoCc,
-        Provider::SCoop,
-        Provider::Bmeo,
-        Provider::UrlShortenerIo,
-        Provider::HmmRs,
-
-        // The following list are items that have long response sometimes:
-        Provider::TnyIm,
-
-        // The following list are items that are discouraged from use:
-
-        // Reasons:
-        //
-        // * rate limit (250 requests per 15 minutes)
-        // * does not accept short urls (ex: http://google.com)
-        Provider::SirBz,
-        // Reason: rate limit (100 requests per hour)
-        Provider::Rlu,
-        // Reason: rate limit (3000 requests per day)
-        Provider::HecSu,
-        // Reason: rate limit (20r/3min; 60r/15min for a UNIQUE urls only)
-        Provider::Abv8,
-        // Reason: does not provide an api
-        Provider::TinyUrl,
-        // Reason: unstable work
-        Provider::PsbeCo,
-
-        // The following list are items that show previews instead of direct
-        // links.
-        Provider::NowLinks,
-    ]
 }
 
 parse!(abv8_parse);
