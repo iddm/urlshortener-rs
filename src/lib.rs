@@ -79,7 +79,9 @@ impl UrlShortener {
 
     /// Creates new `UrlShortener` with custom read timeout.
     pub fn with_timeout(seconds: u64) -> Result<UrlShortener, reqwest::Error> {
-        let client = reqwest::ClientBuilder::new()?.timeout(Duration::from_secs(seconds)).build()?;
+        let client = reqwest::ClientBuilder::new()?
+            .timeout(Duration::from_secs(seconds))
+            .build()?;
 
         Ok(UrlShortener { client: client })
     }
@@ -115,12 +117,13 @@ impl UrlShortener {
     ///
     /// Returns an `Error<ErrorKind::Other>` if there is an error generating a
     /// short URL from all providers.
-    pub fn try_generate(&self,
-                        url: &str,
-                        use_providers: Option<&[Provider]>)
-        -> Result<String, Error> {
+    pub fn try_generate(
+        &self,
+        url: &str,
+        use_providers: Option<&[Provider]>,
+    ) -> Result<String, Error> {
         let providers = use_providers.unwrap_or(PROVIDERS);
-	for provider in providers {
+        for provider in providers {
             // This would normally have the potential to panic, except that a
             // check to ensure there is an element at this index is performed.
             let res = self.generate(url, provider);
@@ -128,13 +131,17 @@ impl UrlShortener {
             if let Ok(s) = res {
                 return Ok(s);
             } else {
-                warn!("Failed to get short link from service: {}",
-                      res.unwrap_err());
-            }	
-	}
+                warn!(
+                    "Failed to get short link from service: {}",
+                    res.unwrap_err()
+                );
+            }
+        }
         error!("Failed to get short link from any service");
-        Err(Error::new(ErrorKind::Other,
-                       "Failed to get short link from any service"))
+        Err(Error::new(
+            ErrorKind::Other,
+            "Failed to get short link from any service",
+        ))
     }
 
     /// Attempts to get a short URL using the specified provider.
@@ -165,10 +172,7 @@ impl UrlShortener {
     ///
     /// a. a decode error (ErrorKind::Other);
     /// b. the service being unavailable (ErrorKind::ConnectionAborted)
-    pub fn generate<S: Into<String>>(&self,
-                                     url: S,
-                                     provider: &Provider)
-                                     -> Result<String, Error> {
+    pub fn generate<S: Into<String>>(&self, url: S, provider: &Provider) -> Result<String, Error> {
         let response_opt = request(&url.into(), &self.client, provider);
 
         if let Some(mut response) = response_opt {
@@ -182,7 +186,10 @@ impl UrlShortener {
             }
         }
 
-        Err(Error::new(ErrorKind::ConnectionAborted, "Service is unavailable"))
+        Err(Error::new(
+            ErrorKind::ConnectionAborted,
+            "Service is unavailable",
+        ))
     }
 }
 
