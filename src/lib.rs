@@ -8,7 +8,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! urlshortener = "0.7"
+//! urlshortener = "0.8"
 //! ```
 //!
 //! And add this to your root file:
@@ -79,7 +79,7 @@ impl UrlShortener {
 
     /// Creates new `UrlShortener` with custom read timeout.
     pub fn with_timeout(seconds: u64) -> Result<UrlShortener, reqwest::Error> {
-        let client = reqwest::ClientBuilder::new()?
+        let client = reqwest::ClientBuilder::new()
             .timeout(Duration::from_secs(seconds))
             .build()?;
 
