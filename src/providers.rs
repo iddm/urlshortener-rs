@@ -24,10 +24,8 @@ pub const PROVIDERS: &[Provider] = &[
     Provider::Bmeo,
     Provider::UrlShortenerIo,
     Provider::HmmRs,
-
     // The following list are items that have long response sometimes:
     Provider::TnyIm,
-
     // The following list are items that are discouraged from use:
 
         // Reasons:
@@ -45,7 +43,6 @@ pub const PROVIDERS: &[Provider] = &[
     Provider::TinyUrl,
     // Reason: unstable work
     Provider::PsbeCo,
-
     // The following list are items that show previews instead of direct
     // links.
     Provider::NowLinks,
@@ -95,31 +92,19 @@ macro_rules! request {
         fn $name(url: &str, client: &Client) -> Option<Response> {
             let url = form_urlencoded::byte_serialize(url.as_bytes())
                 .collect::<String>();
-            let mut client = match client.$method(&format!($req_url, url)) {
-                Ok(c) => c,
-                _ => return None,
-            };
-            client.send().ok()
+            client.$method(&format!($req_url, url)).send().ok()
         }
     };
 
     (B, $name:ident, $method: ident, $req_url:expr, $body:expr) => {
         fn $name(url: &str, client: &Client) -> Option<Response> {
-            let mut client = match client.$method($req_url) {
-                Ok(c) => c,
-                _ => return None,
-            };
-            client.body(format!($body, url)).send().ok()
+            client.$method($req_url).body(format!($body, url)).send().ok()
         }
     };
 
     ($name:ident, $method:ident, $req_url:expr, $body:expr, $header:expr) => {
         fn $name(url: &str, client: &Client) -> Option<Response> {
-            let mut client = match client.$method($req_url) {
-                Ok(c) => c,
-                _ => return None,
-            };
-            client.body(format!($body, url)).header($header).send().ok()
+            client.$method($req_url).body(format!($body, url)).header($header).send().ok()
         }
     };
 }
@@ -251,11 +236,7 @@ fn bitly_req(url: &str, key: &str, client: &Client) -> Option<Response> {
         key,
         url
     );
-    if let Ok(mut c) = client.get(&address) {
-        c.send().ok()
-    } else {
-        None
-    }
+    client.get(&address).send().ok()
 }
 
 parse_json_tag!(bmeo_parse, "short", "");
@@ -273,19 +254,15 @@ request!(fifocc_req, get, "https://fifo.cc/api/v2?url={}");
 
 parse_json_tag!(googl_parse, "id", "");
 fn googl_req(url: &str, key: &str, client: &Client) -> Option<Response> {
-    let client_post = client.post(&format!(
-        "https://www.googleapis.com/urlshortener/v1/url?key={}",
-        key
-    ));
-    if let Ok(mut client_post) = client_post {
-        client_post
-            .body(format!(r#"{{"longUrl": "{}"}}"#, url))
-            .header(ContentType::json())
-            .send()
-            .ok()
-    } else {
-        None
-    }
+    client
+        .post(&format!(
+            "https://www.googleapis.com/urlshortener/v1/url?key={}",
+            key
+        ))
+        .body(format!(r#"{{"longUrl": "{}"}}"#, url))
+        .header(ContentType::json())
+        .send()
+        .ok()
 }
 
 parse_json_tag!(hmmrs_parse, "shortUrl", "");
