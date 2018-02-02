@@ -64,7 +64,6 @@ use reqwest::Client;
 use std::io::{Error, ErrorKind, Read};
 use std::time::Duration;
 
-
 /// Url shortener: the way to retrieve a short url.
 #[derive(Debug)]
 pub struct UrlShortener {

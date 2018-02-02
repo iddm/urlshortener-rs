@@ -48,7 +48,6 @@ pub const PROVIDERS: &[Provider] = &[
     Provider::NowLinks,
 ];
 
-
 macro_rules! parse_xml_tag {
     ($fname: ident, $tag: expr) => {
         fn $fname(res: &str) -> Option<String> {
@@ -233,8 +232,7 @@ parse!(bitly_parse);
 fn bitly_req(url: &str, key: &str, client: &Client) -> Option<Response> {
     let address = format!(
         "https://api-ssl.bitly.com/v3/shorten?access_token={}&longUrl={}&format=txt",
-        key,
-        url
+        key, url
     );
     client.get(&address).send().ok()
 }
