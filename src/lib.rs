@@ -200,7 +200,8 @@ mod tests {
     #[test]
     fn providers() {
         let us = ::UrlShortener::with_timeout(5).unwrap();
-        let url = "http://stackoverflow.com";
+        // let url = "http://stackoverflow.com";
+        let url = "http://yandex.com";
 
         for provider in ::PROVIDERS {
             println!("Request shortening via provider: {}", provider.to_name());

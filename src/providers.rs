@@ -1,8 +1,11 @@
 //! Library service providers implementation.
 
 use reqwest::{Client, Response};
-use reqwest::header::ContentType;
+use reqwest::header::{ContentType, UserAgent};
 use url::form_urlencoded;
+
+/// A user agent for faking weird serices.
+const FAKE_USER_AGENT: &str = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0";
 
 /// A slice of all `Provider` variants which do not require authentication.
 /// This list is in order of provider quality.
@@ -264,13 +267,15 @@ fn googl_req(url: &str, key: &str, client: &Client) -> Option<Response> {
 }
 
 parse_json_tag!(hmmrs_parse, "shortUrl", "");
-request!(
-    hmmrs_req,
-    post,
-    "http://hmm.rs/x/shorten",
-    "url={}",
-    ContentType::form_url_encoded()
-);
+fn hmmrs_req(url: &str, client: &Client) -> Option<Response> {
+    client
+        .post("http:/hmm.rs/x/shorten")
+        .body(format!(r#"{{"url": "{}"}}"#, url))
+        .header(ContentType::json())
+        .header(UserAgent::new(FAKE_USER_AGENT))
+        .send()
+        .ok()
+}
 
 parse_xml_tag!(hecsu_parse, "short");
 request!(hecsu_req, get, "https://hec.su/api?url={}&method=xml");
