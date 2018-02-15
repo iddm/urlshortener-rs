@@ -6,7 +6,8 @@ use url::form_urlencoded;
 use url::percent_encoding::{utf8_percent_encode, QUERY_ENCODE_SET};
 
 /// A user agent for faking weird serices.
-const FAKE_USER_AGENT: &str = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0";
+const FAKE_USER_AGENT: &str =
+    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0";
 
 /// A slice of all `Provider` variants which do not require authentication.
 /// This list is in order of provider quality.
