@@ -3,6 +3,7 @@
 use reqwest::{Client, Response};
 use reqwest::header::ContentType;
 use url::form_urlencoded;
+use url::percent_encoding::{utf8_percent_encode, QUERY_ENCODE_SET};
 
 /// A slice of all `Provider` variants which do not require authentication.
 /// This list is in order of provider quality.
@@ -230,9 +231,10 @@ request!(
 
 parse!(bitly_parse);
 fn bitly_req(url: &str, key: &str, client: &Client) -> Option<Response> {
+    let encoded_url = utf8_percent_encode(url, QUERY_ENCODE_SET).collect::<String>();
     let address = format!(
         "https://api-ssl.bitly.com/v3/shorten?access_token={}&longUrl={}&format=txt",
-        key, url
+        key, encoded_url
     );
     client.get(&address).send().ok()
 }
