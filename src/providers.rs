@@ -271,7 +271,7 @@ request!(
     post,
     "http://hmm.rs/x/shorten",
     "url={}",
-    ContentType::form_url_encoded()
+    ContentType::json()
 );
 
 parse_xml_tag!(hecsu_parse, "short");
