@@ -1,6 +1,6 @@
 [package]
 name = "urlshortener"
-version = "0.8.1"
+version = "0.9.0"
 authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
 
 description = "A very simple url shortener client library"
@@ -15,6 +15,13 @@ documentation = "https://docs.rs/urlshortener"
 travis-ci = { repository = "vityafx/urlshortener-rs" }
 
 [dependencies]
-log = "0.3"
-reqwest = "0.8"
+log = "0.4"
 url = "1"
+
+[dependencies.reqwest]
+version = "0.8"
+optional = true
+
+[features]
+default = ["client"]
+client = ["reqwest"]

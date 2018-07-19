@@ -3,7 +3,7 @@
 
 extern crate urlshortener;
 
-use urlshortener::UrlShortener;
+use urlshortener::client::UrlShortener;
 
 fn main() {
     let long_url = "https://doc.rust-lang.org/std/";
