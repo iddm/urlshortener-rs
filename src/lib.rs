@@ -49,7 +49,7 @@
 //! key.to_owned() });
 //! assert!(short_url.is_ok());
 //! ```
-
+#[deny(missing_docs)]
 #[cfg(feature = "client")]
 #[macro_use]
 extern crate log;

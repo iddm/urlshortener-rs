@@ -6,7 +6,8 @@
 A very simple urlshortener for Rust.
 
 This library aims to implement as much URL shortener services as possible and to provide an interface as
-minimal and simple as possible.
+minimal and simple as possible. For easing pain with dependency hell, the library provides request objects
+since 0.9.0 version which can be used for performing requests via user http-client library.
 
 ## Implementations
 
@@ -40,17 +41,33 @@ restrictions such as rate limits:
 - `sirbz.com`
 - `hec.su`
 - `abv8.me`
-- `nowlinks.net`
+- `nowlinks.net**
 
+## Usage **without** "client" feature
 
-## Usage
+You can make a `Request` object without "client" feature only via provider functions:
+
+```rust
+extern crate urlshortener;
+
+use urlshortener::providers::{Provider, self};
+
+fn main() {
+    let long_url = "https://google.com";
+    let key = "MY_API_KEY";
+    let req = providers::request(long_url, &Provider::GooGl { api_key: key.to_owned() });
+    println!("A request object for shortening URL via GooGl: {:?}", req);
+}
+```
+
+## Usage with "client" feature
 
 Without authentication
 
 ```rust
 extern crate urlshortener;
 
-use urlshortener::UrlShortener;
+use urlshortener::client::UrlShortener;
 
 fn main() {
     let us = UrlShortener::new().unwrap();
@@ -64,7 +81,7 @@ With authentication (**Goo.Gl**)
 ```rust
 extern crate urlshortener;
 
-use urlshortener::{ UrlShortener, Provider };
+use urlshortener::{ client::UrlShortener, providers::Provider };
 
 fn main() {
     let us = UrlShortener::new().unwrap();
@@ -79,7 +96,7 @@ Combined (**Goo.Gl** + **Is.Gd**)
 ```rust
 extern crate urlshortener;
 
-use urlshortener::{ UrlShortener, Provider };
+use urlshortener::{ client::UrlShortener, providers::Provider };
 
 fn main() {    
     let us = UrlShortener::new().unwrap();
