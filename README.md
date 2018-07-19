@@ -41,7 +41,7 @@ restrictions such as rate limits:
 - `sirbz.com`
 - `hec.su`
 - `abv8.me`
-- `nowlinks.net**
+- `nowlinks.net`
 
 ## Usage **without** "client" feature
 
