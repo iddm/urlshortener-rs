@@ -442,7 +442,22 @@ pub fn parse(res: &str, provider: &Provider) -> Option<String> {
 }
 
 /// Performs a request to the short link provider.
-/// Returns the parsed response on success or a `None` on error.
+/// Returns the request object which can be used for performing requests.
+///
+/// # Example
+///
+/// ```no_run
+/// extern crate urlshortener;
+///
+/// use urlshortener::providers::{Provider, self};
+///
+/// fn main() {
+///     let long_url = "https://google.com";
+///     let key = "MY_API_KEY";
+///     let req = providers::request(long_url, &Provider::GooGl { api_key: key.to_owned() });
+///     println!("A request object for shortening URL via GooGl: {:?}", req);
+/// }
+/// ```
 pub fn request(url: &str, provider: &Provider) -> request::Request {
     match *provider {
         Provider::Abv8 => abv8_req(url),
