@@ -19,7 +19,7 @@ log = "0.4"
 url = "1"
 
 [dependencies.reqwest]
-version = "0.8"
+version = "0.9"
 optional = true
 
 [features]

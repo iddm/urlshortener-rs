@@ -1,6 +1,9 @@
 #[cfg(feature = "client")]
 use reqwest::{header, Client, Response};
 
+const CONTENT_JSON: &'static str = "application/json";
+const CONTENT_FORM_URL_ENCODED: &'static str = "application/x-www-form-urlencoded";
+
 /// An HTTP method abstraction
 #[derive(Debug, Copy, Clone)]
 pub enum Method {
@@ -38,20 +41,20 @@ impl Request {
         };
 
         if let Some(agent) = self.user_agent.clone() {
-            builder.header(header::UserAgent::new(agent.0));
+            builder = builder.header(header::USER_AGENT, agent.0);
         }
 
         if let Some(content_type) = self.content_type.clone() {
-            match content_type {
-                ContentType::Json => builder.header(header::ContentType::json()),
+            builder = match content_type {
+                ContentType::Json => builder.header(header::CONTENT_TYPE, CONTENT_JSON),
                 ContentType::FormUrlEncoded => {
-                    builder.header(header::ContentType::form_url_encoded())
+                    builder.header(header::CONTENT_TYPE, CONTENT_FORM_URL_ENCODED)
                 }
             };
         }
 
         if let Some(body) = self.body.clone() {
-            builder.body(body);
+            builder = builder.body(body);
         }
 
         builder.send().ok()
