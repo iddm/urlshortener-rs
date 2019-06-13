@@ -32,10 +32,10 @@ pub const PROVIDERS: &[Provider] = &[
     Provider::TnyIm,
     // The following list are items that are discouraged from use:
 
-        // Reasons:
-        //
-        // * rate limit (250 requests per 15 minutes)
-        // * does not accept short urls (ex: http://google.com)
+    // Reasons:
+    //
+    // * rate limit (250 requests per 15 minutes)
+    // * does not accept short urls (ex: http://google.com)
     Provider::SirBz,
     // Reason: rate limit (100 requests per hour)
     Provider::Rlu,
