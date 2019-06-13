@@ -8,6 +8,15 @@ use url::percent_encoding::{utf8_percent_encode, QUERY_ENCODE_SET};
 const FAKE_USER_AGENT: &str =
     "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0";
 
+/// Describes the provider error.
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub enum ProviderError {
+    /// Means there was a connection error. Usually when making a request.
+    Connection,
+    /// Means we were not able to deserialize the answer.
+    Deserialize,
+}
+
 /// A slice of all `Provider` variants which do not require authentication.
 /// This list is in order of provider quality.
 ///
@@ -19,7 +28,6 @@ const FAKE_USER_AGENT: &str =
 /// shortening via their service.
 pub const PROVIDERS: &[Provider] = &[
     Provider::IsGd,
-    Provider::BnGy,
     Provider::VGd,
     Provider::BamBz,
     Provider::TinyPh,
@@ -82,7 +90,7 @@ macro_rules! parse_json_tag {
     };
 }
 
-macro_rules! parse {
+macro_rules! parse_noop {
     ($name:ident) => {
         fn $name(res: &str) -> Option<String> {
             Some(res.to_owned())
@@ -143,15 +151,19 @@ pub enum Provider {
     /// https://bam.bz provider
     BamBz,
     /// https://bit.ly provider
-    BitLy { token: String },
+    BitLy {
+        /// A token string which you may obtain on the provider web service page.
+        token: String,
+    },
     /// http://bmeo.org provider
     Bmeo,
-    /// https://bn.gy provider
-    BnGy,
     /// http://fifo.cc provider
     FifoCc,
     /// https://goo.gl provider of Google
-    GooGl { api_key: String },
+    GooGl {
+        /// An api key string which you may obtain on the provider web service page.
+        api_key: String,
+    },
     /// https://hec.su provider
     ///
     /// Notes:
@@ -216,7 +228,6 @@ impl Provider {
             Provider::BamBz => "bam.bz",
             Provider::BitLy { .. } => "bitly.com",
             Provider::Bmeo => "bmeo.org",
-            Provider::BnGy => "bn.gy",
             Provider::FifoCc => "fifo.cc",
             Provider::GooGl { .. } => "goo.gl",
             Provider::HmmRs => "hmm.rs",
@@ -237,7 +248,7 @@ impl Provider {
     }
 }
 
-parse!(abv8_parse);
+parse_noop!(abv8_parse);
 request!(abv8_req, request::Method::Get, "http://abv8.me/?url={}");
 
 parse_json_tag!(bambz_parse, "url", "");
@@ -249,7 +260,7 @@ request!(
     request::ContentType::FormUrlEncoded
 );
 
-parse!(bitly_parse);
+parse_noop!(bitly_parse);
 fn bitly_req(url: &str, key: &str) -> request::Request {
     let encoded_url = utf8_percent_encode(url, QUERY_ENCODE_SET).collect::<String>();
     let address = format!(
@@ -271,13 +282,6 @@ request!(
     bmeo_req,
     request::Method::Get,
     "http://bmeo.org/api.php?url={}"
-);
-
-parse_xml_tag!(bngy_parse, "ShortenedUrl");
-request!(
-    bngy_req,
-    request::Method::Get,
-    "https://bn.gy/API.asmx/CreateUrl?real_url={}"
 );
 
 parse_json_tag!(fifocc_parse, "shortner", "http://fifo.cc/");
@@ -316,21 +320,21 @@ request!(
     "https://hec.su/api?url={}&method=xml"
 );
 
-parse!(isgd_parse);
+parse_noop!(isgd_parse);
 request!(
     isgd_req,
     request::Method::Get,
     "https://is.gd/create.php?format=simple&url={}"
 );
 
-parse!(nowlinks_parse);
+parse_noop!(nowlinks_parse);
 request!(
     nowlinks_req,
     request::Method::Get,
     "http://nowlinks.net/api?url={}"
 );
 
-parse!(phxcoin_parse);
+parse_noop!(phxcoin_parse);
 request!(
     phxcoin_req,
     request::Method::Get,
@@ -344,14 +348,14 @@ request!(
     "http://psbe.co/API.asmx/CreateUrl?real_url={}"
 );
 
-parse!(scoop_parse);
+parse_noop!(scoop_parse);
 request!(
     scoop_req,
     request::Method::Get,
     "http://s.coop/devapi.php?action=shorturl&url={}&format=RETURN"
 );
 
-parse!(rlu_parse);
+parse_noop!(rlu_parse);
 request!(
     rlu_req,
     request::Method::Get,
@@ -397,7 +401,7 @@ request!(
     "http://tny.im/yourls-api.php?action=shorturl&url={}"
 );
 
-parse!(urlshortenerio_parse);
+parse_noop!(urlshortenerio_parse);
 request!(
     urlshortenerio_req,
     request::Method::Post,
@@ -406,7 +410,7 @@ request!(
     request::ContentType::FormUrlEncoded
 );
 
-parse!(vgd_parse);
+parse_noop!(vgd_parse);
 request!(
     vgd_req,
     request::Method::Get,
@@ -415,13 +419,12 @@ request!(
 
 /// Parses the response from a successful request to a provider into the
 /// URL-shortened string.
-pub fn parse(res: &str, provider: &Provider) -> Option<String> {
+pub fn parse(res: &str, provider: &Provider) -> Result<String, ProviderError> {
     match *provider {
         Provider::Abv8 => abv8_parse(res),
         Provider::BamBz => bambz_parse(res),
         Provider::BitLy { .. } => bitly_parse(res),
         Provider::Bmeo => bmeo_parse(res),
-        Provider::BnGy => bngy_parse(res),
         Provider::FifoCc => fifocc_parse(res),
         Provider::GooGl { .. } => googl_parse(res),
         Provider::HmmRs => hmmrs_parse(res),
@@ -439,6 +442,7 @@ pub fn parse(res: &str, provider: &Provider) -> Option<String> {
         Provider::UrlShortenerIo => urlshortenerio_parse(res),
         Provider::VGd => vgd_parse(res),
     }
+    .ok_or_else(|| ProviderError::Deserialize)
 }
 
 /// Performs a request to the short link provider.
@@ -446,7 +450,7 @@ pub fn parse(res: &str, provider: &Provider) -> Option<String> {
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```rust,no_run
 /// extern crate urlshortener;
 ///
 /// use urlshortener::providers::{Provider, self};
@@ -464,7 +468,6 @@ pub fn request(url: &str, provider: &Provider) -> request::Request {
         Provider::BamBz => bambz_req(url),
         Provider::BitLy { token: ref key } => bitly_req(url, &key),
         Provider::Bmeo => bmeo_req(url),
-        Provider::BnGy => bngy_req(url),
         Provider::FifoCc => fifocc_req(url),
         Provider::GooGl { api_key: ref key } => googl_req(url, &key),
         Provider::HmmRs => hmmrs_req(url),

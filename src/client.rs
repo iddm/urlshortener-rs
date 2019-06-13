@@ -1,9 +1,8 @@
-use providers::{self, parse, request};
+use providers::{self, parse, request, ProviderError};
 use reqwest::{self, Client};
-use std::io::{Error, ErrorKind, Read};
 use std::time::Duration;
 
-//// Url shortener: the way to retrieve a short url.
+/// Url shortener: the way to retrieve a short url.
 #[derive(Debug)]
 pub struct UrlShortener {
     client: Client,
@@ -21,7 +20,7 @@ impl UrlShortener {
             .timeout(Duration::from_secs(seconds))
             .build()?;
 
-        Ok(UrlShortener { client: client })
+        Ok(UrlShortener { client })
     }
 
     /// Try to generate a short URL from each provider, iterating over each
@@ -31,7 +30,7 @@ impl UrlShortener {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```rust,no_run
     /// use urlshortener::client::UrlShortener;
     ///
     /// let us = UrlShortener::new().unwrap();
@@ -39,7 +38,7 @@ impl UrlShortener {
     /// let _short_url = us.try_generate(long_url, None);
     /// ```
     ///
-    /// ```no_run
+    /// ```rust,no_run
     /// use urlshortener::{client::UrlShortener, providers::Provider};
     ///
     /// let us = UrlShortener::new().unwrap();
@@ -53,40 +52,55 @@ impl UrlShortener {
     ///
     /// # Errors
     ///
-    /// Returns an `Error<ErrorKind::Other>` if there is an error generating a
+    /// Returns an `Error<ProviderError>` if there is an error generating a
     /// short URL from all providers.
+    ///
+    /// # Notes
+    ///
+    /// This function has been deprecated since it does not bring any UX improvements.
+    /// The body could be easily re-written as:
+    ///
+    /// ```rust,no_run
+    /// use urlshortener::{client::UrlShortener, providers::Provider};
+    ///
+    /// let us = UrlShortener::new().unwrap();
+    /// let providers = [
+    ///     Provider::GooGl { api_key: "MY_API_KEY".to_owned() },
+    ///     Provider::IsGd,
+    /// ];
+    /// let long_url = "https://rust-lang.org";
+    /// let mut short_url = None;
+    /// for provider in &providers {
+    ///     if let Ok(short_url_res) = us.generate(long_url, provider) {
+    ///         short_url = Some(short_url_res);
+    ///         break;
+    ///     }
+    /// }
+    ///
+    /// ```
+    #[deprecated(since = "1.0.0", note = "Please use `generate` directly instead.")]
     pub fn try_generate(
         &self,
         url: &str,
         use_providers: Option<&[providers::Provider]>,
-    ) -> Result<String, Error> {
+    ) -> Result<String, ProviderError> {
         let providers = use_providers.unwrap_or(providers::PROVIDERS);
         for provider in providers {
-            // This would normally have the potential to panic, except that a
-            // check to ensure there is an element at this index is performed.
             let res = self.generate(url, provider);
 
-            if let Ok(s) = res {
-                return Ok(s);
-            } else {
-                warn!(
-                    "Failed to get short link from service: {}",
-                    res.unwrap_err()
-                );
+            if res.is_ok() {
+                return res;
             }
         }
-        error!("Failed to get short link from any service");
-        Err(Error::new(
-            ErrorKind::Other,
-            "Failed to get short link from any service",
-        ))
+
+        Err(ProviderError::Connection)
     }
 
     /// Attempts to get a short URL using the specified provider.
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```rust, no_run
     /// use urlshortener::{providers::Provider, client::UrlShortener};
     ///
     /// let us = UrlShortener::new().unwrap();
@@ -94,7 +108,7 @@ impl UrlShortener {
     /// let _short_url = us.generate(long_url, &Provider::IsGd);
     /// ```
     ///
-    /// ```no_run
+    /// ```rust,no_run
     /// use urlshortener::{providers::Provider, client::UrlShortener};
     ///
     /// let us = UrlShortener::new().unwrap();
@@ -102,36 +116,21 @@ impl UrlShortener {
     /// let long_url = "http://rust-lang.org";
     /// let _short_url = us.generate(long_url, &Provider::GooGl { api_key: api_key });
     /// ```
-    ///
-    /// # Errors
-    ///
-    /// Returns an `std::io::Error` if there is an error generating a
-    /// short URL from the given provider due to either:
-    ///
-    /// a. a decode error (ErrorKind::Other);
-    /// b. the service being unavailable (ErrorKind::ConnectionAborted)
     pub fn generate<S: Into<String>>(
         &self,
         url: S,
         provider: &providers::Provider,
-    ) -> Result<String, Error> {
+    ) -> Result<String, ProviderError> {
         let req = request(&url.into(), provider);
 
-        if let Some(mut response) = req.execute(&self.client) {
-            if response.status().is_success() {
-                let mut short_url = String::new();
-
-                if try!(response.read_to_string(&mut short_url)) > 0 {
-                    return parse(&short_url, provider)
-                        .ok_or_else(|| Error::new(ErrorKind::Other, "Decode error"));
-                }
-            }
+        if let Ok(mut response) = req.execute(&self.client) {
+            response
+                .text()
+                .map_err(|_| ProviderError::Connection)
+                .and_then(|t| parse(&t, provider))
+        } else {
+            Err(ProviderError::Connection)
         }
-
-        Err(Error::new(
-            ErrorKind::ConnectionAborted,
-            "Could not create a request",
-        ))
     }
 }
 
@@ -139,20 +138,18 @@ impl UrlShortener {
 mod tests {
     use client;
     use providers;
-    use std::io::ErrorKind;
 
     /// This test does not cover services which require authentication for obvious reasons.
     #[test]
     fn providers() {
         let us = client::UrlShortener::with_timeout(5).unwrap();
-        // let url = "http://stackoverflow.com";
         let url = "http://yandex.com";
 
         for provider in providers::PROVIDERS {
             println!("Request shortening via provider: {}", provider.to_name());
             if let Some(err) = us.generate(url, provider).err() {
                 println!("Error: {:?}", err);
-                assert_eq!(err.kind(), ErrorKind::ConnectionAborted);
+                assert_eq!(err, providers::ProviderError::Connection);
             }
         }
     }
