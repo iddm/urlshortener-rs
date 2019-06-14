@@ -146,10 +146,8 @@ mod tests {
         let url = "http://yandex.com";
 
         for provider in providers::PROVIDERS {
-            println!("Request shortening via provider: {}", provider.to_name());
-            if let Some(err) = us.generate(url, provider).err() {
-                println!("Error: {:?}", err);
-                assert_eq!(err, providers::ProviderError::Connection);
+            if let Err(e) = us.generate(url, provider) {
+                assert!(false, "{:?} -> {:?}", provider, e);
             }
         }
     }
