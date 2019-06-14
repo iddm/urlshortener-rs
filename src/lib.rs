@@ -2,26 +2,11 @@
 //!
 //! An easy library for retrieving short urls.
 //!
-//! ## Installation
-//!
-//! Add the following dependency to your project's `Cargo.toml`:
-//!
-//! ```toml
-//! [dependencies]
-//! urlshortener = "0.9"
-//! ```
-//!
-//! And add this to your root file:
-//!
-//! ```no_run
-//! extern crate urlshortener;
-//! ```
-//!
 //! ## Usage
 //!
 //! Creating a short URL via a specified provider is very simple:
 //!
-//! ```no_run
+//! ```rust,no_run
 //! use urlshortener::{providers::Provider, client::UrlShortener};
 //!
 //! let us = UrlShortener::new().unwrap();
@@ -31,7 +16,7 @@
 //!
 //! Or attempting all URL shorteners until one is successfully generated:
 //!
-//! ```no_run
+//! ```rust,no_run
 //! use urlshortener::client::UrlShortener;
 //!
 //! let us = UrlShortener::new().unwrap();
@@ -40,7 +25,7 @@
 //! ```
 //! In order to use service with authentication use the appropriate provider directly:
 //!
-//! ```no_run
+//! ```rust,no_run
 //! use urlshortener::{ client::UrlShortener, providers::Provider };
 //!
 //! let us = UrlShortener::new().unwrap();
