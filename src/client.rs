@@ -116,12 +116,12 @@ impl UrlShortener {
     /// let long_url = "http://rust-lang.org";
     /// let _short_url = us.generate(long_url, &Provider::GooGl { api_key: api_key });
     /// ```
-    pub fn generate<S: Into<String>>(
+    pub fn generate<S: AsRef<str>>(
         &self,
         url: S,
         provider: &providers::Provider,
     ) -> Result<String, ProviderError> {
-        let req = request(&url.into(), provider);
+        let req = request(url.as_ref(), provider);
 
         if let Ok(mut response) = req.execute(&self.client) {
             response
