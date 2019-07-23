@@ -15,7 +15,7 @@ documentation = "https://docs.rs/urlshortener"
 travis-ci = { repository = "vityafx/urlshortener-rs" }
 
 [dependencies]
-url = "1"
+url = "2"
 
 [dependencies.reqwest]
 version = "0.9"
