@@ -414,7 +414,7 @@ parse_noop!(vgd_parse);
 request!(
     vgd_req,
     request::Method::Get,
-    "http://is.gd/create.php?format=simple&url={}"
+    "http://v.gd/create.php?format=simple&url={}"
 );
 
 /// Parses the response from a successful request to a provider into the
