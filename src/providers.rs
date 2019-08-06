@@ -2,7 +2,6 @@
 
 use request;
 use url::form_urlencoded;
-use url::percent_encoding::{utf8_percent_encode, QUERY_ENCODE_SET};
 
 /// A user agent for faking weird services.
 const FAKE_USER_AGENT: &str =
@@ -262,7 +261,7 @@ request!(
 
 parse_noop!(bitly_parse);
 fn bitly_req(url: &str, key: &str) -> request::Request {
-    let encoded_url = utf8_percent_encode(url, QUERY_ENCODE_SET).collect::<String>();
+    let encoded_url = form_urlencoded::byte_serialize(url.as_bytes()).collect::<String>();
     let address = format!(
         "https://api-ssl.bitly.com/v3/shorten?access_token={}&longUrl={}&format=txt",
         key, encoded_url
