@@ -171,6 +171,8 @@ pub enum Provider {
     Kutt {
         /// An api key string which you may obtain on the provider web service page.
         api_key: String,
+        /// The api host, defaults to 'https://kutt.it'
+        host: Option<String>,
     },
     /// https://hec.su provider
     ///
@@ -241,7 +243,10 @@ impl Provider {
             Provider::HmmRs => "hmm.rs",
             Provider::HecSu => "hec.su",
             Provider::IsGd => "is.gd",
-            Provider::Kutt { .. } => "kutt.it",
+            Provider::Kutt { ref host, .. } => host
+                .as_ref()
+                .map(|h| h.rsplit("//").next().unwrap())
+                .unwrap_or("kutt.it"),
             Provider::NowLinks => "nowlinks.net",
             Provider::PhxCoIn => "phx.co.in",
             Provider::PsbeCo => "psbe.co",
@@ -340,12 +345,12 @@ request!(
 );
 
 parse_json_tag!(kutt_parse, "shortUrl", "");
-fn kutt_req(url: &str, api_key: &str) -> request::Request {
+fn kutt_req(url: &str, api_key: &str, host: Option<&str>) -> request::Request {
     let mut headers = HeaderMap::new();
     headers.insert("X-API-Key", api_key.parse().unwrap());
 
     request::Request {
-        url: "https://kutt.it/api/url/submit".into(),
+        url: format!("{}/api/url/submit", host.unwrap_or("https://kutt.it")),
         body: Some(format!(r#"{{"target": "{}"}}"#, url)),
         content_type: Some(request::ContentType::Json),
         user_agent: None,
@@ -494,14 +499,17 @@ pub fn request(url: &str, provider: &Provider) -> request::Request {
     match *provider {
         Provider::Abv8 => abv8_req(url),
         Provider::BamBz => bambz_req(url),
-        Provider::BitLy { token: ref key } => bitly_req(url, &key),
+        Provider::BitLy { ref token } => bitly_req(url, &token),
         Provider::Bmeo => bmeo_req(url),
         Provider::FifoCc => fifocc_req(url),
-        Provider::GooGl { api_key: ref key } => googl_req(url, &key),
+        Provider::GooGl { ref api_key } => googl_req(url, &api_key),
         Provider::HmmRs => hmmrs_req(url),
         Provider::HecSu => hecsu_req(url),
         Provider::IsGd => isgd_req(url),
-        Provider::Kutt { api_key: ref key } => kutt_req(url, &key),
+        Provider::Kutt {
+            ref api_key,
+            ref host,
+        } => kutt_req(url, &api_key, host.as_ref().map(|h| &**h)),
         Provider::NowLinks => nowlinks_req(url),
         Provider::PhxCoIn => phxcoin_req(url),
         Provider::PsbeCo => psbeco_req(url),
