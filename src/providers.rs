@@ -1,6 +1,7 @@
 //! Library service providers implementation.
 
 use request;
+use reqwest::header::HeaderMap;
 use url::form_urlencoded;
 
 /// A user agent for faking weird services.
@@ -106,6 +107,7 @@ macro_rules! request {
                 body: None,
                 content_type: None,
                 user_agent: None,
+                headers: None,
                 method: $method,
             }
         }
@@ -118,6 +120,7 @@ macro_rules! request {
                 body: Some(format!($body, url)),
                 content_type: None,
                 user_agent: None,
+                headers: None,
                 method: $method,
             }
         }
@@ -130,6 +133,7 @@ macro_rules! request {
                 body: Some(format!($body, url)),
                 content_type: Some($content_type),
                 user_agent: None,
+                headers: None,
                 method: $method,
             }
         }
@@ -160,6 +164,11 @@ pub enum Provider {
     FifoCc,
     /// https://goo.gl provider of Google
     GooGl {
+        /// An api key string which you may obtain on the provider web service page.
+        api_key: String,
+    },
+    /// https://kutt.it provider, can be self hosted
+    Kutt {
         /// An api key string which you may obtain on the provider web service page.
         api_key: String,
     },
@@ -232,6 +241,7 @@ impl Provider {
             Provider::HmmRs => "hmm.rs",
             Provider::HecSu => "hec.su",
             Provider::IsGd => "is.gd",
+            Provider::Kutt { .. } => "kutt.it",
             Provider::NowLinks => "nowlinks.net",
             Provider::PhxCoIn => "phx.co.in",
             Provider::PsbeCo => "psbe.co",
@@ -272,6 +282,7 @@ fn bitly_req(url: &str, key: &str) -> request::Request {
         body: None,
         content_type: None,
         user_agent: None,
+        headers: None,
         method: request::Method::Get,
     }
 }
@@ -297,6 +308,7 @@ fn googl_req(url: &str, key: &str) -> request::Request {
         body: Some(format!(r#"{{"longUrl": "{}"}}"#, url)),
         content_type: Some(request::ContentType::Json),
         user_agent: None,
+        headers: None,
         method: request::Method::Post,
     }
 }
@@ -308,6 +320,7 @@ fn hmmrs_req(url: &str) -> request::Request {
         body: Some(format!(r#"{{"url": "{}"}}"#, url)),
         content_type: Some(request::ContentType::Json),
         user_agent: Some(request::UserAgent(FAKE_USER_AGENT.to_owned())),
+        headers: None,
         method: request::Method::Post,
     }
 }
@@ -325,6 +338,21 @@ request!(
     request::Method::Get,
     "https://is.gd/create.php?format=simple&url={}"
 );
+
+parse_json_tag!(kutt_parse, "shortUrl", "");
+fn kutt_req(url: &str, api_key: &str) -> request::Request {
+    let mut headers = HeaderMap::new();
+    headers.insert("X-API-Key", api_key.parse().unwrap());
+
+    request::Request {
+        url: "https://kutt.it/api/url/submit".into(),
+        body: Some(format!(r#"{{"target": "{}"}}"#, url)),
+        content_type: Some(request::ContentType::Json),
+        user_agent: None,
+        headers: Some(headers),
+        method: request::Method::Post,
+    }
+}
 
 parse_noop!(nowlinks_parse);
 request!(
@@ -429,6 +457,7 @@ pub fn parse(res: &str, provider: &Provider) -> Result<String, ProviderError> {
         Provider::HmmRs => hmmrs_parse(res),
         Provider::HecSu => hecsu_parse(res),
         Provider::IsGd => isgd_parse(res),
+        Provider::Kutt { .. } => kutt_parse(res),
         Provider::NowLinks => nowlinks_parse(res),
         Provider::PhxCoIn => phxcoin_parse(res),
         Provider::PsbeCo => psbeco_parse(res),
@@ -472,6 +501,7 @@ pub fn request(url: &str, provider: &Provider) -> request::Request {
         Provider::HmmRs => hmmrs_req(url),
         Provider::HecSu => hecsu_req(url),
         Provider::IsGd => isgd_req(url),
+        Provider::Kutt { api_key: ref key } => kutt_req(url, &key),
         Provider::NowLinks => nowlinks_req(url),
         Provider::PhxCoIn => phxcoin_req(url),
         Provider::PsbeCo => psbeco_req(url),

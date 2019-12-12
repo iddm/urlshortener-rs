@@ -1,5 +1,8 @@
 #[cfg(feature = "client")]
-use reqwest::{header, Client, Response};
+use reqwest::{
+    header::{self, HeaderMap},
+    Client, Response,
+};
 
 const CONTENT_JSON: &str = "application/json";
 const CONTENT_FORM_URL_ENCODED: &str = "application/x-www-form-urlencoded";
@@ -37,6 +40,8 @@ pub struct Request {
     pub content_type: Option<ContentType>,
     /// The user agent.
     pub user_agent: Option<UserAgent>,
+    /// Request headers.
+    pub headers: Option<HeaderMap>,
     /// The HTTP method.
     pub method: Method,
 }
@@ -52,6 +57,10 @@ impl Request {
 
         if let Some(agent) = self.user_agent.clone() {
             builder = builder.header(header::USER_AGENT, agent.0);
+        }
+
+        if let Some(headers) = self.headers.clone() {
+            builder = builder.headers(headers);
         }
 
         if let Some(content_type) = self.content_type {
