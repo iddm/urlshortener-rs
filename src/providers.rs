@@ -1,6 +1,7 @@
 //! Library service providers implementation.
 
 use request;
+use reqwest::header::HeaderMap;
 use url::form_urlencoded;
 
 /// A user agent for faking weird services.
@@ -106,6 +107,7 @@ macro_rules! request {
                 body: None,
                 content_type: None,
                 user_agent: None,
+                headers: None,
                 method: $method,
             }
         }
@@ -118,6 +120,7 @@ macro_rules! request {
                 body: Some(format!($body, url)),
                 content_type: None,
                 user_agent: None,
+                headers: None,
                 method: $method,
             }
         }
@@ -130,6 +133,7 @@ macro_rules! request {
                 body: Some(format!($body, url)),
                 content_type: Some($content_type),
                 user_agent: None,
+                headers: None,
                 method: $method,
             }
         }
@@ -162,6 +166,13 @@ pub enum Provider {
     GooGl {
         /// An api key string which you may obtain on the provider web service page.
         api_key: String,
+    },
+    /// https://kutt.it provider, can be self hosted
+    Kutt {
+        /// An api key string which you may obtain on the provider web service page.
+        api_key: String,
+        /// The api host, defaults to 'https://kutt.it'
+        host: Option<String>,
     },
     /// https://hec.su provider
     ///
@@ -232,6 +243,10 @@ impl Provider {
             Provider::HmmRs => "hmm.rs",
             Provider::HecSu => "hec.su",
             Provider::IsGd => "is.gd",
+            Provider::Kutt { ref host, .. } => host
+                .as_ref()
+                .map(|h| h.rsplit("//").next().unwrap())
+                .unwrap_or("kutt.it"),
             Provider::NowLinks => "nowlinks.net",
             Provider::PhxCoIn => "phx.co.in",
             Provider::PsbeCo => "psbe.co",
@@ -272,6 +287,7 @@ fn bitly_req(url: &str, key: &str) -> request::Request {
         body: None,
         content_type: None,
         user_agent: None,
+        headers: None,
         method: request::Method::Get,
     }
 }
@@ -297,6 +313,7 @@ fn googl_req(url: &str, key: &str) -> request::Request {
         body: Some(format!(r#"{{"longUrl": "{}"}}"#, url)),
         content_type: Some(request::ContentType::Json),
         user_agent: None,
+        headers: None,
         method: request::Method::Post,
     }
 }
@@ -308,6 +325,7 @@ fn hmmrs_req(url: &str) -> request::Request {
         body: Some(format!(r#"{{"url": "{}"}}"#, url)),
         content_type: Some(request::ContentType::Json),
         user_agent: Some(request::UserAgent(FAKE_USER_AGENT.to_owned())),
+        headers: None,
         method: request::Method::Post,
     }
 }
@@ -325,6 +343,21 @@ request!(
     request::Method::Get,
     "https://is.gd/create.php?format=simple&url={}"
 );
+
+parse_json_tag!(kutt_parse, "shortUrl", "");
+fn kutt_req(url: &str, api_key: &str, host: Option<&str>) -> request::Request {
+    let mut headers = HeaderMap::new();
+    headers.insert("X-API-Key", api_key.parse().unwrap());
+
+    request::Request {
+        url: format!("{}/api/url/submit", host.unwrap_or("https://kutt.it")),
+        body: Some(format!(r#"{{"target": "{}"}}"#, url)),
+        content_type: Some(request::ContentType::Json),
+        user_agent: None,
+        headers: Some(headers),
+        method: request::Method::Post,
+    }
+}
 
 parse_noop!(nowlinks_parse);
 request!(
@@ -429,6 +462,7 @@ pub fn parse(res: &str, provider: &Provider) -> Result<String, ProviderError> {
         Provider::HmmRs => hmmrs_parse(res),
         Provider::HecSu => hecsu_parse(res),
         Provider::IsGd => isgd_parse(res),
+        Provider::Kutt { .. } => kutt_parse(res),
         Provider::NowLinks => nowlinks_parse(res),
         Provider::PhxCoIn => phxcoin_parse(res),
         Provider::PsbeCo => psbeco_parse(res),
@@ -465,13 +499,17 @@ pub fn request(url: &str, provider: &Provider) -> request::Request {
     match *provider {
         Provider::Abv8 => abv8_req(url),
         Provider::BamBz => bambz_req(url),
-        Provider::BitLy { token: ref key } => bitly_req(url, &key),
+        Provider::BitLy { ref token } => bitly_req(url, &token),
         Provider::Bmeo => bmeo_req(url),
         Provider::FifoCc => fifocc_req(url),
-        Provider::GooGl { api_key: ref key } => googl_req(url, &key),
+        Provider::GooGl { ref api_key } => googl_req(url, &api_key),
         Provider::HmmRs => hmmrs_req(url),
         Provider::HecSu => hecsu_req(url),
         Provider::IsGd => isgd_req(url),
+        Provider::Kutt {
+            ref api_key,
+            ref host,
+        } => kutt_req(url, &api_key, host.as_ref().map(|h| &**h)),
         Provider::NowLinks => nowlinks_req(url),
         Provider::PhxCoIn => phxcoin_req(url),
         Provider::PsbeCo => psbeco_req(url),

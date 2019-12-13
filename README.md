@@ -17,6 +17,7 @@ With authentication:
 
 - `goo.gl`
 - `bit.ly`
+- `kutt.it` (supports self hosting)
 
 Without authentication:
 
