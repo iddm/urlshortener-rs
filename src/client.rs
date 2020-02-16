@@ -1,5 +1,5 @@
 use providers::{self, parse, request, ProviderError};
-use reqwest::{self, Client};
+use reqwest::blocking::{Client, ClientBuilder};
 use std::time::Duration;
 
 /// Url shortener: the way to retrieve a short url.
@@ -16,7 +16,7 @@ impl UrlShortener {
 
     /// Creates new `UrlShortener` with custom read timeout.
     pub fn with_timeout(seconds: u64) -> Result<UrlShortener, reqwest::Error> {
-        let client = reqwest::ClientBuilder::new()
+        let client = ClientBuilder::new()
             .timeout(Duration::from_secs(seconds))
             .build()?;
 
@@ -123,7 +123,7 @@ impl UrlShortener {
     ) -> Result<String, ProviderError> {
         let req = request(url.as_ref(), provider);
 
-        if let Ok(mut response) = req.execute(&self.client) {
+        if let Ok(response) = req.execute(&self.client) {
             response
                 .text()
                 .map_err(|_| ProviderError::Connection)
