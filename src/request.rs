@@ -1,7 +1,7 @@
 #[cfg(feature = "client")]
 use reqwest::{
-    header::{self, HeaderMap},
     blocking::{Client, Response},
+    header::{self, HeaderMap},
 };
 
 const CONTENT_JSON: &str = "application/json";

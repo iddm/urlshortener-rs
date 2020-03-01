@@ -1,4 +1,4 @@
-use providers::{self, parse, request, ProviderError};
+use crate::providers::{self, parse, request, ProviderError};
 use reqwest::blocking::{Client, ClientBuilder};
 use std::time::Duration;
 
@@ -136,19 +136,25 @@ impl UrlShortener {
 
 #[cfg(test)]
 mod tests {
-    use client;
-    use providers;
+    use crate::client;
+    use crate::providers;
 
     /// This test does not cover services which require authentication for obvious reasons.
     #[test]
     fn providers() {
         let us = client::UrlShortener::with_timeout(5).unwrap();
         let url = "http://yandex.com";
+        let mut valid = 0;
 
         for provider in providers::PROVIDERS {
             if let Err(e) = us.generate(url, provider) {
-                assert!(false, "{:?} -> {:?}", provider, e);
+                println!("{:?} -> {:?}", provider, e);
+            } else {
+                valid += 1;
+                println!("{:?} -> OK", provider);
             }
         }
+
+        assert!(valid > 0, "There are no valid providers to use.");
     }
 }

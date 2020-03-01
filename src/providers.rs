@@ -1,6 +1,6 @@
 //! Library service providers implementation.
 
-use request;
+use crate::request as req;
 use reqwest::header::HeaderMap;
 use url::form_urlencoded;
 
@@ -100,9 +100,9 @@ macro_rules! parse_noop {
 
 macro_rules! request {
     ($name:ident, $method:expr, $req_url:expr) => {
-        fn $name(url: &str) -> request::Request {
+        fn $name(url: &str) -> req::Request {
             let url = form_urlencoded::byte_serialize(url.as_bytes()).collect::<String>();
-            request::Request {
+            req::Request {
                 url: format!($req_url, url),
                 body: None,
                 content_type: None,
@@ -114,8 +114,8 @@ macro_rules! request {
     };
 
     (B, $name:ident, $method:expr, $req_url:expr, $body:expr) => {
-        fn $name(url: &str) -> request::Request {
-            request::Request {
+        fn $name(url: &str) -> req::Request {
+            req::Request {
                 url: $req_url.to_owned(),
                 body: Some(format!($body, url)),
                 content_type: None,
@@ -127,8 +127,8 @@ macro_rules! request {
     };
 
     ($name:ident, $method:expr, $req_url:expr, $body:expr, $content_type:expr) => {
-        fn $name(url: &str) -> request::Request {
-            request::Request {
+        fn $name(url: &str) -> req::Request {
+            req::Request {
                 url: $req_url.to_owned(),
                 body: Some(format!($body, url)),
                 content_type: Some($content_type),
@@ -263,144 +263,140 @@ impl Provider {
 }
 
 parse_noop!(abv8_parse);
-request!(abv8_req, request::Method::Get, "http://abv8.me/?url={}");
+request!(abv8_req, req::Method::Get, "http://abv8.me/?url={}");
 
 parse_json_tag!(bambz_parse, "url", "");
 request!(
     bambz_req,
-    request::Method::Post,
+    req::Method::Post,
     "https://bam.bz/api/short",
     "target={}",
-    request::ContentType::FormUrlEncoded
+    req::ContentType::FormUrlEncoded
 );
 
 parse_noop!(bitly_parse);
-fn bitly_req(url: &str, key: &str) -> request::Request {
+fn bitly_req(url: &str, key: &str) -> req::Request {
     let encoded_url = form_urlencoded::byte_serialize(url.as_bytes()).collect::<String>();
     let address = format!(
         "https://api-ssl.bitly.com/v3/shorten?access_token={}&longUrl={}&format=txt",
         key, encoded_url
     );
 
-    request::Request {
+    req::Request {
         url: address,
         body: None,
         content_type: None,
         user_agent: None,
         headers: None,
-        method: request::Method::Get,
+        method: req::Method::Get,
     }
 }
 
 parse_json_tag!(bmeo_parse, "short", "");
-request!(
-    bmeo_req,
-    request::Method::Get,
-    "http://bmeo.org/api.php?url={}"
-);
+request!(bmeo_req, req::Method::Get, "http://bmeo.org/api.php?url={}");
 
 parse_json_tag!(fifocc_parse, "shortner", "http://fifo.cc/");
 request!(
     fifocc_req,
-    request::Method::Get,
+    req::Method::Get,
     "https://fifo.cc/api/v2?url={}"
 );
 
 parse_json_tag!(googl_parse, "id", "");
-fn googl_req(url: &str, key: &str) -> request::Request {
-    request::Request {
+fn googl_req(url: &str, key: &str) -> req::Request {
+    req::Request {
         url: format!("https://www.googleapis.com/urlshortener/v1/url?key={}", key),
         body: Some(format!(r#"{{"longUrl": "{}"}}"#, url)),
-        content_type: Some(request::ContentType::Json),
+        content_type: Some(req::ContentType::Json),
         user_agent: None,
         headers: None,
-        method: request::Method::Post,
+        method: req::Method::Post,
     }
 }
 
 parse_json_tag!(hmmrs_parse, "shortUrl", "");
-fn hmmrs_req(url: &str) -> request::Request {
-    request::Request {
+fn hmmrs_req(url: &str) -> req::Request {
+    req::Request {
         url: "http:/hmm.rs/x/shorten".to_owned(),
         body: Some(format!(r#"{{"url": "{}"}}"#, url)),
-        content_type: Some(request::ContentType::Json),
-        user_agent: Some(request::UserAgent(FAKE_USER_AGENT.to_owned())),
+        content_type: Some(req::ContentType::Json),
+        user_agent: Some(req::UserAgent(FAKE_USER_AGENT.to_owned())),
         headers: None,
-        method: request::Method::Post,
+        method: req::Method::Post,
     }
 }
 
 parse_xml_tag!(hecsu_parse, "short");
 request!(
     hecsu_req,
-    request::Method::Get,
+    req::Method::Get,
     "https://hec.su/api?url={}&method=xml"
 );
 
 parse_noop!(isgd_parse);
 request!(
     isgd_req,
-    request::Method::Get,
+    req::Method::Get,
     "https://is.gd/create.php?format=simple&url={}"
 );
 
 parse_json_tag!(kutt_parse, "shortUrl", "");
-fn kutt_req(url: &str, api_key: &str, host: Option<&str>) -> request::Request {
+fn kutt_req(url: &str, api_key: &str, host: Option<&str>) -> req::Request {
     let mut headers = HeaderMap::new();
     headers.insert("X-API-Key", api_key.parse().unwrap());
 
-    request::Request {
+    req::Request {
         url: format!("{}/api/url/submit", host.unwrap_or("https://kutt.it")),
         body: Some(format!(r#"{{"target": "{}"}}"#, url)),
-        content_type: Some(request::ContentType::Json),
+        content_type: Some(req::ContentType::Json),
         user_agent: None,
         headers: Some(headers),
-        method: request::Method::Post,
+        method: req::Method::Post,
     }
 }
 
 parse_noop!(nowlinks_parse);
 request!(
     nowlinks_req,
-    request::Method::Get,
+    req::Method::Get,
     "http://nowlinks.net/api?url={}"
 );
 
 parse_noop!(phxcoin_parse);
 request!(
     phxcoin_req,
-    request::Method::Get,
+    req::Method::Get,
     "http://phx.co.in/shrink.asp?url={}"
 );
 
 parse_xml_tag!(psbeco_parse, "ShortUrl");
 request!(
     psbeco_req,
-    request::Method::Get,
+    req::Method::Get,
     "http://psbe.co/API.asmx/CreateUrl?real_url={}"
 );
 
 parse_noop!(scoop_parse);
 request!(
     scoop_req,
-    request::Method::Get,
+    req::Method::Get,
     "http://s.coop/devapi.php?action=shorturl&url={}&format=RETURN"
 );
 
 parse_noop!(rlu_parse);
 request!(
     rlu_req,
-    request::Method::Get,
+    req::Method::Get,
     "http://rlu.ru/index.sema?a=api&link={}"
 );
 
 parse_json_tag!(sirbz_parse, "short_link", "");
 request!(
     sirbz_req,
-    request::Method::Post,
+    req::Method::Post,
     "http://sirbz.com/api/shorten_url",
     "url={}",
-    request::ContentType::FormUrlEncoded
+    req::ContentType::FormUrlEncoded
 );
 
 fn tinyurl_parse(res: &str) -> Option<String> {
@@ -413,39 +409,39 @@ fn tinyurl_parse(res: &str) -> Option<String> {
 }
 request!(
     tinyurl_req,
-    request::Method::Get,
+    req::Method::Get,
     "http://tinyurl.com/create.php?url={}"
 );
 
 parse_json_tag!(tinyph_parse, "hash", "http://tiny.ph/");
 request!(
     tinyph_req,
-    request::Method::Post,
+    req::Method::Post,
     "http://tiny.ph/api/url/create",
     "url={}",
-    request::ContentType::FormUrlEncoded
+    req::ContentType::FormUrlEncoded
 );
 
 parse_xml_tag!(tnyim_parse, "shorturl");
 request!(
     tnyim_req,
-    request::Method::Get,
+    req::Method::Get,
     "http://tny.im/yourls-api.php?action=shorturl&url={}"
 );
 
 parse_noop!(urlshortenerio_parse);
 request!(
     urlshortenerio_req,
-    request::Method::Post,
+    req::Method::Post,
     "http://url-shortener.io/shorten",
     "url_param={}",
-    request::ContentType::FormUrlEncoded
+    req::ContentType::FormUrlEncoded
 );
 
 parse_noop!(vgd_parse);
 request!(
     vgd_req,
-    request::Method::Get,
+    req::Method::Get,
     "http://v.gd/create.php?format=simple&url={}"
 );
 
@@ -495,7 +491,7 @@ pub fn parse(res: &str, provider: &Provider) -> Result<String, ProviderError> {
 ///     println!("A request object for shortening URL via GooGl: {:?}", req);
 /// }
 /// ```
-pub fn request(url: &str, provider: &Provider) -> request::Request {
+pub fn request(url: &str, provider: &Provider) -> req::Request {
     match *provider {
         Provider::Abv8 => abv8_req(url),
         Provider::BamBz => bambz_req(url),

@@ -35,10 +35,7 @@
 //! assert!(short_url.is_ok());
 //! ```
 #![deny(missing_docs)]
-
-#[cfg(feature = "client")]
-extern crate reqwest;
-extern crate url;
+#![deny(warnings)]
 
 /// A urlshortener http client for performing requests.
 #[cfg(feature = "client")]
@@ -50,6 +47,6 @@ pub mod request;
 /// A prelude module with main useful stuff.
 pub mod prelude {
     #[cfg(feature = "client")]
-    pub use client::*;
-    pub use providers::{Provider, PROVIDERS};
+    pub use crate::client::*;
+    pub use crate::providers::{Provider, PROVIDERS};
 }
