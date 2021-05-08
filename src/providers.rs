@@ -471,7 +471,7 @@ pub fn parse(res: &str, provider: &Provider) -> Result<String, ProviderError> {
         Provider::UrlShortenerIo => urlshortenerio_parse(res),
         Provider::VGd => vgd_parse(res),
     }
-    .ok_or_else(|| ProviderError::Deserialize)
+    .ok_or(ProviderError::Deserialize)
 }
 
 /// Performs a request to the short link provider.
