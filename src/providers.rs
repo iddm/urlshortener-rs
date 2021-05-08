@@ -43,7 +43,7 @@ pub const PROVIDERS: &[Provider] = &[
     // Reasons:
     //
     // * rate limit (250 requests per 15 minutes)
-    // * does not accept short urls (ex: http://google.com)
+    // * does not accept short urls (ex: <http://google.com>)
     Provider::SirBz,
     // Reason: rate limit (100 requests per hour)
     Provider::Rlu,
@@ -143,7 +143,7 @@ macro_rules! request {
 /// Used to specify which provider to use to generate a short URL.
 #[derive(Clone, Debug)]
 pub enum Provider {
-    /// http://abv8.me provider
+    /// <http://abv8.me> provider
     ///
     /// Notes:
     ///
@@ -151,42 +151,42 @@ pub enum Provider {
     /// * You may not shorten more than 60 unique URLs within a 15-minute
     ///   period.
     Abv8,
-    /// https://bam.bz provider
+    /// <https://bam.bz> provider
     BamBz,
-    /// https://bit.ly provider
+    /// <https://bit.ly> provider
     BitLy {
         /// A token string which you may obtain on the provider web service page.
         token: String,
     },
-    /// http://bmeo.org provider
+    /// <http://bmeo.org> provider
     Bmeo,
-    /// http://fifo.cc provider
+    /// <http://fifo.cc> provider
     FifoCc,
-    /// https://goo.gl provider of Google
+    /// <https://goo.gl> provider of Google
     GooGl {
         /// An api key string which you may obtain on the provider web service page.
         api_key: String,
     },
-    /// https://kutt.it provider, can be self hosted
+    /// <https://kutt.it> provider, can be self hosted
     Kutt {
         /// An api key string which you may obtain on the provider web service page.
         api_key: String,
-        /// The api host, defaults to 'https://kutt.it'
+        /// The api host, defaults to '<https://kutt.it>'
         host: Option<String>,
     },
-    /// https://hec.su provider
+    /// <https://hec.su> provider
     ///
     /// Notes:
     ///
     /// * Limited to 3000 API requests per day
     HecSu,
-    /// http://hmm.rs provider
+    /// <http://hmm.rs> provider
     HmmRs,
-    /// https://is.gd provider
+    /// <https://is.gd> provider
     IsGd,
-    /// http://nowlinks.net provider
+    /// <http://nowlinks.net> provider
     NowLinks,
-    /// http://phx.co.in provider
+    /// <http://phx.co.in> provider
     ///
     /// Notes:
     ///
@@ -194,11 +194,11 @@ pub enum Provider {
     /// * Instead of redirecting, a preview page will be displayed
     /// * Currently unstable
     PhxCoIn,
-    /// http://psbe.co provider
+    /// <http://psbe.co> provider
     PsbeCo,
-    /// http://s.coop provider
+    /// <http://s.coop> provider
     SCoop,
-    /// http://rlu.ru provider
+    /// <http://rlu.ru> provider
     ///
     /// Notes:
     ///
@@ -207,26 +207,26 @@ pub enum Provider {
     ///   the technical support know. Otherwise your IP can be blocked
     ///   unexpectedly. Prior added URLs can be deleted.
     Rlu,
-    /// http://sirbz.com provider
+    /// <http://sirbz.com> provider
     ///
     /// Notes:
     ///
     /// * By default, you are limited to 250 requests per 15 minutes.
     SirBz,
-    /// http://tinyurl.com provider
+    /// <http://tinyurl.com> provider
     ///
     /// Notes:
     ///
     /// * This service does not provide any API.
     /// * The implementation result depends on the service result web page.
     TinyUrl,
-    /// http://tiny.ph provider
+    /// <http://tiny.ph> provider
     TinyPh,
-    /// http://tny.im provider
+    /// <http://tny.im> provider
     TnyIm,
-    /// http://url-shortener.io provider
+    /// <http://url-shortener.io> provider
     UrlShortenerIo,
-    /// https://v.gd provider
+    /// <https://v.gd> provider
     VGd,
 }
 
