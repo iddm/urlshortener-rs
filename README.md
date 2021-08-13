@@ -1,5 +1,5 @@
 # urlshortener-rs
-[![](https://meritbadge.herokuapp.com/urlshortener)](https://crates.io/crates/urlshortener)
+[![Crates badge](https://img.shields.io/crates/v/urlshortener.svg)](https://crates.io/crates/urlshortener)
 [![CI](https://github.com/vityafx/urlshortener-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/vityafx/urlshortener-rs/actions/workflows/ci.yml)
 [![](https://docs.rs/urlshortener/badge.svg)](https://docs.rs/urlshortener)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
