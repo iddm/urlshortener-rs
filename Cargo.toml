@@ -25,3 +25,22 @@ optional = true
 [features]
 default = ["client"]
 client = ["reqwest"]
+
+[[example]]
+name = "via_all_providers"
+required-features = ["client"]
+
+[[example]]
+name = "via_auth_provider"
+required-features = ["client"]
+
+[[example]]
+name = "via_kutt_custom_host_provider"
+required-features = ["client"]
+
+[[example]]
+name = "via_single_provider"
+required-features = ["client"]
+
+[package.metadata.docs.rs]
+all-features = true
