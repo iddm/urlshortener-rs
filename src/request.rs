@@ -1,10 +1,10 @@
+use http::header;
 #[cfg(feature = "client")]
-use reqwest::{
-    blocking::{Client, Response},
-    header::{self, HeaderMap},
-};
+use reqwest::blocking::{Client, Response};
 
+#[cfg(feature = "client")]
 const CONTENT_JSON: &str = "application/json";
+#[cfg(feature = "client")]
 const CONTENT_FORM_URL_ENCODED: &str = "application/x-www-form-urlencoded";
 
 /// An HTTP method abstraction
@@ -41,7 +41,7 @@ pub struct Request {
     /// The user agent.
     pub user_agent: Option<UserAgent>,
     /// Request headers.
-    pub headers: Option<HeaderMap>,
+    pub headers: Option<header::HeaderMap>,
     /// The HTTP method.
     pub method: Method,
 }

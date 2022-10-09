@@ -1,7 +1,7 @@
 //! Library service providers implementation.
 
 use crate::request as req;
-use reqwest::header::HeaderMap;
+use http::header::HeaderMap;
 use url::form_urlencoded;
 
 /// A user agent for faking weird services.
