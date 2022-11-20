@@ -1,6 +1,6 @@
 [package]
 name = "urlshortener"
-version = "3.0.0"
+version = "3.0.1"
 edition = "2018"
 authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
 description = "A very simple url shortener client library"
@@ -9,9 +9,6 @@ license = "MIT"
 keywords = ["url", "short", "shortener", "link"]
 repository = "https://github.com/vityafx/urlshortener-rs"
 documentation = "https://docs.rs/urlshortener"
-
-[badges]
-travis-ci = { repository = "vityafx/urlshortener-rs" }
 
 [dependencies]
 url = "2"
