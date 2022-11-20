@@ -11,6 +11,10 @@ This library aims to implement as much URL shortener services as possible and to
 minimal and simple as possible. For easing pain with dependency hell, the library provides request objects
 since 0.9.0 version which can be used for performing requests via user http-client library.
 
+## MSRV
+The minimum supported rust version is bumped to 1.56 just because one of the dependencies.
+The code itself should work fine with Rust version 1.46, and, perhaps, even lower versions.
+
 ## Implementations
 
 Currently the following URL shorteners are implemented:
