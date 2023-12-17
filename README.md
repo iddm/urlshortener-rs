@@ -12,7 +12,7 @@ minimal and simple as possible. For easing pain with dependency hell, the librar
 since 0.9.0 version which can be used for performing requests via user http-client library.
 
 ## MSRV
-The minimum supported rust version is bumped to 1.56 just because one of the dependencies.
+The minimum supported rust version is bumped to 1.63 just because one of the dependencies.
 The code itself should work fine with Rust version 1.46, and, perhaps, even lower versions.
 
 ## Implementations
