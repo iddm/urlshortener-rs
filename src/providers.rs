@@ -17,6 +17,17 @@ pub enum ProviderError {
     Deserialize,
 }
 
+impl std::fmt::Display for ProviderError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match *self {
+            Self::Connection => write!(f, "A connection problem occured when connecting to a provided."),
+            Self::Deserialize => write!(f, "Couldn't deserialize the shortened URL from the response."),
+        }
+    }
+}
+
+impl std::error::Error for ProviderError {}
+
 /// A slice of all `Provider` variants which do not require authentication.
 /// This list is in order of provider quality.
 ///
