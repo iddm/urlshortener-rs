@@ -176,6 +176,8 @@ pub enum Provider {
         /// A token string which you may obtain on the provider web service page.
         token: String,
     },
+    /// <https://biturl.top> provider
+    BitUrl,
     /// <http://bmeo.org> provider
     Bmeo,
     /// <http://fifo.cc> provider
@@ -246,8 +248,6 @@ pub enum Provider {
     UrlShortenerIo,
     /// <https://v.gd> provider
     VGd,
-    /// <https://biturl.top> provider
-    BitUrl
 }
 
 impl Provider {
@@ -257,6 +257,7 @@ impl Provider {
             Provider::Abv8 => "abv8.me",
             Provider::BamBz => "bam.bz",
             Provider::BitLy { .. } => "bitly.com",
+            Provider::BitUrl => "biturl.top",
             Provider::Bmeo => "bmeo.org",
             Provider::FifoCc => "fifo.cc",
             Provider::GooGl { .. } => "goo.gl",
@@ -278,7 +279,6 @@ impl Provider {
             Provider::TnyIm => "tny.im",
             Provider::UrlShortenerIo => "url-shortener.io",
             Provider::VGd => "v.gd",
-            Provider::BitUrl => "biturl.top",
         }
     }
 }
@@ -482,6 +482,7 @@ pub fn parse(res: &str, provider: &Provider) -> Result<String, ProviderError> {
         Provider::Abv8 => abv8_parse(res),
         Provider::BamBz => bambz_parse(res),
         Provider::BitLy { .. } => bitly_parse(res),
+        Provider::BitUrl => biturl_parse(res),
         Provider::Bmeo => bmeo_parse(res),
         Provider::FifoCc => fifocc_parse(res),
         Provider::GooGl { .. } => googl_parse(res),
@@ -500,7 +501,6 @@ pub fn parse(res: &str, provider: &Provider) -> Result<String, ProviderError> {
         Provider::TnyIm => tnyim_parse(res),
         Provider::UrlShortenerIo => urlshortenerio_parse(res),
         Provider::VGd => vgd_parse(res),
-        Provider::BitUrl => biturl_parse(res),
     }
     .ok_or(ProviderError::Deserialize)
 }
