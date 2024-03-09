@@ -53,6 +53,7 @@ pub const PROVIDERS: &[Provider] = &[
     Provider::Bmeo,
     Provider::UrlShortenerIo,
     Provider::HmmRs,
+    Provider::BitUrl,
     // The following list are items that have long response sometimes:
     Provider::TnyIm,
     // The following list are items that are discouraged from use:
@@ -245,6 +246,8 @@ pub enum Provider {
     UrlShortenerIo,
     /// <https://v.gd> provider
     VGd,
+    /// <https://biturl.top> provider
+    BitUrl
 }
 
 impl Provider {
@@ -275,6 +278,7 @@ impl Provider {
             Provider::TnyIm => "tny.im",
             Provider::UrlShortenerIo => "url-shortener.io",
             Provider::VGd => "v.gd",
+            Provider::BitUrl => "biturl.top",
         }
     }
 }
@@ -462,6 +466,15 @@ request!(
     "http://v.gd/create.php?format=simple&url={}"
 );
 
+parse_json_tag!(biturl_parse, "short", "");
+request!(
+    biturl_req,
+    req::Method::Post,
+    "https://api.biturl.top/short",
+    "url={}",
+    req::ContentType::FormUrlEncoded
+);
+
 /// Parses the response from a successful request to a provider into the
 /// URL-shortened string.
 pub fn parse(res: &str, provider: &Provider) -> Result<String, ProviderError> {
@@ -487,6 +500,7 @@ pub fn parse(res: &str, provider: &Provider) -> Result<String, ProviderError> {
         Provider::TnyIm => tnyim_parse(res),
         Provider::UrlShortenerIo => urlshortenerio_parse(res),
         Provider::VGd => vgd_parse(res),
+        Provider::BitUrl => biturl_parse(res),
     }
     .ok_or(ProviderError::Deserialize)
 }
@@ -534,5 +548,6 @@ pub fn request(url: &str, provider: &Provider) -> req::Request {
         Provider::TnyIm => tnyim_req(url),
         Provider::UrlShortenerIo => urlshortenerio_req(url),
         Provider::VGd => vgd_req(url),
+        Provider::BitUrl => biturl_req(url),
     }
 }
