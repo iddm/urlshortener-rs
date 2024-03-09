@@ -38,6 +38,7 @@ Without authentication:
 - `bmeo.org`
 - `hmm.rs`
 - `url-shortener.io`
+- `biturl.top`
 
 The following services are supported, but are discouraged from use, due to
 restrictions such as rate limits:
