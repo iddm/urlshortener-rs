@@ -527,6 +527,7 @@ pub fn request(url: &str, provider: &Provider) -> req::Request {
         Provider::Abv8 => abv8_req(url),
         Provider::BamBz => bambz_req(url),
         Provider::BitLy { ref token } => bitly_req(url, token),
+        Provider::BitUrl => biturl_req(url),
         Provider::Bmeo => bmeo_req(url),
         Provider::FifoCc => fifocc_req(url),
         Provider::GooGl { ref api_key } => googl_req(url, api_key),
@@ -548,6 +549,5 @@ pub fn request(url: &str, provider: &Provider) -> req::Request {
         Provider::TnyIm => tnyim_req(url),
         Provider::UrlShortenerIo => urlshortenerio_req(url),
         Provider::VGd => vgd_req(url),
-        Provider::BitUrl => biturl_req(url),
     }
 }
