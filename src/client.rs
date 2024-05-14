@@ -3,7 +3,7 @@ use reqwest::blocking::{Client, ClientBuilder};
 use std::time::Duration;
 
 /// Url shortener: the way to retrieve a short url.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UrlShortener {
     client: Client,
 }
