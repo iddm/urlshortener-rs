@@ -1,7 +1,7 @@
 [package]
 name = "urlshortener"
-version = "3.2.0"
-edition = "2018"
+version = "3.2.1"
+edition = "2021"
 authors = ["Victor Polevoy <maintainer@vpolevoy.com>"]
 description = "A very simple url shortener client library"
 readme = "README.md"
@@ -14,7 +14,7 @@ documentation = "https://docs.rs/urlshortener"
 url = "2"
 
 [dependencies.reqwest]
-version = "0.11"
+version = "0.12"
 features = ["blocking"]
 optional = true
 
