@@ -20,6 +20,10 @@ jobs:
           - macOS
           - Windows
 
+        cargo-opts:
+          - --all-features
+          - --no-default-features
+
         include:
           - name: beta
             toolchain: beta
@@ -52,13 +56,9 @@ jobs:
             target
           key: ${{ runner.os }}-test-${{ steps.tc.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.toml') }}
 
-      - name: Build all features
-        if: matrix.features == ''
-        run: cargo build --all-features
+      - run: cargo build ${{ matrix.cargo-opts }}
 
-      - name: Test all features
-        if: matrix.features == ''
-        run: cargo test --all-features
+      - run: cargo test ${{ matrix.cargo-opts }}
 
   clippy:
     name: Run clippy
